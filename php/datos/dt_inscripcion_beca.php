@@ -1,0 +1,74 @@
+<?php
+require_once 'consultas_designa.php';
+class dt_inscripcion_beca extends toba_datos_tabla
+{
+    function get_postulantes($filtro=null){
+        if(!is_null($filtro)){
+                $where=' where '.$filtro;
+            }else{
+                $where='';
+            }
+        $sql="select * from 
+               (select i.uni_acad,i.fecha_presentacion,i.id_becario,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.fec_nacim,c.descripcion as categ_beca, 
+                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.cat_estat||di.dedic as cat_dir,ci.descripcion as cei_dir,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic as cat_co,cico.descripcion as cei_co
+                from inscripcion_beca i
+                LEFT OUTER JOIN becario b ON (i.id_becario=b.id_becario)
+                LEFT OUTER JOIN categoria_beca c ON (c.id_categ=i.categ_beca)
+                LEFT OUTER JOIN proyecto_inv p ON (p.id_pinv=i.id_proyecto)
+                LEFT OUTER JOIN director_beca di ON (di.id=i.id_director)
+                LEFT OUTER JOIN categoria_invest ci ON (ci.cod_cati=di.cat_invest)
+                LEFT OUTER JOIN director_beca co ON (co.id=i.id_codirector)
+                LEFT OUTER JOIN categoria_invest cico ON (cico.cod_cati=co.cat_invest)
+                )sub
+                $where ";
+        return toba::db('becarios')->consultar($sql);
+    }
+    function get_unidades(){
+        $uni_acad = consultas_designa::get_unidades();
+        return $uni_acad;
+    }
+    function get_departamentos($uni_acad){
+        $dep =consultas_designa::get_departamentos($uni_acad);
+        return $dep;
+    }
+//    function get_inscripcion($nro_doc){//busca si el becario ya se anoto en este año
+//        $sql=" select i.* from becario b, inscripcion_beca i"
+//                . " where b.id_becario=i.id_becario"
+//                . " and b.nro_docum=$nro_doc "
+//                . " and extract (year from i.fecha_presentacion)=extract(year from now())";
+//        $res= toba::db('becarios')->consultar($sql);
+//        return $res;
+//    }
+    //--ver!!
+    //recibe el nro de cuil sin guiones ni espacios
+    function get_inscripcion($cuil){//busca si el becario ya se anoto en este año
+        $sql=" select i.* from becario b, inscripcion_beca i"
+                . " where b.id_becario=i.id_becario"
+                . " and b.cuil1 = cast(substring('".$cuil."',1,2) as numeric)"
+                . " and b.cuil = cast(substring('".$cuil."',3,length('".$cuil."')-3) as numeric)"
+                . " and b.cuil2 = cast(substring('".$cuil."',length('".$cuil."'),1) as numeric)"
+                . " and extract (year from i.fecha_presentacion)=extract(year from now())";
+        $res= toba::db('becarios')->consultar($sql);
+        return $res;
+    }
+    function get_datos_inscripcion($id_becario,$fecha){
+        $sql="select i.ua_trabajo_beca,i.titulo_plan_trabajo,i.dpto_trabajo_beca,i.desc_trabajo_beca,d.calle||' '||d.numero||' CP: '||d.cod_postal||' '||p.descripcion_pcia||' '||a.nombre as domi_lt "
+                . " from inscripcion_beca i"
+                . " left outer join domicilio d on (i.nro_domicilio_trabajo_beca=d.nro_domicilio)"
+                . " left outer join pais a on (d.cod_pais=a.codigo_pais)"
+                . " left outer join provincia p on (p.codigo_pcia=d.cod_provincia and p.cod_pais=a.codigo_pais)"
+                . " where i.id_becario=$id_becario and i.fecha_presentacion='".$fecha."'";
+        $res= toba::db('becarios')->consultar($sql);
+        $salida=array();
+        if(count($res)>0){
+                $salida= $res[0];
+            }
+        return $salida;
+    
+    }
+    function get_unidad($uni_acad){
+        $salida = consultas_designa::get_unidad($uni_acad);
+        return $salida;
+        }
+}
+?>  
