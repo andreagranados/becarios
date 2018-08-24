@@ -4,16 +4,16 @@
 ------------------------------------------------------------
 INSERT INTO apex_usuario_grupo_acc (proyecto, usuario_grupo_acc, nombre, nivel_acceso, descripcion, vencimiento, dias, hora_entrada, hora_salida, listar, permite_edicion, menu_usuario) VALUES (
 	'becarios', --proyecto
-	'admin', --usuario_grupo_acc
-	'Administrador', --nombre
-	'0', --nivel_acceso
-	'Accede a toda la funcionalidad', --descripcion
+	'becario', --usuario_grupo_acc
+	'Becario', --nombre
+	NULL, --nivel_acceso
+	'Alta de inscripcion becarios', --descripcion
 	NULL, --vencimiento
 	NULL, --dias
 	NULL, --hora_entrada
 	NULL, --hora_salida
 	NULL, --listar
-	'1', --permite_edicion
+	'0', --permite_edicion
 	NULL  --menu_usuario
 );
 
@@ -24,26 +24,26 @@ INSERT INTO apex_usuario_grupo_acc (proyecto, usuario_grupo_acc, nombre, nivel_a
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
 	'becarios', --proyecto
-	'admin', --usuario_grupo_acc
+	'becario', --usuario_grupo_acc
+	NULL, --item_id
+	'1'  --item
+);
+INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
+	'becarios', --proyecto
+	'becario', --usuario_grupo_acc
 	NULL, --item_id
 	'2'  --item
 );
 INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
 	'becarios', --proyecto
-	'admin', --usuario_grupo_acc
+	'becario', --usuario_grupo_acc
 	NULL, --item_id
 	'3793'  --item
 );
 INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
 	'becarios', --proyecto
-	'admin', --usuario_grupo_acc
+	'becario', --usuario_grupo_acc
 	NULL, --item_id
 	'3794'  --item
-);
-INSERT INTO apex_usuario_grupo_acc_item (proyecto, usuario_grupo_acc, item_id, item) VALUES (
-	'becarios', --proyecto
-	'admin', --usuario_grupo_acc
-	NULL, --item_id
-	'3797'  --item
 );
 --- FIN Grupo de desarrollo 0
