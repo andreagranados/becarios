@@ -51,8 +51,8 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'3360', --evento_id
 	'4123', --objeto
 	'previu', --identificador
-	'Previ', --etiqueta
-	'1', --maneja_datos
+	'Vista Previa', --etiqueta
+	'0', --maneja_datos
 	NULL, --sobre_fila
 	NULL, --confirmacion
 	NULL, --estilo
@@ -150,7 +150,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'3361', --evento_id
 	'4123', --objeto
 	'imprimir', --identificador
-	'Imprimir', --etiqueta
+	'Inscripción Becario', --etiqueta
 	'1', --maneja_datos
 	NULL, --sobre_fila
 	NULL, --confirmacion
@@ -165,7 +165,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'0', --defecto
 	NULL, --display_datos_cargados
 	NULL, --grupo
-	'F', --accion
+	'V', --accion
 	'0', --accion_imphtml_debug
 	NULL, --accion_vinculo_carpeta
 	NULL, --accion_vinculo_item
@@ -174,9 +174,42 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	NULL, --accion_vinculo_popup_param
 	NULL, --accion_vinculo_target
 	NULL, --accion_vinculo_celda
-	NULL, --accion_vinculo_servicio
+	'vista_pdf', --accion_vinculo_servicio
 	'0', --es_seleccion_multiple
-	'0'  --es_autovinculo
+	'1'  --es_autovinculo
+);
+INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
+	'becarios', --proyecto
+	'3402', --evento_id
+	'4123', --objeto
+	'imprimir_ficha', --identificador
+	'Ficha Inscripción', --etiqueta
+	'1', --maneja_datos
+	NULL, --sobre_fila
+	NULL, --confirmacion
+	NULL, --estilo
+	'apex', --imagen_recurso_origen
+	'exp_pdf.gif', --imagen
+	'1', --en_botonera
+	NULL, --ayuda
+	'5', --orden
+	NULL, --ci_predep
+	'0', --implicito
+	'0', --defecto
+	NULL, --display_datos_cargados
+	NULL, --grupo
+	'V', --accion
+	'0', --accion_imphtml_debug
+	NULL, --accion_vinculo_carpeta
+	NULL, --accion_vinculo_item
+	NULL, --accion_vinculo_objeto
+	'0', --accion_vinculo_popup
+	NULL, --accion_vinculo_popup_param
+	NULL, --accion_vinculo_target
+	NULL, --accion_vinculo_celda
+	'vista_pdf', --accion_vinculo_servicio
+	'0', --es_seleccion_multiple
+	'1'  --es_autovinculo
 );
 --- FIN Grupo de desarrollo 0
 
@@ -241,6 +274,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'4123', --objeto_consumidor
 	'4124', --objeto_proveedor
 	'form', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'becarios', --proyecto
+	'3054', --dep_id
+	'4123', --objeto_consumidor
+	'4203', --objeto_proveedor
+	'form_adj', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -328,7 +373,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'pant_director', --identificador
 	'3', --orden
 	'3', --etiqueta
-	'CERTIFICACIÓN DEL DIRECTOR/CODIRECTOR DE BECA', --descripcion
+	'DATOS DEL DIRECTOR/CODIRECTOR DE BECA', --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen
@@ -416,6 +461,46 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --template_impresion
 	'25'  --punto_montaje
 );
+INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
+	'becarios', --objeto_ci_proyecto
+	'4123', --objeto_ci
+	'1721', --pantalla
+	'pant_adj', --identificador
+	'7', --orden
+	'7', --etiqueta
+	'DATOS ADJUNTOS', --descripcion
+	NULL, --tip
+	'apex', --imagen_recurso_origen
+	NULL, --imagen
+	NULL, --objetos
+	NULL, --eventos
+	NULL, --subclase
+	NULL, --subclase_archivo
+	NULL, --template
+	NULL, --template_impresion
+	'25'  --punto_montaje
+);
+INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
+	'becarios', --objeto_ci_proyecto
+	'4123', --objeto_ci
+	'1722', --pantalla
+	'pant_final', --identificador
+	'8', --orden
+	'8', --etiqueta
+	'<h2>ENVIO A SCyT</h2>
+ <br>
+Una vez enviado ya no podrás modificar ningún dato. Si has finalizado presiona el botón Enviar', --descripcion
+	NULL, --tip
+	'apex', --imagen_recurso_origen
+	NULL, --imagen
+	NULL, --objetos
+	NULL, --eventos
+	NULL, --subclase
+	NULL, --subclase_archivo
+	NULL, --template
+	NULL, --template_impresion
+	'25'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
@@ -463,6 +548,13 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'0', --orden
 	'3053'  --dep_id
 );
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becarios', --proyecto
+	'1721', --pantalla
+	'4123', --objeto_ci
+	'0', --orden
+	'3054'  --dep_id
+);
 
 ------------------------------------------------------------
 -- apex_eventos_pantalla
@@ -482,18 +574,30 @@ INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VAL
 INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
 	'1720', --pantalla
 	'4123', --objeto_ci
-	'3361', --evento_id
-	'becarios'  --proyecto
-);
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1720', --pantalla
-	'4123', --objeto_ci
 	'3363', --evento_id
 	'becarios'  --proyecto
 );
 INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1720', --pantalla
+	'1722', --pantalla
+	'4123', --objeto_ci
+	'3360', --evento_id
+	'becarios'  --proyecto
+);
+INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
+	'1722', --pantalla
+	'4123', --objeto_ci
+	'3361', --evento_id
+	'becarios'  --proyecto
+);
+INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
+	'1722', --pantalla
 	'4123', --objeto_ci
 	'3364', --evento_id
+	'becarios'  --proyecto
+);
+INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
+	'1722', --pantalla
+	'4123', --objeto_ci
+	'3402', --evento_id
 	'becarios'  --proyecto
 );
