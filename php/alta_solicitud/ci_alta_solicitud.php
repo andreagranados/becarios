@@ -97,6 +97,7 @@ class ci_alta_solicitud extends toba_ci
             $form->set_datos($datos);
             if(isset($datos['id_designacion'])){
                  $id_doc=$this->dep('datos')->tabla('director_beca')->get_docente($datos['id_designacion']);
+                
                  $datos['id_docente']=$id_doc;
                  $domi=$this->dep('datos')->tabla('domicilio_dir')->get();
                  $datos['cod_pais']=$domi['cod_pais'];

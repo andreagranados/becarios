@@ -37,7 +37,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_f
 	NULL, --usuario
 	'2018-07-30 15:11:58', --creacion
-	'abajo'  --posicion_botonera
+	'arriba'  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
 
