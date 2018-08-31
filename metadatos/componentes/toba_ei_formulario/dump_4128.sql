@@ -256,7 +256,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'correo', --identificador
 	'ef_editable', --elemento_formulario
 	'correo', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'3', --orden
 	'CORREO', --etiqueta
@@ -336,7 +336,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'titulo', --identificador
 	'ef_editable', --elemento_formulario
 	'titulo', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'9', --orden
 	'MAX TITULACIÓN ACAD', --etiqueta
@@ -416,7 +416,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'institucion', --identificador
 	'ef_editable', --elemento_formulario
 	'institucion', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'6', --orden
 	'INSTITUCIÓN', --etiqueta
@@ -496,7 +496,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'lugar_trabajo', --identificador
 	'ef_editable', --elemento_formulario
 	'lugar_trabajo', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'7', --orden
 	'LUGAR DE TRABAJO', --etiqueta
@@ -576,7 +576,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_docente', --identificador
 	'ef_combo', --elemento_formulario
 	'id_docente', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
 	'DIRECTOR', --etiqueta
@@ -656,7 +656,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_docentec', --identificador
 	'ef_combo', --elemento_formulario
 	'id_docentec', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'17', --orden
 	'CODIRECTOR', --etiqueta
@@ -736,7 +736,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'correoc', --identificador
 	'ef_editable', --elemento_formulario
 	'correoc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'18', --orden
 	'CORREO', --etiqueta
@@ -816,7 +816,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_designacionc', --identificador
 	'ef_combo', --elemento_formulario
 	'id_designacionc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'19', --orden
 	'CARGO DOCENTE', --etiqueta
@@ -896,7 +896,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'tituloc', --identificador
 	'ef_editable', --elemento_formulario
 	'tituloc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'20', --orden
 	'MAX TITULACIÓN ACAD', --etiqueta
@@ -976,7 +976,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'institucionc', --identificador
 	'ef_editable', --elemento_formulario
 	'institucionc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'21', --orden
 	'INSTITUCIÓN', --etiqueta
@@ -1056,7 +1056,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'lugar_trabajoc', --identificador
 	'ef_editable', --elemento_formulario
 	'lugar_trabajoc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'22', --orden
 	'LUGAR DE TRABAJO', --etiqueta
@@ -1136,7 +1136,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_designacion', --identificador
 	'ef_combo', --elemento_formulario
 	'id_designacion', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'4', --orden
 	'CARGO DOCENTE', --etiqueta
@@ -1223,7 +1223,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_conicet', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_conicet', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'5', --orden
 	'CATEG OTRO ORGANISMO', --etiqueta
@@ -1303,7 +1303,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_invest', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_invest', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'8', --orden
 	'CATEG EQUIV INVEST', --etiqueta
@@ -1383,7 +1383,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_investc', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_investc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'23', --orden
 	'CATEG EQUIV INVEST', --etiqueta
@@ -1463,7 +1463,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_conicetc', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_conicetc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'24', --orden
 	'CATEG OTRO ORGANISMO', --etiqueta
@@ -1543,7 +1543,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'categ', --identificador
 	'ef_editable', --elemento_formulario
 	'categ', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
 	NULL, --etiqueta
@@ -1623,7 +1623,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'hs_dedic_inves', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'hs_dedic_inves', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'10', --orden
 	'HS DEDIC INVEST', --etiqueta
@@ -1703,7 +1703,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'hs_dedic_invesc', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'hs_dedic_invesc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'25', --orden
 	'HS DEDIC INVEST', --etiqueta
@@ -1783,7 +1783,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_pais', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_pais', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'11', --orden
 	'País', --etiqueta
@@ -1863,7 +1863,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_provincia', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_provincia', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'12', --orden
 	'Provincia', --etiqueta
@@ -1943,7 +1943,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_postal', --identificador
 	'ef_editable', --elemento_formulario
 	'cod_postal', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'13', --orden
 	'Código Postal', --etiqueta
@@ -2023,7 +2023,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'calle', --identificador
 	'ef_editable', --elemento_formulario
 	'calle', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'14', --orden
 	'Calle', --etiqueta
@@ -2103,7 +2103,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'numero', --identificador
 	'ef_editable', --elemento_formulario
 	'numero', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'15', --orden
 	'Número', --etiqueta
@@ -2183,7 +2183,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'telefono', --identificador
 	'ef_editable', --elemento_formulario
 	'telefono', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'16', --orden
 	'Teléfono', --etiqueta
@@ -2263,7 +2263,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_paisc', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_paisc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'26', --orden
 	'País', --etiqueta
@@ -2343,7 +2343,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_provinciac', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_provinciac', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'27', --orden
 	'Provincia', --etiqueta
@@ -2423,7 +2423,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_postalc', --identificador
 	'ef_editable', --elemento_formulario
 	'cod_postalc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'28', --orden
 	'Código Postal', --etiqueta
@@ -2503,7 +2503,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'callec', --identificador
 	'ef_editable', --elemento_formulario
 	'callec', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'29', --orden
 	'Calle', --etiqueta
@@ -2583,7 +2583,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'numeroc', --identificador
 	'ef_editable', --elemento_formulario
 	'numeroc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'30', --orden
 	'Número', --etiqueta
@@ -2663,7 +2663,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'telefonoc', --identificador
 	'ef_editable', --elemento_formulario
 	'telefonoc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'31', --orden
 	'Teléfono', --etiqueta
