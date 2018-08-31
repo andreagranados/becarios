@@ -511,14 +511,14 @@ class ci_alta_solicitud extends toba_ci
                     //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
                     $nombre_ca="cert_ant".$cuil_becario.".pdf";
                     //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
-                    $destino_ca="/home/cristian/becarios/becarios_2019/cert_ant".$cuil_becario.".pdf";
+                    $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
                     move_uploaded_file($datos['cert_a']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cert_ant']=strval($nombre_ca);
                 }
                 if(isset($datos['const_titu'])){
                     $nombre_ti="const_titu".$cuil_becario.".pdf";
                     //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/const_titu".$cuil_becario.".pdf";
-                    $destino_ti="/home/cristian/becarios/becarios_2019/cert_ant".$cuil_becario.".pdf";
+                    $destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
                     move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['const_titu']=strval($nombre_ti);
                 }
