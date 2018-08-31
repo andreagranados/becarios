@@ -23,6 +23,13 @@ class form_extension extends toba_ei_formulario
                                                 this.ef('lugar_trabajoc').ocultar();
                                                 this.ef('cat_investc').ocultar();
                                                 this.ef('cat_conicetc').ocultar();
+                                                this.ef('cod_paisc').ocultar();
+                                                this.ef('cod_provinciac').ocultar();
+                                                this.ef('cod_postalc').ocultar();
+                                                this.ef('callec').ocultar();
+                                                this.ef('numeroc').ocultar();
+                                                this.ef('telefonoc').ocultar();
+                                                this.ef('hs_dedic_invesc').ocultar();
 						break;				
 				}
 			}

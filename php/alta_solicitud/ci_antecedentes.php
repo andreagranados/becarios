@@ -55,7 +55,8 @@ class ci_antecedentes extends toba_ci
                 if($insc['estado']<>'I'){
                     $band=false;
                 }
-                if(isset($insc['id_carrera'])){//si ya tiene valor entonces esta asociada a la inscripcion
+                if(isset($insc['id_becario'])){//sino tiene id_becario seteado
+                //if(isset($insc['id_carrera'])){//si ya tiene valor entonces esta asociada a la inscripcion
                     $primera=false;
                 }
             }else{//sino esta cargada la inscripcion significa que es la primera entonces pongo la fecha actual
@@ -110,11 +111,14 @@ class ci_antecedentes extends toba_ci
 	function conf__form_car(toba_ei_formulario $form)
 	{
             $datos=$this->controlador()->dep('datos')->tabla('carrera_inscripcion_beca')->get();
-            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos['categ']=$insc['categ_beca'];
-            $datos['car']=$datos['carrera'];
             if(isset($datos)){
-                 $form->set_datos($datos);
+                $datos['car']=$datos['carrera'];
+            }
+            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+            $datos['categ']=$insc['categ_beca']; 
+        
+            if(isset($datos)){
+                $form->set_datos($datos);
             }
 	}
         function evt__form_car__guardar($datos)

@@ -131,6 +131,7 @@ class consultas_designa
   	$sql="select id_designacion, cat_estat||dedic||'-'||carac as descripcion
               from designacion d
               where d.id_docente=$id_doc
+                  and d.desde <= '2019-01-31' and (d.hasta >= '2018-02-01' or d.hasta is null)
              ";
 	
 	$res= toba::db('designa')->consultar($sql);

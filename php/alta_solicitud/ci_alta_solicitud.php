@@ -3,6 +3,8 @@ class ci_alta_solicitud extends toba_ci
 {
         protected $s__pantalla;
         protected $s__categ_beca;
+        protected $s__nombre_archivo_ca;
+        
     
         function get_categ_beca()
         {
@@ -73,18 +75,13 @@ class ci_alta_solicitud extends toba_ci
                     $band=false;
                 }
             }
-            if($band){
-               $this->s__categ_beca =   $datos;
-               $this->dep('datos')->tabla('inscripcion_beca')->set($datos);//setea en la inscripcion el tipo de categoria que acaba de elegir 
-            }
-//            if (isset($datos['archivo'])) {
-//                //is_uploaded_file();verifica que se subio el archivo
-//                $nombre_archivo = toba::proyecto()->get_www_temp($datos['archivo']['name']);
-//                //print_r($nombre_archivo['path']);exit;//C:\proyectos\toba_2.6.3/proyectos/becarios/www/temp/Informe_TKD(2).pdf 
-//                $destino="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2018/xx.pdf";
-//                move_uploaded_file($datos['archivo']['tmp_name'], $destino);
-//                 //mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+            //esto era para cambiar la categoria
+            //!!!ojo aca ver si esta bien que pueda modificar la categoria de la inscripcion
+//            if($band){
+//               $this->s__categ_beca =   $datos;
+//               $this->dep('datos')->tabla('inscripcion_beca')->set($datos);//setea en la inscripcion el tipo de categoria que acaba de elegir 
 //            }
+
         }
 	//-----------------------------------------------------------------------------------
 	//---- form_dir ---------------------------------------------------------------------
@@ -93,6 +90,7 @@ class ci_alta_solicitud extends toba_ci
         function conf__form_dir(toba_ei_formulario $form)
 	{
             $datos=$this->dep('datos')->tabla('director_beca')->get();
+            $datosc=$this->dep('datos')->tabla('codirector_beca')->get();
             $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
             //hago un set de categ para ocultar o no formulario de codirector
             $datos['categ']=$insc['categ_beca'];
@@ -100,7 +98,32 @@ class ci_alta_solicitud extends toba_ci
             if(isset($datos['id_designacion'])){
                  $id_doc=$this->dep('datos')->tabla('director_beca')->get_docente($datos['id_designacion']);
                  $datos['id_docente']=$id_doc;
-                 //$datos['cuil']=$datos['cuil1'].str_pad($datos['cuil'], 8, '0', STR_PAD_LEFT).$datos['cuil2'];
+                 $domi=$this->dep('datos')->tabla('domicilio_dir')->get();
+                 $datos['cod_pais']=$domi['cod_pais'];
+                 $datos['cod_provincia']=$domi['cod_provincia'];
+                 $datos['cod_postal']=$domi['cod_postal'];
+                 $datos['calle']=$domi['calle'];
+                 $datos['numero']=$domi['numero'];
+                 $datos['telefono']=$domi['telefono'];
+                 if(isset($datosc['id_designacion'])){
+                     $id_docc=$this->dep('datos')->tabla('director_beca')->get_docente($datosc['id_designacion']);
+                     $datos['id_docentec']=$id_docc;
+                     $datos['correoc']=$datosc['correo'];
+                     $datos['id_designacionc']=$datosc['id_designacion'];
+                     $datos['tituloc']=$datosc['titulo'];
+                     $datos['institucionc']=$datosc['institucion'];
+                     $datos['lugar_trabajoc']=$datosc['lugar_trabajo'];
+                     $datos['cat_investc']=$datosc['cat_invest'];
+                     $datos['cat_conicetc']=$datosc['cat_conicet'];
+                     $datos['hs_dedic_invesc']=$datosc['hs_dedic_inves'];
+                     $domic=$this->dep('datos')->tabla('domicilio_codir')->get();
+                     $datos['cod_paisc']=$domic['cod_pais'];
+                     $datos['cod_provinciac']=$domic['cod_provincia'];
+                     $datos['cod_postalc']=$domic['cod_postal'];
+                     $datos['callec']=$domic['calle'];
+                     $datos['numeroc']=$domic['numero'];
+                     $datos['telefonoc']=$domic['telefono'];
+                 }
                  $form->set_datos($datos);
             }   
 	}
@@ -123,6 +146,18 @@ class ci_alta_solicitud extends toba_ci
              }
            }
            if($band){
+                //datos del domicilio
+                $datosdom['cod_pais']=$datos['cod_pais'];
+                $datosdom['cod_provincia']=$datos['cod_provincia'];
+                $datosdom['cod_postal']=$datos['cod_postal'];
+                $datosdom['numero']=$datos['numero'];
+                $datosdom['calle']=$datos['calle'];
+                $datosdom['telefono']=$datos['telefono'];
+                $this->controlador()->dep('datos')->tabla('domicilio_dir')->set($datosdom);
+                $this->controlador()->dep('datos')->tabla('domicilio_dir')->sincronizar();
+                $domi=$this->controlador()->dep('datos')->tabla('domicilio_dir')->get();
+                $datosd['nro_domicilio']=$domi['nro_domicilio'];
+                
                 $datosd['cat_invest']=$datos['cat_invest'];
                 $datosd['institucion']=$datos['institucion'];
                 $datosd['lugar_trabajo']=$datos['lugar_trabajo'];
@@ -147,21 +182,32 @@ class ci_alta_solicitud extends toba_ci
                 $datosd['carac']=$caracd;
                 $datosd['legajo']=$legajod;
                 $datosd['id_designacion']=$datos['id_designacion'];
+                $datosd['hs_dedic_inves']=$datos['hs_dedic_inves'];
                 $this->dep('datos')->tabla('director_beca')->set($datosd);
                 //----sincroniza
                 $this->dep('datos')->tabla('director_beca')->sincronizar();
                 if($primerad){
                     $dir=$this->dep('datos')->tabla('director_beca')->get();
-                    $datos['id_director']=$dir['id'];
+                    $datos_insc['id_director']=$dir['id'];
                 }
-                if($primerac){
-                    $dir=$this->dep('datos')->tabla('codirector_beca')->get();
-                    $datos['id_codirector']=$dir['id'];
-                }
-                $this->dep('datos')->tabla('inscripcion_beca')->set($datos);
-                $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+                
                 //pregunto si cargo codirector beca
                 if(isset($datos['id_designacionc'])){
+                    //datos del domicilio
+                    if(isset($datos['cod_paisc'])){
+                        $datosdom['cod_pais']=$datos['cod_paisc'];
+                        $datosdom['cod_provincia']=$datos['cod_provinciac'];
+                        $datosdom['cod_postal']=$datos['cod_postalc'];
+                        $datosdom['numero']=$datos['numeroc'];
+                        $datosdom['calle']=$datos['callec'];
+                        $datosdom['telefono']=$datos['telefonoc'];
+                        $this->controlador()->dep('datos')->tabla('domicilio_codir')->set($datosdom);
+                        $this->controlador()->dep('datos')->tabla('domicilio_codir')->sincronizar();
+                        $domi=$this->controlador()->dep('datos')->tabla('domicilio_codir')->get();
+                        $datosc['nro_domicilio']=$domi['nro_domicilio'];
+                    }
+                    
+                //--datos del codirector
                     $datosc['cat_invest']=$datos['cat_investc'];
                     $datosc['institucion']=$datos['institucionc'];
                     $datosc['lugar_trabajo']=$datos['lugar_trabajoc'];
@@ -186,9 +232,18 @@ class ci_alta_solicitud extends toba_ci
                     $datosc['carac']=$caracc;
                     $datosc['legajo']=$legajoc;
                     $datosc['id_designacion']=$datos['id_designacionc'];
+                    $datosc['hs_dedic_inves']=$datos['hs_dedic_invesc'];
                     $this->dep('datos')->tabla('codirector_beca')->set($datosc);
                     $this->dep('datos')->tabla('codirector_beca')->sincronizar();
                 }  
+                if($primerac){
+                    $dir=$this->dep('datos')->tabla('codirector_beca')->get();
+                    $datos_insc['id_codirector']=$dir['id'];
+                }
+                if($primerad or $primerac){
+                    $this->dep('datos')->tabla('inscripcion_beca')->set($datos_insc);
+                    $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+                }
            } 
         }
         //-----------------------------------------------------------------------------------
@@ -328,9 +383,16 @@ class ci_alta_solicitud extends toba_ci
                 $this->dep('datos')->tabla('inscripcion_beca')->cargar($datosb);
                 $datosd=array('id'=>$insc[0]['id_director']);
                 $this->dep('datos')->tabla('director_beca')->cargar($datosd);
+                $director=$this->dep('datos')->tabla('director_beca')->get();
+                //domicilio del director
+                $datosdom_dir=array('nro_domicilio'=>$director['nro_domicilio']);
+                $this->dep('datos')->tabla('domicilio_dir')->cargar($datosdom_dir);
                 if(isset($insc[0]['id_codirector'])){
                     $datosc=array('id'=>$insc[0]['id_codirector']);
                     $this->dep('datos')->tabla('codirector_beca')->cargar($datosc);
+                    $codirector=$this->dep('datos')->tabla('codirector_beca')->get();
+                    $datosdom_codir=array('nro_domicilio'=>$codirector['nro_domicilio']);
+                    $this->dep('datos')->tabla('domicilio_codir')->cargar($datosdom_codir);
                 }
                 $datosb=array('id_becario'=>$insc[0]['id_becario']);
                 $this->dep('datos')->tabla('becario')->cargar($datosb);
@@ -349,6 +411,7 @@ class ci_alta_solicitud extends toba_ci
                 $this->dep('datos')->tabla('becario_idioma')->cargar($datosins);
                 $this->dep('datos')->tabla('participacion_inv')->cargar($datosins);
                 $this->dep('datos')->tabla('participacion_ext')->cargar($datosins);
+                $this->dep('datos')->tabla('inscripcion_adjuntos')->cargar($datosins);
                 //domicilio del lugar de trabajo beca
                 $datosdomilt=array('nro_domicilio'=>$insc[0]['nro_domicilio_trabajo_beca']);
                 $this->dep('datos')->tabla('domicilio_lt')->cargar($datosdomilt);
@@ -388,17 +451,131 @@ class ci_alta_solicitud extends toba_ci
         {
             $this->s__pantalla='pant_pinv';
         }
-        function vista_toba_impr_html(toba_vista_html $salida){
-            $salida = new toba_impr_html();
-            $salida->generar_salida();
+        
+       //--------formulario para adjuntos
+        function conf__form_adj(toba_ei_formulario $form)
+	{
+            if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
+                $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
+                if(isset($adj['cert_ant'])){
+                    //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
+                    $nomb_ca='/becarios/1.0/temp/becarios_2019/'.$adj['cert_ant'];
+                    $datos['cert_a']=$adj['cert_ant'];
+                    $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
+                }
+                if(isset($adj['const_titu'])){
+                    //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
+                    $nomb_ti='/becarios/1.0/temp/becarios_2019/'.$adj['const_titu'];
+                    $datos['const_titu']=$adj['const_titu'];
+                    $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_ti}' >const titu</a>";
+                }
+                if(isset($adj['rend_acad'])){
+                    //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
+                    $nomb_ra='/becarios/1.0/temp/becarios_2019/'.$adj['rend_acad'];
+                    $datos['rend_acad']=$adj['rend_acad'];
+                    $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
+                }
+                 if(isset($adj['cv_post'])){
+                    //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
+                    $nomb_cvp='/becarios/1.0/temp/becarios_2019/'.$adj['cv_post'];
+                    $datos['cv_post']=$adj['cv_post'];
+                    $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postul</a>";
+                }
+                return $datos;
+                //https://despacho.uncoma.edu.ar/archivos/ord_1039_2017_47.pdf
+            }
+	}
+        
+        function evt__form_adj__guardar($datos)
+        {//print_r($datos);
+            $band=true;
+            $datos2=array();
+            if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
+                $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
+                if($insc['estado']<>'I'){//solo en estado I puede modificar
+                    $band=false;
+                }else{
+                    $datos2['id_becario']=$insc['id_becario'];
+                    $datos2['fecha']=$insc['fecha_presentacion'];
+                }
+                
+            }
+            //!!!!!!!!toba::proyecto()->get_path() usar
+            if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
+                $bec=$this->dep('datos')->tabla('becario')->get();
+                $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
+                
+                if (isset($datos['cert_a'])) {
+                    //$nombre_archivo_ca = toba::proyecto()->get_www_temp($datos['cert_a']['name']);
+                    //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
+                    $nombre_ca="cert_ant".$cuil_becario.".pdf";
+                    $destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
+                    move_uploaded_file($datos['cert_a']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $datos2['cert_ant']=strval($nombre_ca);
+                }
+                if(isset($datos['const_titu'])){
+                    $nombre_ti="const_titu".$cuil_becario.".pdf";
+                    $destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/const_titu".$cuil_becario.".pdf";
+                    move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $datos2['const_titu']=strval($nombre_ti);
+                }
+                if(isset($datos['rend_acad'])){
+                    $nombre_ra="rend_acad".$cuil_becario.".pdf";
+                    $destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/rend_acad".$cuil_becario.".pdf";
+                    move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $datos2['rend_acad']=strval($nombre_ra);
+                }
+                if(isset($datos['cv_post'])){
+                    $nombre_cvp="cv_post".$cuil_becario.".pdf";
+                    $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/rend_acad".$cuil_becario.".pdf";
+                    move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $datos2['cv_post']=strval($nombre_cvp);
+                }
+                //print_r($datos2);
+                $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
+                $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
+                
+            }//no modifica nada
+ 
         }
+        //recien cuando ha sifo enviado muestra los botones para imprimir
+        function conf__pant_final(toba_ei_pantalla $pantalla){
+            //El evento "imprimir" no posee un VINCULO ASOCIADO.
+            if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
+                $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
+                if($insc['estado']=='E'){
+                    $this->evento('enviar')->ocultar();
+                    $this->evento('imprimir')->mostrar();
+                    $this->evento('imprimir_ficha')->mostrar();
+                    $this->evento('imprimir')->vinculo()->agregar_parametro('evento_trigger', 'imprimir1');
+                    $this->evento('imprimir_ficha')->vinculo()->agregar_parametro('evento_trigger', 'imprimir2'); 
+                }else{
+                    $this->evento('imprimir')->ocultar();
+                    $this->evento('imprimir_ficha')->ocultar();
+                }
+             }
+            
+        }
+        //----
+        
         function vista_pdf(toba_vista_pdf $salida){
+          $bandera = toba::memoria()->get_parametro('evento_trigger');
+         // print_r($bandera);exit;
+          $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+          $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
+          $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
+          $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
+          $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
+          $proy=$this->dep('datos')->tabla('proyecto_inv')->get();
+          $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($proy['id_pinv']);
+          $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
+          if($bandera=='imprimir1'){//imprimir el formulario
             $salida->set_nombre_archivo("Inscripcion_Becario.pdf");
             //recuperamos el objteo ezPDF para agregar la cabecera y el pie de página 
             $salida->set_papel_orientacion('portrait');//landscape
             $salida->inicializar();
             $pdf = $salida->get_pdf();
-            $pdf->ezSetMargins(80, 50, 45, 45);
+            $pdf->ezSetMargins(90, 50, 45, 45);
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
             $formato = utf8_decode('Becarios-Mocovi '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
@@ -420,15 +597,16 @@ class ci_alta_solicitud extends toba_ci
                 'width' => 1000,
                 'cols'=>array('col1'=>array('width'=>180,'justification'=>'center'),'col2'=>array('width'=>180,'justification'=>'center'),'col3'=>array('width'=>180,'justification'=>'center'))
             );
+           
             //INICIALIZACION VARIABLE CAT
             $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($this->s__categ_beca['categ_beca']);
             $centrado = array('justification'=>'center');
-            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
-            //print_r($inscripcion);
-            $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
-            $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
-            $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
+//            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+//            $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
+//            //print_r($inscripcion);
+//            $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
+//            $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
+//            $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
             $datos_carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get_datos_carrera($inscripcion['id_carrera']); 
             $datos_estudio=$this->dep('datos')->tabla('becario_estudio')->get_datos_estudio($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_beca=$this->dep('datos')->tabla('becario_beca')->get_datos_beca($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
@@ -441,8 +619,8 @@ class ci_alta_solicitud extends toba_ci
             $datos_trab=$this->dep('datos')->tabla('becario_trabajo')->get_datos_trabajo($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_idioma=$this->dep('datos')->tabla('becario_idioma')->get_datos_idioma($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_referencias=$this->dep('datos')->tabla('becario_referencia')->get_datos_referencias($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
-            $proy=$this->dep('datos')->tabla('proyecto_inv')->get();
-            $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($proy['id_pinv']);
+//            $proy=$this->dep('datos')->tabla('proyecto_inv')->get();
+//            $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($proy['id_pinv']);
            // print_r($datos_proy);exit;
             $carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get();
             //por si llega hasta el final sin guardar y presiona el botón imprimir ver!! pero como va a ser obligatorio entonces esta
@@ -455,54 +633,42 @@ class ci_alta_solicitud extends toba_ci
             
             //$pinv=$this->dep('datos')->tabla('proyecto_inv')->get();
             //$codigo=$this->dep('datos')->tabla('proyecto_inv')->get_codigo($pinv['id_pinv']);
-            //-----------------------CARATULA
-            $pdf->ezText(utf8_d_seguro(' <b>BECAS DE INVESTIGACIÓN DE LA UNIVERSIDAD NACIONAL DEL COMAHUE</b>'), 20,$centrado);
+            
+           
+            //-------------------------------1
+            $pdf->ezText(' <b>1. SOLICITUD </b>', 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(' <b>CONVOCATORIA 2019</b>', 20,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText('<b>POSTULANTE: </b>'.utf8_d_seguro($datos_bec['nombre']), 20,$centrado);
+            //-----------------------datos que antes iban en la CARATULA
+            $pdf->ezText(utf8_d_seguro(' <b>BECAS DE INVESTIGACIÓN DE LA UNIVERSIDAD NACIONAL DEL COMAHUE</b>'), 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText($uacad, 20,$centrado);
+            $pdf->ezText(' <b>CONVOCATORIA 2019</b>', 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro($cat), 20,$centrado);
+            $pdf->ezText('<b>POSTULANTE: </b>'.utf8_d_seguro($datos_bec['nombre']), 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText($datos_proy['codigo'], 20,$centrado);
+            $pdf->ezText($uacad, 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText('<b>DIRECTOR: </b>'.utf8_d_seguro($datos_dir['nombre']), 20,$centrado);
-//            if(isset($inscripcion['id_codirector'])){
-//                if(isset($datos_codir['nombre'])){
-//                    $pdf->ezText( utf8_d_seguro($datos_codir['nombre']), 20,$centrado);
-//                }   
-//            }
-//            
-
-            $pdf->ezNewPage(); 
-            $pdf->ezText(' <b>1. SOLICITUD </b>', 10,$centrado);
-            $pdf->ezText("\n\n", 10);
-            $pdf->ezText(utf8_d_seguro(' Al Señor/a'), 10);
-            $pdf->ezText(' Rector/a de la ', 10);
-            $pdf->ezText(' Universidad Nacional del Comahue ', 10);
-            $pdf->ezText(' Buenos Aires 1400 ', 10);
-            $pdf->ezText(utf8_d_seguro(' (8300) Neuquén '), 10);
-            $pdf->ezText("\n\n", 10);
-            $pdf->ezText(utf8_d_seguro("            Me dirijo al Sr/a. Rector/a, con el objeto de solititar la inscripción en el CONCURSO DE BECAS DE INVESTIGACIÓN de la Universidad Nacional del Comahue del año 2019 en la categoría ".$cat), 10);
+            $pdf->ezText(utf8_d_seguro($cat), 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro('            A tal efecto, hago constar en el formulario adjunto los datos correspondientes y acompaño la documentación requerida.'),10);
+            $pdf->ezText($datos_proy['codigo'], 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro('            Declaro conocer el Reglamento de Becas de Investigación de la Universidad Nacional del Comahue, y aceptar cada una de las obligaciones que de él derivan, comprometiéndome desde ya formalmente a su cumplimiento en caso de que me fuera otorgada la beca.'),10);
-            $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro('            Saludo al Sr/a. Rector/a con atenta consideración.'), 10);
-            $pdf->ezText("\n\n", 10);
-            $pdf->ezText('         ................................................', 10,$centrado);
-            $pdf->ezText(utf8_d_seguro('         FIRMA Y ACLARACIÓN DEL POSTULANTE'), 10,$centrado);
-                     
+            $pdf->ezText('<b>DIRECTOR: </b>'.utf8_d_seguro($datos_dir['nombre']), 12,$centrado);
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
+                if(isset($inscripcion['id_codirector'])){
+                    if(isset($datos_codir['nombre'])){
+                        $pdf->ezText("\n", 10);
+                        $pdf->ezText('<b>CO-DIRECTOR: </b>'.utf8_d_seguro($datos_codir['nombre']), 12,$centrado);
+                    }   
+                }
+            }
+   
             //-------------------------------2
             $pdf->ezNewPage(); 
-            $pdf->ezText(' <b>2. ANTECEDENTES Y DATOS DEL POSTULANTE </b>', 10,$centrado);
+            $pdf->ezText(' <b>2. ANTECEDENTES Y DATOS DEL POSTULANTE </b>', 12,$centrado);
             $pdf->ezText("\n", 10);
             $pdf->ezText(' <b>2.1 DATOS PERSONALES </b>', 10);
             $pdf->ezText("\n", 10);
-            $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
+            //$fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
             $tabla_becario=array();
             $tabla_becario[0]=array('dato'=>utf8_d_seguro('APELLIDO Y NOMBRES: '.$datos_bec['nombre']));
             $tabla_becario[1]=array('dato'=>'NACIONALIDAD: '.$datos_bec['nacionalidad']);
@@ -641,7 +807,7 @@ class ci_alta_solicitud extends toba_ci
                       $pdf->ezText("\n", 10); 
                   }
             }
-           if(count($datos_trab)>0){
+            if(count($datos_trab)>0){
                $pdf->ezText(utf8_d_seguro(' <b>2.7 TRABAJOS REALIZADOS: MONOGRAFÍAS, TRABAJOS DE SEMINARIOS, TESIS, CONGRESOS, PUBLICACIONES </b>'), 10); 
                $pdf->ezText("\n", 10);
                $i=0;
@@ -653,8 +819,8 @@ class ci_alta_solicitud extends toba_ci
                 }   
                $pdf->ezTable($tabla_trab,array('col1'=>utf8_d_seguro('<b>TÍTULO DEL TRABAJO</b>'),'col2'=>'<b>PRESENTADO O PUBLICADO EN</b>','col3'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
                $pdf->ezText("\n", 10);
-           }
-           if(count($datos_idioma)>0){
+            }
+            if(count($datos_idioma)>0){
                 $pdf->ezText(utf8_d_seguro(' <b>2.8 CONOCIMIENTO DE IDIOMAS: INDICAR SI ES MUY BUENO, BUENO, ACEPTABLE Y ADJUNTAR CERTIFICADOS O DIPLOMAS </b>'), 10);
                 $pdf->ezText("\n", 10);
                 $i=0;
@@ -666,15 +832,15 @@ class ci_alta_solicitud extends toba_ci
                 
                $pdf->ezTable($tabla_idiom,array('col1'=>utf8_d_seguro('<b>IDIOMA</b>'),'col2'=>'<b>LEE</b>','col3'=>'<b>ESCRIBE</b>','col4'=>'<b>HABLA</b>','col5'=>'<b>ENTIENDE</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500,'cols'=>array('col1'=>array('width'=>200,'justification'=>'center'),'col2'=>array('width'=>75,'justification'=>'center'),'col3'=>array('width'=>75,'justification'=>'center'),'col4'=>array('width'=>75,'justification'=>'center'))));
                $pdf->ezText("\n", 10);
-           }
+            }
 
-           $pdf->ezText(' <b>2.9 TIENE OTRA BECA EN CURSO? </b>', 10);
-           if($inscripcion['beca_en_curso']){
+            $pdf->ezText(' <b>2.9 TIENE OTRA BECA EN CURSO? </b>', 10);
+            if($inscripcion['beca_en_curso']){
                 $pdf->ezText(' <b>SI </b>', 10);
                 $pdf->ezText('INSTITUCION: '.$inscripcion['institucion_beca_en_curso'], 10);
-           }else{
+            }else{
                 $pdf->ezText(' <b>NO </b>', 10);
-           }
+            }
             $pdf->ezText("\n", 10);
             
             $pdf->ezText(utf8_d_seguro(' <b>2.10 PERSONAS A QUIENES EL POSTULANTE SOLICITÓ REFERENCIAS </b>'), 10);
@@ -716,30 +882,12 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText(utf8_d_seguro(' <b>LABORATORIO, ÁREA, CENTRO, INSTITUTO: </b>'.$datos_insc['desc_trabajo_beca']), 10);
             $pdf->ezText(utf8_d_seguro(' <b>DOMICILIO COMPLETO: </b>'.$datos_insc['domi_lt']), 10);
             $pdf->ezText("\n", 10);
-            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){
-                $pdf->ezText(utf8_d_seguro(' <b>2.12 CONFORMIDAD DEL DECANO Y DEL DIRECTOR DEL DEPARTAMENTO DEL LUGAR DE TRABAJO </b>'), 10);
-                $pdf->ezText("\n", 10);
-                $datos[0]=array('dato'=>'APELLIDO Y NOMBRE DEL DECANO: ....................................................................quien ocupa el cargo de.............................................................PRESTA SU acuerdo para que en caso de ser aprobada la beca, EL CONCURSANTE PUEDA REALIZAR EL TRABAJO PROPUESTO EN EL PUNTO 3.11');
-                $datos[1]=array('dato'=>'TIPO Y N DE DOCUMENTO: ........................');
-                $datos[2]=array('dato'=>'FIRMA: .................................................................');
-                $pdf->ezTable($datos,array('dato'=>''),' ',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
-                $pdf->ezText("\n", 10);
-                $datos=array();
-                $datos[0]=array('dato'=>'APELLIDO Y NOMBRE DEL DIRECTOR DEL DEPARTAMENTO: ...............................................................quien ocupa el cargo de.............................................................PRESTA SU acuerdo para que en caso de ser aprobada la beca, EL CONCURSANTE PUEDA REALIZAR EL TRABAJO PROPUESTO EN EL PUNTO 3.11');
-                $datos[1]=array('dato'=>'TIPO Y N DE DOCUMENTO: ........................');
-                $datos[2]=array('dato'=>'FIRMA: .................................................................');
-                $pdf->ezTable($datos,array('dato'=>''),' ',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
-                $pdf->ezText("\n", 10);
-            }
+            
             //------------------------3
             $pdf->ezNewPage(); 
-            $pdf->ezText(utf8_d_seguro(' <b>3. CERTIFICACIÓN DEL DIRECTOR DE BECA </b>'), 10,$centrado);
+            $pdf->ezText(utf8_d_seguro(' <b>3. DATOS DEL DIRECTOR DE BECA </b>'), 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro('            Declaro conocer y aceptar el Reglamento de Becas de Investigación de la Universidad Nacional del Comahue, y las obligaciones que de él derivan para los directores de beca, y dejo constancia de que he aconsejado en la formación del plan de trabajo del solicitante y estimado el cronograma de ejecución.'), 10);
-            $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro('            Asimismo, me hago responsable ante la Universidad Nacional del Comahue de que en caso de serle concedida la beca, se le proporcionará al solicitante, en el lugar de trabajo propuesto, los elementos necesarios para llevar a cabo su tarea.'), 10);
-            $pdf->ezText("\n", 10);
-           
+                     
             $tabla_director=array();
             $tabla_codirector=array();
             if(isset($inscripcion['id_director'])){
@@ -754,44 +902,32 @@ class ci_alta_solicitud extends toba_ci
                 $tabla_director[8]=array('dato'=>utf8_d_seguro('INSTITUCIÓN: '.$datos_dir['institucion']));
                 $tabla_director[9]=array('dato'=>'LUGAR DE TRABAJO: '.$datos_dir['lugar_trabajo']);
                 $tabla_director[10]=array('dato'=>utf8_d_seguro('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: '.$datos_dir['cat_inv']));
-                $tabla_director[11]=array('dato'=>utf8_d_seguro('TÍTULO DE POSGRADO: '.$datos_dir['titulo']));
+                $tabla_director[11]=array('dato'=>utf8_d_seguro('MAX TITULACIÓN ALCANZADA: '.$datos_dir['titulo']));
                 $tabla_director[12]=array('dato'=>utf8_d_seguro('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'));
                 $pdf->ezTable($tabla_director,array('dato'=>''),'<b>DATOS DEL DIRECTOR DE BECA: </b>',array('showHeadings'=>0,'shaded'=>0,'fontSize'=>10));
-                $pdf->ezText("\n\n\n\n\n", 10);
-                $pdf->ezText('         ..........................................', 10,$centrado);
-                $pdf->ezText('         ..........................................', 10,$centrado);
-                $pdf->ezText('         FIRMA DEL DIRECTOR', 10,$centrado);
-                $pdf->ezText('         LUGAR Y FECHA', 10,$centrado);
+                
             }
               if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//solo graduados pide codirector
-//            if(isset($inscripcion['id_codirector'])){
-//                $tabla_codirector[0]=array('dato'=>'APELLIDO Y NOMBRES: '.$datos_codir['nombre']);
-//                $tabla_codirector[1]=array('dato'=>'DOMICILIO: '.$datos_codir['domi']);
-//                $tabla_codirector[2]=array('dato'=>'E-MAIL: '.$datos_codir['correo']);
-//                $tabla_codirector[3]=array('dato'=>'CUIL: '.$datos_codir['cuil']);
-//                $tabla_codirector[4]=array('dato'=>utf8_d_seguro('CATEGORÍA DOCENTE: '.$datos_codir['cat_estat']));
-//                $tabla_codirector[5]=array('dato'=>utf8_d_seguro('DEDICACIÓN: '.$datos_codir['dedicacion']));
-//                $tabla_codirector[6]=array('dato'=>'REGULAR O INTERINO: '.$datos_codir['carac']);
-//                $tabla_codirector[7]=array('dato'=>utf8_d_seguro('CATEGORÍA INVESTIGADOR: '.$datos_codir['cat_conicet']));
-//                $tabla_codirector[8]=array('dato'=>utf8_d_seguro('INSTITUCIÓN: '.$datos_codir['institucion']));
-//                $tabla_codirector[9]=array('dato'=>'LUGAR DE TRABAJO: '.$datos_codir['lugar_trabajo']);
-//                $tabla_codirector[10]=array('dato'=>utf8_d_seguro('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: '.$datos_codir['cat_inv']));
-//                $tabla_codirector[11]=array('dato'=>utf8_d_seguro('TÍTULO DE POSGRADO: '.$datos_codir['titulo']));
-//                $tabla_codirector[12]=array('dato'=>utf8_d_seguro('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'));
-//                $pdf->ezTable($tabla_codirector,array('dato'=>''),'<b>DATOS DEL CODIRECTOR DE BECA: ',array('showHeadings'=>0,'shaded'=>0));
-//                $pdf->ezText("\n\n\n\n\n", 10);
-//                $pdf->ezText('         ..........................................', 10,$centrado);
-//                $pdf->ezText('         ..........................................', 10,$centrado);
-//                $pdf->ezText('         FIRMA DEL CODIRECTOR', 10,$centrado);
-//                $pdf->ezText('         LUGAR Y FECHA', 10,$centrado);
-//                $pdf->ezTable(array(),array('dato'=>''),utf8_d_seguro('<b>FUNDAMENTOS DE LA PARTICIPACIÓN DEL CODIRECTOR: </b>'),array('showHeadings'=>0,'shaded'=>0));
-//                $pdf->ezText('         ..........................................', 10,$centrado);
-//                $pdf->ezText('         FIRMA DEL DIRECTOR', 10,$centrado);
-//            }
-              }
+                if(isset($inscripcion['id_codirector'])){
+                    $tabla_codirector[0]=array('dato'=>'APELLIDO Y NOMBRES: '.$datos_codir['nombre']);
+                    $tabla_codirector[1]=array('dato'=>'DOMICILIO: '.$datos_codir['domi']);
+                    $tabla_codirector[2]=array('dato'=>'E-MAIL: '.$datos_codir['correo']);
+                    $tabla_codirector[3]=array('dato'=>'CUIL: '.$datos_codir['cuil']);
+                    $tabla_codirector[4]=array('dato'=>utf8_d_seguro('CATEGORÍA DOCENTE: '.$datos_codir['cat_estat']));
+                    $tabla_codirector[5]=array('dato'=>utf8_d_seguro('DEDICACIÓN: '.$datos_codir['dedicacion']));
+                    $tabla_codirector[6]=array('dato'=>'REGULAR O INTERINO: '.$datos_codir['carac']);
+                    $tabla_codirector[7]=array('dato'=>utf8_d_seguro('CATEGORÍA INVESTIGADOR: '.$datos_codir['cat_conicet']));
+                    $tabla_codirector[8]=array('dato'=>utf8_d_seguro('INSTITUCIÓN: '.$datos_codir['institucion']));
+                    $tabla_codirector[9]=array('dato'=>'LUGAR DE TRABAJO: '.$datos_codir['lugar_trabajo']);
+                    $tabla_codirector[10]=array('dato'=>utf8_d_seguro('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: '.$datos_codir['cat_inv']));
+                    $tabla_codirector[11]=array('dato'=>utf8_d_seguro('MAX TITULACIÓN ALCANZADA: '.$datos_codir['titulo']));
+                    $tabla_codirector[12]=array('dato'=>utf8_d_seguro('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'));
+                    $pdf->ezTable($tabla_codirector,array('dato'=>''),'<b>DATOS DEL CODIRECTOR DE BECA:</b> ',array('showHeadings'=>0,'shaded'=>0));
+                  }
+            }
          //-------------------------4
             $pdf->ezText("\n", 10);
-            $pdf->ezText(utf8_d_seguro(' <b>4. DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA (APROBADO O EN EVALUACIÓN) </b>'), 10,$centrado);
+            $pdf->ezText(utf8_d_seguro(' <b>4. DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA (APROBADO O EN EVALUACIÓN) </b>'), 12,$centrado);
             if(isset($datos_proy)>0){
                 $datos[0]=array('dato'=>utf8_d_seguro('CÓDIGO DEL PROYECTO: '.$datos_proy['codigo']));
                 $datos[1]=array('dato'=>utf8_d_seguro('TÍTULO: '.$datos_proy['denominacion']));
@@ -806,7 +942,7 @@ class ci_alta_solicitud extends toba_ci
             }
             $pdf->ezNewPage(); 
             //-------------------------5
-            $pdf->ezText(' <b>5. DATOS DEL PLAN DE TRABAJO DEL BECARIO</b>', 10,$centrado);
+            $pdf->ezText(' <b>5. DATOS DEL PLAN DE TRABAJO DEL BECARIO</b>', 12,$centrado);
             $pdf->ezText("\n", 10);
             if(isset($inscripcion['titulo_plan_trabajo'])){
                 $pdf->ezText(utf8_d_seguro($inscripcion['titulo_plan_trabajo']), 10,$centrado);
@@ -824,7 +960,7 @@ class ci_alta_solicitud extends toba_ci
             }
              //-------------------------6
             $pdf->ezNewPage(); 
-            $pdf->ezText(' <b>6. FUNDAMENTOS DE LA SOLICITUD</b>', 10,$centrado);
+            $pdf->ezText(' <b>6. FUNDAMENTOS DE LA SOLICITUD</b>', 12,$centrado);
             $pdf->ezText("\n", 8);
             $pdf->ezText(utf8_d_seguro(' El solicitante expresará en esta hoja los motivos de su solicitud de una beca y de su elección de los temas propuestos.'), 10);
             $pdf->ezText("\n", 8);
@@ -834,93 +970,271 @@ class ci_alta_solicitud extends toba_ci
                 $pdf->ezTable($datos,array('dato'=>''),' ',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
                 $pdf->ezText("\n", 8);
             }
-            //---------------------------7
-            $i=0;
-            while ($i<=$copias_ref) {
-                $pdf->ezNewPage(); 
-                $pdf->ezText(' <b>7. REFERENCISTAS</b>', 10,$centrado);
-                $pdf->ezText("\n", 8);
-                $pdf->ezText(utf8_d_seguro(' SR. REFERENCISTA: Rogamos completar el cuestionario adjunto. Agradecemos desde ya en nombre del Consejo su aprecida colaboración y le garantizamos absoluta reserva.'),10);
-                $pdf->ezText(utf8_d_seguro( 'EL PRESENTE FORMULARIO DEBE SER ENTREGADO EN SOBRE CERRADO, EN LA SUBSECRETARÍA DE INVESTIGACIÓN DE CADA UNIDAD ACADÉMICA, A LOS EFECTOS DE SER ANEXADO A LA CARPETA DE PRESENTACIÓN.'), 10);
-                $pdf->ezText("\n", 8);
-                $pdf->ezText(utf8_d_seguro( '1. Apellido y Nombres del concursante: .......................................................................'), 10);
-                $pdf->ezText("\n", 8);
-                $pdf->ezText(utf8_d_seguro( '2. Apellido y Nombres del referencista: ......................................................................'), 10);
-                $pdf->ezText("\n", 8);
-                $pdf->ezText(utf8_d_seguro( '3. CONOCIMIENTO DEL POSTULANTE'), 10);
-                $pdf->ezText(utf8_d_seguro( '3.1 ¿Cuánto tiempo hace que lo conoce?'), 10);
-                $pdf->ezText(utf8_d_seguro( '3.2 Tipo de relación (especifique la duración en cada tipo de relación si corresponde )'), 10);
-                $pdf->ezText("\n", 7);
-                $tabla=array();              
-                $tabla[0]=array( 'col1'=>'Alumno: ','col2' => 'Becario: ');
-                $tabla[1]=array( 'col1'=>'Ayudante: ','col2' => 'Integrante: ');
-                $tabla[2]=array( 'col1'=>' ','col2' => 'Colaborador: ');
-                $tabla[3]=array( 'col1'=>'Otro (especificar): ','col2' => '');
-                $pdf->ezTable($tabla,array('col1'=>'DOCENCIA','col2'=>'INVESTIGACION'),'',array('shaded'=>1,'width'=>500));
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '4. SE SOLICITA OPINIÓN ACERCA DE LOS SIGUIENTES ASPECTOS (SI SON DE SU CONOCIMIENTO)'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '4.1 Formación académica del postulante (carrera universitaria, seminarios).'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '4.2 Antecedentes generales del postulante (ayudantías docentes y de investigación, conocimientos de idiomas, etc.)'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '4.3 Trabajos realizados por el postulante (monografías, tesinas, tesis, publicaciones, presentaciones a congresos, etc.)'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '4.4 Predisposición del postulante para desarrollar tareas vinculadas a la investigación científica.'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '4.5 Disciplina de trabajo y actitud frente a las indicaciones de sus directores, tutores, asesores, etc.'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '5. EVALUACIÓN FINAL DEL POSTULANTE'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
-                $pdf->ezText("\n", 7);
-                $pdf->ezText("\n", 7);$pdf->ezText("\n", 7);
-                $tabla=array();              
-                $tabla[0]=array( 'col1'=>'','col2' => utf8_d_seguro('Unidad Académica a la que '));
-                $tabla[0]=array( 'col1'=>'','col2' => utf8_d_seguro(' pertenece: '));
-                $tabla[1]=array( 'col1'=>'............................................ ','col2' => '............................................');
-                $tabla[2]=array( 'col1'=>utf8_d_seguro('Firma y aclaración '),'col2' => '');
-                $pdf->ezTable($tabla,array( 'col1'=>'','col2' => ''),'',array('showLines'=>0,'shaded'=>0,'width'=>500));
-                $pdf->ezText("\n", 7);$pdf->ezText("\n", 7); 
-                if($inscripcion['categ_beca']==3){
-                    $pdf->ezText(utf8_d_seguro( 'Se certifica que el/la alumno/a....................................................................................'
-                        . 'DNI N° .................................. Legajo N° .................................'
-                        . ' se encuentra cursando la carrera .....................................................................'
-                        . ' con un total de  .....................................................materias aprobadas al día de la fecha.'
-                        . ' El Plan de Estudios consta de ........materias, incluyendo tesis/trabajo final si correspondiera (Ordenanzas N° .......................................)'), 10);
-                    $pdf->ezText("\n", 7);$pdf->ezText("\n", 7);
-                    $pdf->ezText(utf8_d_seguro( 'Lugar y fecha:'), 10);
-                    $pdf->ezText("\n", 7);
-                    $pdf->ezText(utf8_d_seguro( 'Firma del área académica correspondiente:'), 10);
-                }
-             $i++;   
+//            //---------------------------7
+//            //PIDEN ELIMINAR LAS HOJAS PARA REFERENCISTAS
+////            $i=0;
+////            while ($i<=$copias_ref) {
+////                $pdf->ezNewPage(); 
+////                $pdf->ezText(' <b>7. REFERENCISTAS</b>', 10,$centrado);
+////                $pdf->ezText("\n", 8);
+////                $pdf->ezText(utf8_d_seguro(' SR. REFERENCISTA: Rogamos completar el cuestionario adjunto. Agradecemos desde ya en nombre del Consejo su aprecida colaboración y le garantizamos absoluta reserva.'),10);
+////                $pdf->ezText(utf8_d_seguro( 'EL PRESENTE FORMULARIO DEBE SER ENTREGADO EN SOBRE CERRADO, EN LA SUBSECRETARÍA DE INVESTIGACIÓN DE CADA UNIDAD ACADÉMICA, A LOS EFECTOS DE SER ANEXADO A LA CARPETA DE PRESENTACIÓN.'), 10);
+////                $pdf->ezText("\n", 8);
+////                $pdf->ezText(utf8_d_seguro( '1. Apellido y Nombres del concursante: .......................................................................'), 10);
+////                $pdf->ezText("\n", 8);
+////                $pdf->ezText(utf8_d_seguro( '2. Apellido y Nombres del referencista: ......................................................................'), 10);
+////                $pdf->ezText("\n", 8);
+////                $pdf->ezText(utf8_d_seguro( '3. CONOCIMIENTO DEL POSTULANTE'), 10);
+////                $pdf->ezText(utf8_d_seguro( '3.1 ¿Cuánto tiempo hace que lo conoce?'), 10);
+////                $pdf->ezText(utf8_d_seguro( '3.2 Tipo de relación (especifique la duración en cada tipo de relación si corresponde )'), 10);
+////                $pdf->ezText("\n", 7);
+////                $tabla=array();              
+////                $tabla[0]=array( 'col1'=>'Alumno: ','col2' => 'Becario: ');
+////                $tabla[1]=array( 'col1'=>'Ayudante: ','col2' => 'Integrante: ');
+////                $tabla[2]=array( 'col1'=>' ','col2' => 'Colaborador: ');
+////                $tabla[3]=array( 'col1'=>'Otro (especificar): ','col2' => '');
+////                $pdf->ezTable($tabla,array('col1'=>'DOCENCIA','col2'=>'INVESTIGACION'),'',array('shaded'=>1,'width'=>500));
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '4. SE SOLICITA OPINIÓN ACERCA DE LOS SIGUIENTES ASPECTOS (SI SON DE SU CONOCIMIENTO)'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '4.1 Formación académica del postulante (carrera universitaria, seminarios).'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '4.2 Antecedentes generales del postulante (ayudantías docentes y de investigación, conocimientos de idiomas, etc.)'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '4.3 Trabajos realizados por el postulante (monografías, tesinas, tesis, publicaciones, presentaciones a congresos, etc.)'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '4.4 Predisposición del postulante para desarrollar tareas vinculadas a la investigación científica.'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '4.5 Disciplina de trabajo y actitud frente a las indicaciones de sus directores, tutores, asesores, etc.'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '5. EVALUACIÓN FINAL DEL POSTULANTE'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText(utf8_d_seguro( '............................................................................................................................................................................'), 10);
+////                $pdf->ezText("\n", 7);
+////                $pdf->ezText("\n", 7);$pdf->ezText("\n", 7);
+////                $tabla=array();              
+////                $tabla[0]=array( 'col1'=>'','col2' => utf8_d_seguro('Unidad Académica a la que '));
+////                $tabla[0]=array( 'col1'=>'','col2' => utf8_d_seguro(' pertenece: '));
+////                $tabla[1]=array( 'col1'=>'............................................ ','col2' => '............................................');
+////                $tabla[2]=array( 'col1'=>utf8_d_seguro('Firma y aclaración '),'col2' => '');
+////                $pdf->ezTable($tabla,array( 'col1'=>'','col2' => ''),'',array('showLines'=>0,'shaded'=>0,'width'=>500));
+////                $pdf->ezText("\n", 7);$pdf->ezText("\n", 7); 
+////                if($inscripcion['categ_beca']==3){
+////                    $pdf->ezText(utf8_d_seguro( 'Se certifica que el/la alumno/a....................................................................................'
+////                        . 'DNI N° .................................. Legajo N° .................................'
+////                        . ' se encuentra cursando la carrera .....................................................................'
+////                        . ' con un total de  .....................................................materias aprobadas al día de la fecha.'
+////                        . ' El Plan de Estudios consta de ........materias, incluyendo tesis/trabajo final si correspondiera (Ordenanzas N° .......................................)'), 10);
+////                    $pdf->ezText("\n", 7);$pdf->ezText("\n", 7);
+////                    $pdf->ezText(utf8_d_seguro( 'Lugar y fecha:'), 10);
+////                    $pdf->ezText("\n", 7);
+////                    $pdf->ezText(utf8_d_seguro( 'Firma del área académica correspondiente:'), 10);
+////                }
+////             $i++;   
+////            }//-------fin referencista 
+            foreach ($pdf->ezPages as $pageNum=>$id){ 
+                   $pdf->reopenObject($id); //definimos el path a la imagen de logo de la organizacion 
+                   $imagen = toba::proyecto()->get_path().'/www/img/logo_becarios.jpg';
+                   $pdf->addJpegFromFile($imagen, 30, 750, 108, 69);
+                   //$imagen2 = toba::proyecto()->get_path().'/www/img/sein.jpg';
+                   //$pdf->addJpegFromFile($imagen2, 30, 760, 70, 60);
+                   $pdf->closeObject(); 
+                }   
+
+        }else{//imprimir la ficha
+          if($bandera=='imprimir2'){
+            $salida->set_nombre_archivo("Ficha_Inscripcion.pdf");
+            //recuperamos el objteo ezPDF para agregar la cabecera y el pie de página 
+            $salida->set_papel_orientacion('portrait');//landscape
+            $salida->inicializar();
+            $pdf = $salida->get_pdf();
+            $pdf->ezSetMargins(100, 50, 30, 30);//($top, $bottom, $left, $right)
+            
+            //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
+            //Primero definimos la plantilla para el número de página.
+            $formato = utf8_decode('Becarios-Mocovi '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
+            //Configuración de Título.
+            $salida->titulo(utf8_d_seguro(''));   
+            //$pdf->setLineStyle(1);
+            //$pdf->setLineStyle(5);
+            //$pdf->Line(1, 45, 210-20, 45);//ultimo le da la inclinacion
+            //$pdf->Line(10, 45, 550, 45);//primero: eje x desde donde comienza/tercero es el largo de la linea/cuarto:ultimo le da la inclinacion
+            //segundo le da orientacion sobre x
+            $pdf->ezText(utf8_decode(' <b>Ficha de Inscripción </b>'), 10);
+            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+            $texto=' La presente ficha deberá ser debidamente firmada y entregada en la Secretaría de Investigación de la Unidad Académica. ';
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
+                $texto.=' correspondiente a la carrera por la que solicita la beca.';         
+            }else{
+                $texto.=' de pertenencia del proyecto en el que se inserta su plan de trabajo.';         
+            }
+           
+            $pdf->ezText(utf8_decode($texto), 10);
+            $pdf->ezText("\n", 7);
+            $tabla_cod=array();
+            $pdf->ezTable($tabla_cod,array('col1'=>utf8_d_seguro('<b>Código de proyecto:</b>'),'col2' => $datos_proy['codigo']),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+            $cols_dp = array('col1'=>"<b>Datos Personales</b>",'col2'=>'');
+            $tabla_dp=array();
+            $tabla_dp[0]=array( 'col1'=>'Postulante:','col2' => utf8_d_seguro($datos_bec['nombre']));
+            $tabla_dp[1]=array( 'col1'=>'CUIL:','col2' => $datos_bec['cuil']);
+            $tabla_dp[3]=array( 'col1'=>'e-mail:','col2' => $datos_bec['correo']);
+            $tabla_dp[4]=array( 'col1'=>'Fecha de nacimiento:','col2' => $fec_nac);
+            $tabla_dp[5]=array( 'col1'=>'Domicilio:','col2' => $datos_bec['domi']);
+            $tabla_dp[6]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_bec['telefono']);
+            $pdf->ezTable($tabla_dp,$cols_dp,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            $tabla_dir=array(); 
+            $tabla_dir[0]=array( 'col1'=>'Apellido y Nombre:','col2' => utf8_d_seguro($datos_dir['nombre']));
+            $tabla_dir[1]=array( 'col1'=>'CUIL:','col2' => $datos_dir['cuil']);
+            $tabla_dir[2]=array( 'col1'=>utf8_decode('e-mail:'),'col2' => $datos_dir['correo']);
+            $tabla_dir[3]=array( 'col1'=>'Domicilio:','col2' => $datos_dir['domi']);
+            $tabla_dir[4]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_dir['telefono']);
+            $tabla_dir[5]=array( 'col1'=>utf8_decode('Máxima titulación alcanzada'),'col2' => $datos_dir['titulo']);
+            $tabla_dir[6]=array( 'col1'=>'Cargo Docente:','col2' => $datos_dir['cat_estat']);
+            $tabla_dir[7]=array( 'col1'=>utf8_decode('Dedicación en el cargo'),'col2' => $datos_dir['dedicacion']);
+            $tabla_dir[8]=array( 'col1'=>utf8_decode('Categoría Equiv Investigador'),'col2' =>  $datos_dir['cat_inv']);
+            $tabla_dir[9]=array( 'col1'=>utf8_decode('Categoría  Investigador'),'col2' => $datos_dir['cat_conicet']);
+            $tabla_dir[10]=array( 'col1'=>'Lugar de trabajo:','col2' => $datos_dir['lugar_trabajo']);
+            $tabla_dir[11]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_dir['hs_dedic_inves']);
+            $cols_dir = array('col1'=>"<b>Datos del Director</b>",'col2'=>'');
+            $pdf->ezTable($tabla_dir,$cols_dir,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){
+                //codirector
+               if(isset($inscripcion['id_codirector'])){
+                    $tabla_codir=array(); 
+                    $tabla_codir[0]=array( 'col1'=>'Apellido y Nombre:','col2' => $datos_codir['nombre']);
+                    $tabla_codir[1]=array( 'col1'=>'CUIL:','col2' => $datos_codir['cuil']);
+                    $tabla_codir[2]=array( 'col1'=>utf8_decode('e-mail:'),'col2' => $datos_codir['correo']);
+                    $tabla_codir[3]=array( 'col1'=>'Domicilio:','col2' => $datos_codir['domi']);
+                    $tabla_codir[4]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_codir['telefono']);
+                    $tabla_codir[5]=array( 'col1'=>utf8_decode('Máxima titulación alcanzada'),'col2' => $datos_codir['titulo']);
+                    $tabla_codir[6]=array( 'col1'=>'Cargo Docente:','col2' => $datos_codir['cat_estat']);
+                    $tabla_codir[7]=array( 'col1'=>utf8_decode('Dedicación en el cargo'),'col2' => $datos_codir['dedicacion']);
+                    $tabla_codir[8]=array( 'col1'=>utf8_decode('Categoría Investigador'),'col2' => $datos_codir['cat_conicet']);
+                    $tabla_codir[9]=array( 'col1'=>'Lugar de trabajo:','col2' => $datos_codir['lugar_trabajo']);
+                    $tabla_codir[10]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_codir['hs_dedic_inves']);
+                    $pdf->ezTable($tabla_dir,array('col1'=>"<b>Datos del Co-director</b>",'col2'=>''),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+               }
             }
             
+            //-----------
+            $tabla_texto=array();
+            $tabla_texto[0]=array('dato'=>utf8_d_seguro('Declaro conocer las Bases y el Reglamento de la Convocatoria 2019 del Porgrama de Becas de Estimulo a las Vocaciones Cientificas del CIN y aceptar cada una de las obligaciones que de ellos derivan, comprometiendome a su cumplimiento en caso de que me fuera otorgada la Beca solicitada.'));
+            $pdf->ezTable($tabla_texto,array('dato'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550));
+            $tabla_firma=array();
+            $tabla_firma[0]=array('col1'=>'','col2'=>'');
+            $tabla_firma[1]=array('col1'=>'','col2'=>'');
+            $tabla_firma[2]=array('col1'=>'Firma Postulante','col2'=>'Lugar y fecha');
+            $pdf->ezTable($tabla_firma,array('col1'=>'','col2'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550,'cols'=>array('col1'=>array('justification'=>'center'),'col2'=>array('justification'=>'center'))));
+            $tabla_texto2=array();
+            $tabla_texto2[0]=array('col1'=>utf8_d_seguro('Por la presente presto mi conformidad para que, en caso de ser otorgada la beca solicitada, el postulante pueda realizar el trabajo propuesto en el marco del proyecto de investigación acreditado y financiado que dirijo.'),'col2'=>utf8_d_seguro('Declaro conocer y aceptar Reglamento de la Convocatoria 2019 del Programa de Becas de Estímulo a las Vocaciones Científicas del CIN en las obligaciones que de él derivan para los directores y dejo constancia que avalo el Plan de Trabajo del postulante./n En caso de ser otorgada la beca, me hago responsable de proporcionar al becario de las orientaciones para que lleve a cabo el plan propuesto faciltando las condiciones académicas necesarias para ello, como así también de contribuir a que mantenga su desempeño académico como estudiante.'));
+            $pdf->ezTable($tabla_texto2,array('col1'=>'','col2'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550,'cols'=>array('col1'=>array('justification'=>'left','width'=>150),'col2'=>array('justification'=>'left','width'=>400))));
+            $tabla_firma2=array();
+            $tabla_firma2[0]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma2[1]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma2[2]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma2[3]=array('col1'=>utf8_d_seguro('Firma Director de proyecto de investigación'),'col2'=>'Firma Director de Beca','col3'=>'Firma Co-Director de Beca');
+            $pdf->ezTable($tabla_firma2,array('col1'=>'','col2'=>'','col3'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550,'cols'=>array('col1'=>array('justification'=>'center','width'=>150),'col2'=>array('justification'=>'center','width'=>200),'col3'=>array('justification'=>'center','width'=>200))));
+            $tabla_firma3=array();
+            $tabla_firma3[0]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma3[1]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma3[2]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma3[3]=array('col1'=>'Lugar de fecha','col2'=>'Lugar y fecha','col3'=>'Lugar y fecha');
+            $pdf->ezTable($tabla_firma3,array('col1'=>'','col2'=>'','col3'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550,'cols'=>array('col1'=>array('justification'=>'center','width'=>150),'col2'=>array('justification'=>'center','width'=>200),'col3'=>array('justification'=>'center','width'=>200))));
+            //lugar de la beca
+            $tabla_lugar=array();
+            $tabla_lugar[0]=array( 'col1'=>utf8_d_seguro('Laboratorio/Área/Centro/Instituto:'),'col2' => $datos_insc['ua_trabajo_beca']);
+            $tabla_lugar[1]=array( 'col1'=>utf8_d_seguro('Departamento Académico:'),'col2' => $datos_insc['dpto_trabajo_beca']);
+            $tabla_lugar[3]=array( 'col1'=>'Domicilio:','col2' => $datos_insc['domi_lt']);
+            $pdf->ezTable($tabla_lugar,array('col1'=>utf8_d_seguro('<b>Lugar de trabajo en donde desarrollará la beca</b>'),'col2'=>''),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right')) ));
+            //
+            $tabla_conf=array();
+            $tabla_conf[0]=array('dato'=>utf8_d_seguro('<b>Conformidad de la Secretaría de Investigación donde se postula</b>'));
+            $pdf->ezTable($tabla_conf,array('dato'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550));
+            $tabla_conf=array();
+            $tabla_conf[0]=array('dato'=>utf8_d_seguro('Por la presente presto mi conformidad para que, en caso de ser otorgada la beca solicitada, el postulante puede realizar el trabajo propuesto en el lugar indicativo precedentemente.'));
+            $pdf->ezTable($tabla_conf,array('dato'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550));
+            $tabla_firma4=array();
+            $tabla_firma4[0]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma4[1]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma4[2]=array('col1'=>'','col2'=>'','col3'=>'');
+            $tabla_firma4[3]=array('col1'=>'Firma','col2'=>'Lugar y fecha','col3'=>utf8_d_seguro('Cargo e Institución'));
+            $pdf->ezTable($tabla_firma4,array('col1'=>'','col2'=>'','col3'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550,'cols'=>array('col1'=>array('justification'=>'center','width'=>150,'fontSize' => 8),'col2'=>array('justification'=>'center','width'=>200,'fontSize' => 8),'col3'=>array('justification'=>'center','width'=>200,'fontSize' => 8))));
+
             
-          //-------fin referencista  
-            
-        }
+            foreach ($pdf->ezPages as $pageNum=>$id){ 
+                   $pdf->reopenObject($id); //definimos el path a la imagen de logo de la organizacion 
+                   //$imagen = toba::proyecto()->get_path().'/www/img/sein.jpg';
+                   //$pdf->addJpegFromFile($imagen, 30, 750, 70, 60);
+                   $imagen = toba::proyecto()->get_path().'/www/img/logo_becarios.jpg';
+                   $pdf->addJpegFromFile($imagen, 30, 750, 108, 69);
+                   $pdf->addText(30,750,13,'<b>                                   CONVOCATORIA BECAS INVESTIGACION - 2019</b>');
+                   $pdf->closeObject(); 
+                }     
+            }//if bandera=imprimir2
+        
+            }//else
+        }//fin vista_pdf
+        function vista_impresion( toba_impresion $salida )
+	{
+		$salida->titulo('Datos de Inscripcion a Beca ');
+                $this->dependencia('form')->vista_impresion($salida);
+                $salida->mensaje('DATOS PERSONALES:');
+		$this->dependencia('ci_antecedentes')->dependencia('form_dp')->vista_impresion($salida);
+                $salida->mensaje('DATOS DE LA CARRERA DE GRADO/PREGRADO POR LA QUE SE SOLICITA LA BECA:');
+                $this->dependencia('ci_antecedentes')->dependencia('form_car')->vista_impresion($salida);
+                $salida->mensaje('OTROS ESTUDIOS UNIVERSITARIOS:');
+                $this->dependencia('ci_antecedentes')->dependencia('form_est')->vista_impresion($salida);
+                $salida->mensaje('BECAS OBTENIDAS:');
+                $this->dependencia('ci_antecedentes')->dependencia('form_beca')->vista_impresion($salida);
+                $salida->mensaje('DISTINCIONES Y PREMIOS');
+                //aqui las tablas ya tienen titulo
+                $this->dependencia('ci_antecedentes')->dependencia('form_dis')->vista_impresion($salida);
+                $this->dependencia('ci_antecedentes')->dependencia('form_emp')->vista_impresion($salida);
+                $this->dependencia('ci_antecedentes')->dependencia('form_empa')->vista_impresion($salida);
+                $this->dependencia('ci_antecedentes')->dependencia('form_pi')->vista_impresion($salida);
+                $this->dependencia('ci_antecedentes')->dependencia('form_pe')->vista_impresion($salida);
+                $salida->mensaje('TRABAJOS REALIZADOS:');
+                $this->dependencia('ci_antecedentes')->dependencia('form_trab')->vista_impresion($salida);
+                $salida->mensaje('CONOCIMIENTO DE IDIOMAS:');
+                $this->dependencia('ci_antecedentes')->dependencia('form_idio')->vista_impresion($salida);
+                $salida->mensaje('¿TIENE BECA EN CURSO?');
+                $this->dependencia('ci_antecedentes')->dependencia('form_bc')->vista_impresion($salida);
+                $salida->mensaje('PERSONAS A QUIENES EL POSTULANTE SOLICITO REFERENCIAS');
+                $this->dependencia('ci_antecedentes')->dependencia('cuadro_ref')->vista_impresion($salida);
+                $salida->mensaje('LUGAR DE TRABAJO EN EL QUE DESARROLLARA LA BECA');
+                $this->dependencia('ci_antecedentes')->dependencia('form_lt')->vista_impresion($salida);
+                $this->dependencia('form_dir')->vista_impresion($salida);
+                $salida->mensaje('DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA ');
+                $this->dependencia('form_pinv')->vista_impresion($salida);
+                $salida->mensaje('DATOS DEL PLAN DE TRABAJO');
+                $this->dependencia('form_pt')->vista_impresion($salida);
+                $salida->mensaje('FUNDAMENTOS DE LA SOLICITUD');
+                $this->dependencia('form_fund')->vista_impresion($salida);
+		$salida->salto_pagina();
+		
+	}
 }
 ?>

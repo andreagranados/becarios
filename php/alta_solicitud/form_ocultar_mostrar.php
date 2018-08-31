@@ -16,12 +16,12 @@ class form_ocultar_mostrar extends toba_ei_formulario
                                 this.ef('categ').ocultar();
 				switch (this.ef('categ').get_estado()) {
 					case '1':
-						
                                                 this.ef('cant_materias_aprobadas').ocultar();
+                                                this.ef('fecha_finalizacion').ocultar();
 						break;
 					case '2':
-						
                                                 this.ef('cant_materias_aprobadas').ocultar();
+                                                this.ef('fecha_finalizacion').ocultar();
 						break;
                                        					
 					case '3':

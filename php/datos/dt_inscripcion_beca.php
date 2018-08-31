@@ -3,14 +3,28 @@ require_once 'consultas_designa.php';
 class dt_inscripcion_beca extends toba_datos_tabla
 {
     function get_postulantes($filtro=null){
-        if(!is_null($filtro)){
-                $where=' where '.$filtro;
-            }else{
-                $where='';
-            }
+        //print_r($filtro);
+        $where=' WHERE 1=1';
+       
+        if(isset($filtro['anio'])){
+            $valor=$filtro['anio']['valor']-1;
+            $where.=' and anio='.$valor;
+        }
+        if(isset ($filtro['uni_acad'])){
+            $where.=" and uni_acad'".$filtro['uni_acad']['valor']."'";
+        }
+        if(isset ($filtro['estado'])){
+            $where.=" and estado='".$filtro['estado']['valor']."'";
+        }
+//        if(!is_null($filtro)){
+//                $where=' where '.$filtro;
+//            }else{
+//                $where='';
+//            }
+       //print_r($where);    exit;
         $sql="select * from 
-               (select i.uni_acad,i.fecha_presentacion,i.id_becario,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.fec_nacim,c.descripcion as categ_beca, 
-                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.cat_estat||di.dedic as cat_dir,ci.descripcion as cei_dir,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic as cat_co,cico.descripcion as cei_co
+               (select i.uni_acad,i.estado,i.fecha_presentacion,i.id_becario,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.fec_nacim,c.descripcion as categ_beca, 
+                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic as cat_co,cico.descripcion as cei_co
                 from inscripcion_beca i
                 LEFT OUTER JOIN becario b ON (i.id_becario=b.id_becario)
                 LEFT OUTER JOIN categoria_beca c ON (c.id_categ=i.categ_beca)
