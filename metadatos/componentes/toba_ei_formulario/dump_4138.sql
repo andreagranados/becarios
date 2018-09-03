@@ -122,71 +122,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	'<table>
-	<tbody>
-		<tr>
-			<td>
-				[ef id=apellido]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=nombre]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=nacionalidad]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=tipo_docum]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=nro_docum]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=cuil]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=fec_nacim]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=correo]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=telefono]</td>
-		</tr>
-		<tr>
-			<td>
-				<strong><span style="color:#000080;">Domicilio Real</span></strong></td>
-		</tr>
-		<tr>
-			<td style="vertical-align: baseline;">
-				[ef id=cod_pais]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=cod_provincia]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=cod_postal]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=calle]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=numero]</td>
-		</tr>
-	</tbody>
-</table>
-<p>&nbsp;</p><p>&nbsp;</p>', --template
+	NULL, --template
 	NULL  --template_impresion
 );
 
