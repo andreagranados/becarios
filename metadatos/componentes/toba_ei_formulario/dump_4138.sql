@@ -778,7 +778,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_provincia', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_provincia', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'9', --orden
 	'Provincia', --etiqueta
@@ -794,7 +794,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	'get_descripciones', --carga_metodo
+	'get_provincias', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	'4136', --carga_dt
