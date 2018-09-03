@@ -63,9 +63,15 @@ class ci_alta_solicitud extends toba_ci
            $datos=array();
            if(isset($this->s__categ_beca)){
                $datos['categ_beca']=$this->s__categ_beca['categ_beca'];
+               $this->dep('form')->evento('descargar')->mostrar();
+               $this->dep('form')->evento('descargar')->vinculo()->agregar_parametro('evento_trigger', 'descargar');
+           }else{
+               $this->dep('form')->evento('descargar')->ocultar();
            }
+           
            $form->set_datos($datos);
 	}
+      
         function evt__form__guardar($datos)
         {
             $band=true;
@@ -73,14 +79,19 @@ class ci_alta_solicitud extends toba_ci
                 $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
                 if($insc['estado']<>'I'){
                     $band=false;
+                }else{//para que no cambie el valor de la variable
+                    if($datos['categ_beca']<>$this->s__categ_beca){
+                        $band=false;
+                    }
                 }
             }
+            
             //esto era para cambiar la categoria
             //!!!ojo aca ver si esta bien que pueda modificar la categoria de la inscripcion
-//            if($band){
-//               $this->s__categ_beca =   $datos;
-//               $this->dep('datos')->tabla('inscripcion_beca')->set($datos);//setea en la inscripcion el tipo de categoria que acaba de elegir 
-//            }
+            if($band){//setea la variable con la categoria seleccionada
+               $this->s__categ_beca =   $datos;
+//               //$this->dep('datos')->tabla('inscripcion_beca')->set($datos);//setea en la inscripcion el tipo de categoria que acaba de elegir 
+            }
 
         }
 	//-----------------------------------------------------------------------------------
@@ -461,7 +472,7 @@ class ci_alta_solicitud extends toba_ci
                 if(isset($adj['cert_ant'])){
                     //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
                     $nomb_ca='/becarios/1.0/temp/becarios_2019/'.$adj['cert_ant'];
-                    $datos['cert_a']=$adj['cert_ant'];
+                    $datos['cert_ant']=$adj['cert_ant'];
                     $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                 }
                 if(isset($adj['const_titu'])){
@@ -505,32 +516,34 @@ class ci_alta_solicitud extends toba_ci
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
                 $bec=$this->dep('datos')->tabla('becario')->get();
                 $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
-                
-                if (isset($datos['cert_a'])) {
+               // print_r($datos['cert_ant']['tmp_name']);
+                if (isset($datos['cert_ant'])) {
                     //$nombre_archivo_ca = toba::proyecto()->get_www_temp($datos['cert_a']['name']);
                     //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
                     $nombre_ca="cert_ant".$cuil_becario.".pdf";
-                    //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
-                    $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
-                    move_uploaded_file($datos['cert_a']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
+                    //$destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
+                    move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cert_ant']=strval($nombre_ca);
                 }
                 if(isset($datos['const_titu'])){
                     $nombre_ti="const_titu".$cuil_becario.".pdf";
-                    //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/const_titu".$cuil_becario.".pdf";
-                    $destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
+                    $destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ti;
+                    //$destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_titu".$cuil_becario.".pdf";
                     move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['const_titu']=strval($nombre_ti);
                 }
                 if(isset($datos['rend_acad'])){
                     $nombre_ra="rend_acad".$cuil_becario.".pdf";
-                    $destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/rend_acad".$cuil_becario.".pdf";
+                    $destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
+                    //$destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/rend_acad".$cuil_becario.".pdf";
                     move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['rend_acad']=strval($nombre_ra);
                 }
                 if(isset($datos['cv_post'])){
                     $nombre_cvp="cv_post".$cuil_becario.".pdf";
-                    $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/rend_acad".$cuil_becario.".pdf";
+                    $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
+                    //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/cv_post".$cuil_becario.".pdf";
                     move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cv_post']=strval($nombre_cvp);
                 }
@@ -563,7 +576,7 @@ class ci_alta_solicitud extends toba_ci
         
         function vista_pdf(toba_vista_pdf $salida){
           $bandera = toba::memoria()->get_parametro('evento_trigger');
-         // print_r($bandera);exit;
+          //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
@@ -1197,7 +1210,29 @@ class ci_alta_solicitud extends toba_ci
                    $pdf->closeObject(); 
                 }     
             }//if bandera=imprimir2
-        
+                        else{if($bandera=='descargar'){
+                            if($this->s__categ_beca==1 or $this->s__categ_beca==2){
+                                //$archivo='C:\proyectos\toba_2.6.3\proyectos\becarios\www\Certificado_Antecedentes_Graduados.docx';
+                                $archivo= toba::proyecto()->get_path().'/www/Certificado_Antecedentes_Graduados.docx';
+                            }else{
+                                //$archivo='C:\proyectos\toba_2.6.3\proyectos\becarios\www\Certificado_Antecedentes_Estudiantes.docx';
+                                $archivo= toba::proyecto()->get_path().'/www/Certificado_Antecedentes_Estudiantes.docx';
+                            }
+                            
+                            header('Content-Description: File Transfer');
+                            header("Content-Type: application/force-download");
+                            header('Content-Disposition: attachment; filename='.basename($archivo));//basename($mi_pdf)//Returns trailing name component of path
+                            header('Content-Transfer-Encoding: binary');
+                            header('Expires: 0');
+                            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+                            header('Pragma: public'); 
+                            ob_clean();
+                            flush();
+                            readfile($archivo);//Outputs a file
+                            exit();
+                        }
+                            
+                        }
             }//else
         }//fin vista_pdf
         function vista_impresion( toba_impresion $salida )

@@ -615,9 +615,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'9302', --objeto_ei_formulario_fila
 	'4203', --objeto_ei_formulario
 	'becarios', --objeto_ei_formulario_proyecto
-	'cert_a', --identificador
+	'cert_ant', --identificador
 	'ef_upload', --elemento_formulario
-	'cert_a', --columnas
+	'cert_ant', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
