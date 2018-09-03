@@ -868,7 +868,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_lista
 	'codigo_pcia', --carga_col_clave
 	'descripcion_pcia', --carga_col_desc
-	NULL, --carga_maestros
+	'cod_pais', --carga_maestros
 	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado
 	'1', --carga_permite_no_seteado
