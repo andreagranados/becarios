@@ -14,7 +14,7 @@ class dt_provincia extends toba_datos_tabla
             $sql="select codigo_pcia,descripcion_pcia from provincia "
                     . $where
                     ." order by descripcion_pcia";
-          
+          print_r($sql);
            return toba::db('becarios')->consultar($sql); 
         }
 }
