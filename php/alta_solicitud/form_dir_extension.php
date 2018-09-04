@@ -1,5 +1,5 @@
 <?php
-class form_extension extends toba_ei_formulario
+class form_dir_extension extends toba_ei_formulario
 {
     function extender_objeto_js()
     {

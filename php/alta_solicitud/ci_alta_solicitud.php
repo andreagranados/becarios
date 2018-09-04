@@ -63,8 +63,9 @@ class ci_alta_solicitud extends toba_ci
            $datos=array();
            if(isset($this->s__categ_beca)){
                $datos['categ_beca']=$this->s__categ_beca['categ_beca'];
-               $this->dep('form')->evento('descargar')->mostrar();
+               //$this->dep('form')->evento('descargar')->mostrar();
                $this->dep('form')->evento('descargar')->vinculo()->agregar_parametro('evento_trigger', 'descargar');
+               
            }else{
                $this->dep('form')->evento('descargar')->ocultar();
            }
@@ -87,10 +88,9 @@ class ci_alta_solicitud extends toba_ci
             }
             
             //esto era para cambiar la categoria
-            //!!!ojo aca ver si esta bien que pueda modificar la categoria de la inscripcion
             if($band){//setea la variable con la categoria seleccionada
                $this->s__categ_beca =   $datos;
-//               //$this->dep('datos')->tabla('inscripcion_beca')->set($datos);//setea en la inscripcion el tipo de categoria que acaba de elegir 
+//    esto lo saco para que no pueda cambiar la categ una vez que guardo //$this->dep('datos')->tabla('inscripcion_beca')->set($datos);//setea en la inscripcion el tipo de categoria que acaba de elegir 
             }
 
         }
@@ -521,8 +521,8 @@ class ci_alta_solicitud extends toba_ci
                     //$nombre_archivo_ca = toba::proyecto()->get_www_temp($datos['cert_a']['name']);
                     //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
                     $nombre_ca="cert_ant".$cuil_becario.".pdf";
-                    $destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
-                    //$destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_ant".$cuil_becario.".pdf";
+                    //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
+                    $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
                     move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cert_ant']=strval($nombre_ca);
                 }
@@ -535,15 +535,15 @@ class ci_alta_solicitud extends toba_ci
                 }
                 if(isset($datos['rend_acad'])){
                     $nombre_ra="rend_acad".$cuil_becario.".pdf";
-                    $destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
-                    //$destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/rend_acad".$cuil_becario.".pdf";
+                    //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
+                    $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
                     move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['rend_acad']=strval($nombre_ra);
                 }
                 if(isset($datos['cv_post'])){
                     $nombre_cvp="cv_post".$cuil_becario.".pdf";
-                    $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
-                    //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/cv_post".$cuil_becario.".pdf";
+                    //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
+                    $destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
                     move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cv_post']=strval($nombre_cvp);
                 }

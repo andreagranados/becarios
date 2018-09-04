@@ -138,7 +138,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'titulo_plan_trabajo', --identificador
 	'ef_editable_textarea', --elemento_formulario
 	'titulo_plan_trabajo', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'1', --orden
 	'Título Plan de Trabajo', --etiqueta
@@ -218,7 +218,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'desarrollo_plan_trab', --identificador
 	'ef_editable_textarea', --elemento_formulario
 	'desarrollo_plan_trab', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
 	'Desarrollo del Plan Trabajo', --etiqueta

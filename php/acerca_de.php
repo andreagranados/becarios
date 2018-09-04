@@ -64,6 +64,22 @@ body {
 	<tr>
 		<td colspan="3" height="40"></td>
 	</tr>
+        
+
+</table>
+    <table border>
+        <tr>
+            <td colspan="2" align="center">Aqui va el check list</td>
+           
+      </tr>
+ 
+      <tr>
+            <td>1</td>
+            <td>Solicitud</td>
+            
+      </tr>
+    </table>
+<table>
 	<tr>
 		<td width="10%"></td>
 		<td class="titulo" align="center">UNIVERSIDAD NACIONAL DEL COMAHUE</td>

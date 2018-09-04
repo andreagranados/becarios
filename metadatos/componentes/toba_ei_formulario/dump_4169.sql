@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_ei_formulario', --clase
 	'25', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'form_bc_extension', --subclase
+	'alta_solicitud/form_bc_extension.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'alta_solicitud - ci_antecedentes - form_bc', --nombre
