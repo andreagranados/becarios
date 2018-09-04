@@ -471,25 +471,25 @@ class ci_alta_solicitud extends toba_ci
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 if(isset($adj['cert_ant'])){
                     //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
-                    $nomb_ca='/becarios/1.0/temp/becarios_2019/'.$adj['cert_ant'];
+                    $nomb_ca='/becarios/1.0/becarios_2019/'.$adj['cert_ant'];
                     $datos['cert_ant']=$adj['cert_ant'];
                     $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                 }
                 if(isset($adj['const_titu'])){
                     //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
-                    $nomb_ti='/becarios/1.0/temp/becarios_2019/'.$adj['const_titu'];
+                    $nomb_ti='/becarios/1.0/becarios_2019/'.$adj['const_titu'];
                     $datos['const_titu']=$adj['const_titu'];
                     $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_ti}' >const titu</a>";
                 }
                 if(isset($adj['rend_acad'])){
                     //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
-                    $nomb_ra='/becarios/1.0/temp/becarios_2019/'.$adj['rend_acad'];
+                    $nomb_ra='/becarios/1.0/becarios_2019/'.$adj['rend_acad'];
                     $datos['rend_acad']=$adj['rend_acad'];
                     $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                 }
                  if(isset($adj['cv_post'])){
                     //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
-                    $nomb_cvp='/becarios/1.0/temp/becarios_2019/'.$adj['cv_post'];
+                    $nomb_cvp='/becarios/1.0/becarios_2019/'.$adj['cv_post'];
                     $datos['cv_post']=$adj['cv_post'];
                     $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postul</a>";
                 }
@@ -522,13 +522,13 @@ class ci_alta_solicitud extends toba_ci
                     //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
                     $nombre_ca="cert_ant".$cuil_becario.".pdf";
                     //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
-                    $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
+                    $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ca;
                     move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cert_ant']=strval($nombre_ca);
                 }
                 if(isset($datos['const_titu'])){
                     $nombre_ti="const_titu".$cuil_becario.".pdf";
-                    $destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ti;
+                    $destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ti;
                     //$destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_titu".$cuil_becario.".pdf";
                     move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['const_titu']=strval($nombre_ti);
@@ -536,14 +536,14 @@ class ci_alta_solicitud extends toba_ci
                 if(isset($datos['rend_acad'])){
                     $nombre_ra="rend_acad".$cuil_becario.".pdf";
                     //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
-                    $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
+                    $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ra;
                     move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['rend_acad']=strval($nombre_ra);
                 }
                 if(isset($datos['cv_post'])){
                     $nombre_cvp="cv_post".$cuil_becario.".pdf";
                     //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
-                    $destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
+                    $destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
                     move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['cv_post']=strval($nombre_cvp);
                 }

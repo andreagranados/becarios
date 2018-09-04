@@ -55,19 +55,19 @@ class ci_postulantes extends toba_ci
                         $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                         if(isset($adj['cert_ant'])){
                             //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
-                            $nomb_ca='/becarios/1.0/temp/becarios_2019/'.$adj['cert_ant'];
+                            $nomb_ca='/becarios/1.0/becarios_2019/'.$adj['cert_ant'];
                             $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                         }
                         if(isset($adj['const_titu'])){
-                            $nomb_titu='/becarios/1.0/temp/becarios_2019/'.$adj['const_titu'];
+                            $nomb_titu='/becarios/1.0/becarios_2019/'.$adj['const_titu'];
                             $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_titu}' >titulo</a>";
                         }
                         if(isset($adj['rend_acad'])){
-                            $nomb_ra='/becarios/1.0/temp/becarios_2019/'.$adj['rend_acad'];
+                            $nomb_ra='/becarios/1.0/becarios_2019/'.$adj['rend_acad'];
                             $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                         }
                         if(isset($adj['cv_post'])){
-                            $nomb_cvp='/becarios/1.0/temp/becarios_2019/'.$adj['cv_post'];
+                            $nomb_cvp='/becarios/1.0/becarios_2019/'.$adj['cv_post'];
                             $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv post</a>";
                         }
                     }
