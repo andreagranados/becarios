@@ -68,7 +68,27 @@ class ci_postulantes extends toba_ci
                         }
                         if(isset($adj['cv_post'])){
                             $nomb_cvp='/becarios/1.0/becarios_2019/'.$adj['cv_post'];
-                            $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv post</a>";
+                            $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postulante</a>";
+                        }
+                        if(isset($adj['cv_dir'])){
+                            $nomb_cvdir='/becarios/1.0/becarios_2019/'.$adj['cv_dir'];
+                            $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
+                        }
+                        if(isset($adj['cv_codir'])){
+                            $nomb_cdir='/becarios/1.0/becarios_2019/'.$adj['cv_codir'];
+                            $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
+                        }
+                        if(isset($adj['cuil'])){
+                            $nomb_cuil='/becarios/1.0/becarios_2019/'.$adj['cuil'];
+                            $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
+                        }
+                        if(isset($adj['docum'])){
+                            $nomb_doc='/becarios/1.0/becarios_2019/'.$adj['docum'];
+                            $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
+                        }
+                        if(isset($adj['comprob'])){
+                            $nomb_comp='/becarios/1.0/becarios_2019/'.$adj['comprob'];
+                            $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                         }
                     }
                     $form->set_datos($datos);    
