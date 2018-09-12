@@ -121,6 +121,7 @@ class ci_antecedentes extends toba_ci
 	}
         function evt__form_car__guardar($datos)
         {
+            //print_r($datos);
             $band=true;
             $primera=true;
             if ($this->controlador()->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
