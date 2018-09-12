@@ -139,6 +139,7 @@ class ci_alta_solicitud extends toba_ci
            $band=true;
            $primerad=true;
            $primerac=true;
+           $borrar_codir=false;
            if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
              $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
              if($insc['estado']<>'I'){
@@ -147,8 +148,14 @@ class ci_alta_solicitud extends toba_ci
              if(isset($insc['id_director'])){
                  $primerad=false;
              }
-             if(isset($insc['id_codirector'])){
-                 $primerac=false;
+             if(isset($insc['id_codirector'])){//la inscripcion tiene seteado el codirector
+                 if(!isset($datos['id_docentec'])){//y ahora ya lo borra
+                     $datos_insc['id_codirector']=null;
+                     $borrar_codir=true;
+                     
+                 }else{//no tiene que actualizar la inscripcion
+                    $primerac=false;
+                 }
              }
            }
            if($band){
@@ -192,7 +199,7 @@ class ci_alta_solicitud extends toba_ci
                 $this->dep('datos')->tabla('director_beca')->set($datosd);
                 //----sincroniza
                 $this->dep('datos')->tabla('director_beca')->sincronizar();
-                if($primerad){
+                if($primerad){//es la primera vez que ingresa al director
                     $dir=$this->dep('datos')->tabla('director_beca')->get();
                     $datos_insc['id_director']=$dir['id'];
                 }
@@ -242,13 +249,23 @@ class ci_alta_solicitud extends toba_ci
                     $this->dep('datos')->tabla('codirector_beca')->set($datosc);
                     $this->dep('datos')->tabla('codirector_beca')->sincronizar();
                 }  
-                if($primerac){
-                    $dir=$this->dep('datos')->tabla('codirector_beca')->get();
-                    $datos_insc['id_codirector']=$dir['id'];
+                if(!$borrar_codir){//sino borra el codirector
+                    if($primerac){//es la primera vez que ingresa codirector
+                        $dir=$this->dep('datos')->tabla('codirector_beca')->get();
+                        $datos_insc['id_codirector']=$dir['id'];
+                    }    
                 }
+                
                 if($primerad or $primerac){
+                    
                     $this->dep('datos')->tabla('inscripcion_beca')->set($datos_insc);
                     $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+                }
+                if($borrar_codir){
+                    $this->dep('datos')->tabla('codirector_beca')->eliminar_todo();
+                    $this->dep('datos')->tabla('codirector_beca')->resetear();
+                    $this->dep('datos')->tabla('domicilio_codir')->eliminar_todo();
+                    $this->dep('datos')->tabla('domicilio_codir')->resetear();
                 }
            } 
         }
