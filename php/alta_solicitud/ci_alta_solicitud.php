@@ -487,56 +487,47 @@ class ci_alta_solicitud extends toba_ci
                 
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 if(isset($adj['cert_ant'])){
-                    $nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];//en linux
-                    //$nomb_ca='/becarios/1.0/temp/becarios_2019/'.$adj['cert_ant'];//en windows
+                    $nomb_ca='/becarios/1.0/becarios_2019/'.$adj['cert_ant'];//en windows
                     $datos['cert_ant']=$adj['cert_ant'];
                     $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                 }
                 if(isset($adj['const_titu'])){
-                    $nomb_ti='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['const_titu'];
-                    //$nomb_ti='/becarios/1.0/temp/becarios_2019/'.$adj['const_titu'];
+                    $nomb_ti='/becarios/1.0/becarios_2019/'.$adj['const_titu'];
                     $datos['const_titu']=$adj['const_titu'];
                     $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_ti}' >const titu</a>";
                 }
                 if(isset($adj['rend_acad'])){
-                    $nomb_ra='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['rend_acad'];
-                    //$nomb_ra='/becarios/1.0/temp/becarios_2019/'.$adj['rend_acad'];
+                    $nomb_ra='/becarios/1.0/becarios_2019/'.$adj['rend_acad'];
                     $datos['rend_acad']=$adj['rend_acad'];
                     $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                 }
                 if(isset($adj['cv_post'])){
-                    $nomb_cvp='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cv_post'];
-                    //$nomb_cvp='/becarios/1.0/temp/becarios_2019/'.$adj['cv_post'];
+                    $nomb_cvp='/becarios/1.0/becarios_2019/'.$adj['cv_post'];
                     $datos['cv_post']=$adj['cv_post'];
                     $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postul</a>";
                 }
                 if(isset($adj['cv_dir'])){
-                    $nomb_cvdir='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cv_dir'];
-                    //$nomb_cvdir='/becarios/1.0/temp/becarios_2019/'.$adj['cv_dir'];
+                    $nomb_cvdir='/becarios/1.0/becarios_2019/'.$adj['cv_dir'];
                     $datos['cv_dir']=$adj['cv_dir'];
                     $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
                 }
                 if(isset($adj['cv_codir'])){
-                    $nomb_cdir='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cv_codir'];
-                    //$nomb_cdir='/becarios/1.0/temp/becarios_2019/'.$adj['cv_codir'];
+                    $nomb_cdir='/becarios/1.0/becarios_2019/'.$adj['cv_codir'];
                     $datos['cv_codir']=$adj['cv_codir'];
                     $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
                 }
-                if(isset($adj['cuil'])){
-                    $nomb_cuil='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cuil'];
-                   // $nomb_cuil='/becarios/1.0/temp/becarios_2019/'.$adj['cuil'];
+                if(isset($adj['cuil'])){ 
+                    $nomb_cuil='/becarios/1.0/becarios_2019/'.$adj['cuil'];
                     $datos['cuil']=$adj['cuil'];
                     $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
                 }
                 if(isset($adj['docum'])){
-                    $nomb_doc='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['docum'];
-                    //$nomb_doc='/becarios/1.0/temp/becarios_2019/'.$adj['docum'];
+                    $nomb_doc='/becarios/1.0/becarios_2019/'.$adj['docum'];
                     $datos['docum']=$adj['docum'];
                     $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
                 }
                 if(isset($adj['comprob'])){
-                    $nomb_comp='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['comprob'];
-                    //$nomb_comp='/becarios/1.0/temp/becarios_2019/'.$adj['comprob'];
+                    $nomb_comp='/becarios/1.0/becarios_2019/'.$adj['comprob'];
                     $datos['comprob']=$adj['comprob'];
                     $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                 }
