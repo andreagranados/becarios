@@ -79,11 +79,31 @@ class dt_director_beca extends toba_datos_tabla
             $dato = consultas_designa::get_cuil($id_doc);
             return $dato;
         }
-        
+        function get_cant_postulantes($legajo,$anio){
+            $salida=0;
+            $sql="select legajo,sum(cant) as cantidad from (select 1,d.legajo,count(distinct i.id_becario)as cant from director_beca d
+                    inner join inscripcion_beca i on (i.id_director=d.id)
+                    where extract(year from i.fecha_presentacion)=$anio
+                        and d.legajo=$legajo
+                    group by d.legajo
+                    union
+                    select 2,d.legajo,count(distinct i.id_becario)as cant from director_beca d
+                    inner join inscripcion_beca i on (i.id_codirector=d.id)
+                    where extract(year from i.fecha_presentacion)=$anio
+                        and d.legajo=$legajo
+                    group by d.legajo)sub
+                    group by legajo";
+            
+            $res=toba::db('becarios')->consultar($sql); 
+            if(count($res)>0){
+                $salida= $res[0]['cantidad'];
+                }
+            return $salida; 
+        }
         function get_datos_director($id_dir){//lo llama para director y codirector
             $salida=array();
             if(isset($id_dir)){
-               $sql="select upper(trim(d.apellido)||', '||trim(d.nombre)) as nombre,cuil1||'-'||cuil||'-'||cuil2 as cuil,correo,cat_estat,case when dedic=1 then 'Simple' else case when dedic=2 then 'Parcial' else case when dedic=3 then 'Exclusiva' else 'Ah-Honorem' end end  end as dedicacion,case when carac='I' then 'Interino' else case when carac='R' then 'Regular' else case when carac='S' then 'Suplente' else 'Otro' end end end as carac,c.descripcion as cat_conicet, i.descripcion as cat_inv, lugar_trabajo, institucion, titulo,
+               $sql="select upper(trim(d.apellido)||', '||trim(d.nombre)) as nombre,legajo,cuil1||'-'||cuil||'-'||cuil2 as cuil,correo,cat_estat,case when dedic=1 then 'Simple' else case when dedic=2 then 'Parcial' else case when dedic=3 then 'Exclusiva' else 'Ah-Honorem' end end  end as dedicacion,case when carac='I' then 'Interino' else case when carac='R' then 'Regular' else case when carac='S' then 'Suplente' else 'Otro' end end end as carac,c.descripcion as cat_conicet, i.descripcion as cat_inv, lugar_trabajo, institucion, titulo,
                     calle||' '||numero||' CP: '||cod_postal||' '||p.descripcion_pcia||' '||a.nombre as domi,hs_dedic_inves, dom.telefono
                      from director_beca d
                      left outer join categoria_conicet c on (d.cat_conicet=c.id_categ)

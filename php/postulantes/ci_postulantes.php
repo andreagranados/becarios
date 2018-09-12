@@ -16,7 +16,6 @@ class ci_postulantes extends toba_ci
 	}
         function evt__filtros__filtrar($datos)
 	{
-            //print_r($datos);
 		$this->s__datos_filtro = $datos;
                 $this->s__where = $this->dep('filtros')->get_sql_where();
 	}
@@ -111,5 +110,46 @@ class ci_postulantes extends toba_ci
             $this->dep('datos')->tabla('becario')->resetear();    
             $this->set_pantalla('pant_inicial');
         }
+//        function ajax__cargar_fila($id_fila,toba_ajax_respuesta $respuesta){
+//            print_r($id_fila);
+////            if($id_fila!=0){$id_fila=$id_fila/2;}
+////            $this->s__designacion=$this->s__datos[$id_fila]['id_designacion'];   
+////            $this->s__nombre="acta_".$this->s__datos[$id_fila]['apellido'].'_'.$this->s__datos[$id_fila]['cat_estat'].".pdf";   
+////            $this->s__pdf='acta';
+////            $tiene=$this->dep('datos')->tabla('articulo_73')->tiene_acta($this->s__designacion);
+////            if($tiene==1){
+////                $respuesta->set($id_fila);
+////            }else{
+////                $respuesta->set(-1);
+////            }
+//        }//esta funcion es llamada desde javascript
+        
+        function vista_pdf(toba_vista_pdf $salida)
+	{
+         
+		//Cambio lo m�rgenes accediendo directamente a la librer�a PDF
+		$pdf = $salida->get_pdf();
+		$pdf->ezSetMargins(80, 50, 30, 30);	//top, bottom, left, right
+				
+		//Pie de p�gina
+		$formato = 'P�gina {PAGENUM} de {TOTALPAGENUM}';
+		$pdf->ezStartPageNumbers(300, 20, 8, 'left', $formato, 1);	//x, y, size, pos, texto, pagina inicio
+
+		//Inserto los componentes usando la API de toba_vista_pdf
+		$salida->titulo($this->get_nombre());
+		$salida->mensaje('Nota: Este es el Principal');
+		$this->dependencia('cuadro')->vista_pdf($salida);	
+		
+	}
+	
+	//-----------------------------------------------------------------------------------
+	//---- cuadro -----------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+//imprime el numero de cada fila 
+	function conf_evt__cuadro__seleccion(toba_evento_usuario $evento, $fila)
+	{
+           // print_r($fila);
+	}
+
 }
 ?>

@@ -195,7 +195,7 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	'anio', --expresion
 	'Convocatoria', --etiqueta
 	NULL, --descripcion
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --inicial
 	'1', --orden
 	NULL, --estado_defecto

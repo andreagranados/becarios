@@ -411,7 +411,8 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'pant_pinv', --identificador
 	'4', --orden
 	'4', --etiqueta
-	'DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA (APROBADO O EN EVALUACIÓN)', --descripcion
+	'DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA (APROBADO O EN EVALUACIÓN)<br>
+Seleccione un proyecto y espere a que se autocompleten el resto de los campos', --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen
@@ -468,7 +469,8 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'pant_adj', --identificador
 	'7', --orden
 	'7', --etiqueta
-	'DATOS ADJUNTOS', --descripcion
+	'DATOS ADJUNTOS<br>
+No permite cargar archivos .PDF que superen los 8MB. En caso de que alguno de los archivos exceda ese tamaño se sugiere comprimirlo usando alguna herramienta online, por ejemplo <a href=" http://www.ilovepdf.com/es/comprimir_pdf" target="nueva"> ww.ilovepdf.com/es/comprimir_pdf</a>', --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen
@@ -572,7 +574,19 @@ INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VAL
 	'becarios'  --proyecto
 );
 INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
+	'1697', --pantalla
+	'4123', --objeto_ci
+	'3363', --evento_id
+	'becarios'  --proyecto
+);
+INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
 	'1720', --pantalla
+	'4123', --objeto_ci
+	'3363', --evento_id
+	'becarios'  --proyecto
+);
+INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
+	'1721', --pantalla
 	'4123', --objeto_ci
 	'3363', --evento_id
 	'becarios'  --proyecto

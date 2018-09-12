@@ -143,7 +143,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'1', --orden
 	'Institución', --etiqueta
 	NULL, --etiqueta_estilo
-	NULL, --descripcion
+	'Institución que le otorga la beca', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
@@ -221,9 +221,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'2', --orden
-	'Objeto', --etiqueta
+	'Descripción', --etiqueta
 	NULL, --etiqueta_estilo
-	'Indique aquí el objetivo???', --descripcion
+	'Indique aquí la categoría, nombre o tipo de la beca (Beca Estímulo a las Vocaciones Científicas-CIN, Beca de Ayuda Económica, Beca PPU, etc)', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
@@ -304,15 +304,15 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'Desde', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
-	NULL, --colapsado
-	NULL, --desactivado
+	'0', --colapsado
+	'0', --desactivado
 	NULL, --estilo
-	NULL, --total
+	'0', --total
 	NULL, --inicializacion
-	NULL, --permitir_html
-	NULL, --deshabilitar_rest_func
+	'0', --permitir_html
+	'0', --deshabilitar_rest_func
 	NULL, --estado_defecto
-	NULL, --solo_lectura
+	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
 	NULL, --carga_metodo
 	NULL, --carga_clase

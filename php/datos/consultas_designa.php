@@ -45,8 +45,11 @@ class consultas_designa
 	return $salida;
     }
     function get_proyectos(){
-        $sql="select id_pinv, denominacion
-              from pinvestigacion";
+        //p.codigo||'-'||SUBSTRING (p.denominacion,0,50) as denominacion
+        $sql="select p.id_pinv,coalesce(codigo,'')||' '||SUBSTRING(p.denominacion,1,60)||'....' as descripcion
+              from pinvestigacion p
+              where extract (year from p.fec_desde) in (2015,2016,2017,2018,2019)
+              and p.estado<>'X'";
 	$res= toba::db('designa')->consultar($sql);
 	return $res;
     }

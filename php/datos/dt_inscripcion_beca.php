@@ -16,22 +16,19 @@ class dt_inscripcion_beca extends toba_datos_tabla
         if(isset ($filtro['estado'])){
             $where.=" and estado='".$filtro['estado']['valor']."'";
         }
-//        if(!is_null($filtro)){
-//                $where=' where '.$filtro;
-//            }else{
-//                $where='';
-//            }
-       //print_r($where);    exit;
+
         $sql="select * from 
                (select i.uni_acad,i.estado,i.fecha_presentacion,i.id_becario,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.fec_nacim,c.descripcion as categ_beca, 
-                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic as cat_co,cico.descripcion as cei_co
+                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,t.descripcion as cat_oo,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic as cat_co,cico.descripcion as cei_co,di.titulo as tituloc,tco.descripcion as catco_oo
                 from inscripcion_beca i
                 LEFT OUTER JOIN becario b ON (i.id_becario=b.id_becario)
                 LEFT OUTER JOIN categoria_beca c ON (c.id_categ=i.categ_beca)
                 LEFT OUTER JOIN proyecto_inv p ON (p.id_pinv=i.id_proyecto)
                 LEFT OUTER JOIN director_beca di ON (di.id=i.id_director)
                 LEFT OUTER JOIN categoria_invest ci ON (ci.cod_cati=di.cat_invest)
+                LEFT OUTER JOIN categoria_conicet t ON (t.id_categ=di.cat_conicet)
                 LEFT OUTER JOIN director_beca co ON (co.id=i.id_codirector)
+                LEFT OUTER JOIN categoria_conicet tco ON (tco.id_categ=co.cat_conicet)
                 LEFT OUTER JOIN categoria_invest cico ON (cico.cod_cati=co.cat_invest)
                 )sub
                 $where ";

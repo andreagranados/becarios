@@ -5,9 +5,7 @@ class ci_antecedentes extends toba_ci
     protected $s__mostrar_sig=0;
     protected $s__mostrar_ant=0;
     protected $s__pantalla;
-    protected $s__mostrar;
-    protected $s__mostrar_e;
-    
+
         function get_opciones($id_categ){
             $salida=array();
             if($id_categ==1 or $id_categ==2){
@@ -366,207 +364,207 @@ class ci_antecedentes extends toba_ci
          //-----------------------------------------------------------------------------------
         //---- CUADRO referencias ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
-        function conf__cuadro_ref(toba_ei_cuadro $cuadro)
-	{
-            if ($this->controlador()->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
-                $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-                $datos=$this->controlador()->dep('datos')->tabla('becario_referencia')->get_listado($insc['id_becario'],$insc['fecha_presentacion']);
-                $cuadro->set_datos($datos);
-            }
-	}
-        function evt__cuadro_ref__seleccion($datos)
-	{//carga el referencista y su domicilio
-          $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-          if($insc['estado']<>'I'){
-              toba::notificacion()->agregar('La inscripcion ya ha sido enviada', "info");
-          }else{
-            if($insc['categ_beca']==3){//estudiante entonces muestra formulario para docente
-                $this->s__mostrar_e=1;  
-            }else{
-                $this->s__mostrar=1;
-            }
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->cargar($datos);  
-            $br=$this->controlador()->dep('datos')->tabla('becario_referencia')->get();  
-            if(isset($br['id_domicilio'])){
-                $datosd['nro_domicilio']=$br['id_domicilio'];
-                $this->controlador()->dep('datos')->tabla('domicilio_ref')->cargar($datosd);  
-            }
-          }
-	}
+//        function conf__cuadro_ref(toba_ei_cuadro $cuadro)
+//	{
+//            if ($this->controlador()->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
+//                $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+//                $datos=$this->controlador()->dep('datos')->tabla('becario_referencia')->get_listado($insc['id_becario'],$insc['fecha_presentacion']);
+//                $cuadro->set_datos($datos);
+//            }
+//	}
+//        function evt__cuadro_ref__seleccion($datos)
+//	{//carga el referencista y su domicilio
+//          $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+//          if($insc['estado']<>'I'){
+//              toba::notificacion()->agregar('La inscripcion ya ha sido enviada', "info");
+//          }else{
+//            if($insc['categ_beca']==3){//estudiante entonces muestra formulario para docente
+//                $this->s__mostrar_e=1;  
+//            }else{
+//                $this->s__mostrar=1;
+//            }
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->cargar($datos);  
+//            $br=$this->controlador()->dep('datos')->tabla('becario_referencia')->get();  
+//            if(isset($br['id_domicilio'])){
+//                $datosd['nro_domicilio']=$br['id_domicilio'];
+//                $this->controlador()->dep('datos')->tabla('domicilio_ref')->cargar($datosd);  
+//            }
+//          }
+//	}
         //---formulario para referencias que son docentes
-        function conf__form_refer_e(toba_ei_formulario $form)
-        {
-            if($this->s__mostrar_e==1){
-                $this->dep('form_refer_e')->descolapsar();
-            }else{
-                $this->dep('form_refer_e')->colapsar();
-            }
-            if ($this->controlador()->dep('datos')->tabla('becario_referencia')->esta_cargada()) {
-                $datos=$this->controlador()->dep('datos')->tabla('becario_referencia')->get();
-                if(isset($datos['id_designacion'])){
-                    $doc=$this->controlador()->dep('datos')->tabla('director_beca')->get_docente($datos['id_designacion']);
-                    $datos['id_docente']=$doc;
-                }
-                if ($this->controlador()->dep('datos')->tabla('domicilio_ref')->esta_cargada()) {
-                    $datosd=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();
-                    $datos['cod_pais']=$datosd['cod_pais'];
-                    $datos['cod_provincia']=$datosd['cod_provincia'];
-                    $datos['cod_postal']=$datosd['cod_postal'];
-                    $datos['calle']=$datosd['calle'];
-                    $datos['numero']=$datosd['numero'];
-                    $datos['telefono']=$datosd['telefono'];
-                }
-                $form->set_datos($datos);
-            }
-        }
-        function evt__form_refer_e__alta($datos)//da de alta un referenciasta docente
-        {
-            $ap=$this->controlador()->dep('datos')->tabla('director_beca')->get_apellido($datos['id_docente']);
-            $nom=$this->controlador()->dep('datos')->tabla('director_beca')->get_nombre($datos['id_docente']);
-            $cargo=$this->controlador()->dep('datos')->tabla('director_beca')->get_cargo($datos['id_designacion']);
-            $unia=$this->controlador()->dep('datos')->tabla('director_beca')->get_ua($datos['id_designacion']);
-            $datos['apellido']=$ap;
-            $datos['nombre']=$nom;
-            $datos['cargo']=$cargo;
-            $datos['uni_acad']=$unia;
-              //datos del domicilio del referencista
-            $datosd['cod_pais']=$datos['cod_pais'];
-            $datosd['cod_provincia']=$datos['cod_provincia'];
-            $datosd['cod_postal']=$datos['cod_postal'];
-            $datosd['calle']=$datos['calle'];
-            $datosd['numero']=$datos['numero'];
-            $datosd['telefono']=$datos['telefono'];
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
-            $domi=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();  
-            $datos['id_domicilio']=$domi['nro_domicilio'];
-            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos['id_becario']=$insc['id_becario'];
-            $datos['fecha']=$insc['fecha_presentacion'];
-            //da de alta el referencista docente
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();  
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();  
-            $this->s__mostrar_e=0;
-        }
-        function evt__form_refer_e__modificacion($datos)
-        {
-            $datosd['cod_pais']=$datos['cod_pais'];
-            $datosd['cod_provincia']=$datos['cod_provincia'];
-            $datosd['cod_postal']=$datos['cod_postal'];
-            $datosd['calle']=$datos['calle'];
-            $datosd['numero']=$datos['numero'];
-            $datosd['telefono']=$datos['telefono'];
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear(); 
-            //referencista
-            $ap=$this->controlador()->dep('datos')->tabla('director_beca')->get_apellido($datos['id_docente']);
-            $nom=$this->controlador()->dep('datos')->tabla('director_beca')->get_nombre($datos['id_docente']);
-            $cargo=$this->controlador()->dep('datos')->tabla('director_beca')->get_cargo($datos['id_designacion']);
-            $ua=$this->controlador()->dep('datos')->tabla('director_beca')->get_ua($datos['id_designacion']);
-            $datos['apellido']=$ap;
-            $datos['nombre']=$nom;
-            $datos['cargo']=$cargo;
-            $datos['uni_acad']=$ua;
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            $this->s__mostrar_e=0;
-            toba::notificacion()->agregar('Los datos se han guardado correctamente', 'info');  
-        }
-        function evt__form_refer_e__cancelar($datos)
-        {
-            $this->s__mostrar_e=0;
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
-        }
-        function evt__form_refer_e__baja($datos)
-        {
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->eliminar_todo();
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->eliminar_todo();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
-            $this->s__mostrar_e=0;
-        }
-        //--formulario para referencias que postulantes graduados
-        function conf__form_refer(toba_ei_formulario $form)
-	{
-            if($this->s__mostrar==1){
-                $this->dep('form_refer')->descolapsar();
-            }else{
-                $this->dep('form_refer')->colapsar();
-            }
-            if ($this->controlador()->dep('datos')->tabla('becario_referencia')->esta_cargada()) {
-                $datos=$this->controlador()->dep('datos')->tabla('becario_referencia')->get();
-                if ($this->controlador()->dep('datos')->tabla('domicilio_ref')->esta_cargada()) {
-                    $datosd=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();
-                    $datos['cod_pais']=$datosd['cod_pais'];
-                    $datos['cod_provincia']=$datosd['cod_provincia'];
-                    $datos['cod_postal']=$datosd['cod_postal'];
-                    $datos['calle']=$datosd['calle'];
-                    $datos['numero']=$datosd['numero'];
-                    $datos['telefono']=$datosd['telefono'];
-                }
-                $form->set_datos($datos);
-            }
-
-	}
-        function evt__form_refer__alta($datos)
-        {
-            //da de alta el domicilio
-            $datosd['cod_pais']=$datos['cod_pais'];
-            $datosd['cod_provincia']=$datos['cod_provincia'];
-            $datosd['cod_postal']=$datos['cod_postal'];
-            $datosd['calle']=$datos['calle'];
-            $datosd['numero']=$datos['numero'];
-            $datosd['telefono']=$datos['telefono'];
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
-            $domi=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();  
-            $datos['id_domicilio']=$domi['nro_domicilio'];
-            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos['id_becario']=$insc['id_becario'];
-            $datos['fecha']=$insc['fecha_presentacion'];
-            //da de alta el becario
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();  
-            $this->s__mostrar=0;
-        }
-        function evt__form_refer__modificacion($datos)
-        {
-            $datosd['cod_pais']=$datos['cod_pais'];
-            $datosd['cod_provincia']=$datos['cod_provincia'];
-            $datosd['cod_postal']=$datos['cod_postal'];
-            $datosd['calle']=$datos['calle'];
-            $datosd['numero']=$datos['numero'];
-            $datosd['telefono']=$datos['telefono'];
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear(); 
-            //referencista
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear(); 
-            $this->s__mostrar=0;
-            toba::notificacion()->agregar('Los datos se han guardado correctamente', 'info');  
-        }
-        function evt__form_refer__cancelar($datos)
-        {
-            $this->s__mostrar=0;
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
-        }
-        function evt__form_refer__baja($datos)
-        {
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->eliminar_todo();
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->eliminar_todo();
-            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
-            $this->s__mostrar=0;
-        }
+//        function conf__form_refer_e(toba_ei_formulario $form)
+//        {
+//            if($this->s__mostrar_e==1){
+//                $this->dep('form_refer_e')->descolapsar();
+//            }else{
+//                $this->dep('form_refer_e')->colapsar();
+//            }
+//            if ($this->controlador()->dep('datos')->tabla('becario_referencia')->esta_cargada()) {
+//                $datos=$this->controlador()->dep('datos')->tabla('becario_referencia')->get();
+//                if(isset($datos['id_designacion'])){
+//                    $doc=$this->controlador()->dep('datos')->tabla('director_beca')->get_docente($datos['id_designacion']);
+//                    $datos['id_docente']=$doc;
+//                }
+//                if ($this->controlador()->dep('datos')->tabla('domicilio_ref')->esta_cargada()) {
+//                    $datosd=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();
+//                    $datos['cod_pais']=$datosd['cod_pais'];
+//                    $datos['cod_provincia']=$datosd['cod_provincia'];
+//                    $datos['cod_postal']=$datosd['cod_postal'];
+//                    $datos['calle']=$datosd['calle'];
+//                    $datos['numero']=$datosd['numero'];
+//                    $datos['telefono']=$datosd['telefono'];
+//                }
+//                $form->set_datos($datos);
+//            }
+//        }
+//        function evt__form_refer_e__alta($datos)//da de alta un referenciasta docente
+//        {
+//            $ap=$this->controlador()->dep('datos')->tabla('director_beca')->get_apellido($datos['id_docente']);
+//            $nom=$this->controlador()->dep('datos')->tabla('director_beca')->get_nombre($datos['id_docente']);
+//            $cargo=$this->controlador()->dep('datos')->tabla('director_beca')->get_cargo($datos['id_designacion']);
+//            $unia=$this->controlador()->dep('datos')->tabla('director_beca')->get_ua($datos['id_designacion']);
+//            $datos['apellido']=$ap;
+//            $datos['nombre']=$nom;
+//            $datos['cargo']=$cargo;
+//            $datos['uni_acad']=$unia;
+//              //datos del domicilio del referencista
+//            $datosd['cod_pais']=$datos['cod_pais'];
+//            $datosd['cod_provincia']=$datos['cod_provincia'];
+//            $datosd['cod_postal']=$datos['cod_postal'];
+//            $datosd['calle']=$datos['calle'];
+//            $datosd['numero']=$datos['numero'];
+//            $datosd['telefono']=$datos['telefono'];
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
+//            $domi=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();  
+//            $datos['id_domicilio']=$domi['nro_domicilio'];
+//            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+//            $datos['id_becario']=$insc['id_becario'];
+//            $datos['fecha']=$insc['fecha_presentacion'];
+//            //da de alta el referencista docente
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();  
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();  
+//            $this->s__mostrar_e=0;
+//        }
+//        function evt__form_refer_e__modificacion($datos)
+//        {
+//            $datosd['cod_pais']=$datos['cod_pais'];
+//            $datosd['cod_provincia']=$datos['cod_provincia'];
+//            $datosd['cod_postal']=$datos['cod_postal'];
+//            $datosd['calle']=$datos['calle'];
+//            $datosd['numero']=$datos['numero'];
+//            $datosd['telefono']=$datos['telefono'];
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear(); 
+//            //referencista
+//            $ap=$this->controlador()->dep('datos')->tabla('director_beca')->get_apellido($datos['id_docente']);
+//            $nom=$this->controlador()->dep('datos')->tabla('director_beca')->get_nombre($datos['id_docente']);
+//            $cargo=$this->controlador()->dep('datos')->tabla('director_beca')->get_cargo($datos['id_designacion']);
+//            $ua=$this->controlador()->dep('datos')->tabla('director_beca')->get_ua($datos['id_designacion']);
+//            $datos['apellido']=$ap;
+//            $datos['nombre']=$nom;
+//            $datos['cargo']=$cargo;
+//            $datos['uni_acad']=$ua;
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
+//            $this->s__mostrar_e=0;
+//            toba::notificacion()->agregar('Los datos se han guardado correctamente', 'info');  
+//        }
+//        function evt__form_refer_e__cancelar($datos)
+//        {
+//            $this->s__mostrar_e=0;
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
+//        }
+//        function evt__form_refer_e__baja($datos)
+//        {
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->eliminar_todo();
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->eliminar_todo();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
+//            $this->s__mostrar_e=0;
+//        }
+//        //--formulario para referencias que postulantes graduados
+//        function conf__form_refer(toba_ei_formulario $form)
+//	{
+//            if($this->s__mostrar==1){
+//                $this->dep('form_refer')->descolapsar();
+//            }else{
+//                $this->dep('form_refer')->colapsar();
+//            }
+//            if ($this->controlador()->dep('datos')->tabla('becario_referencia')->esta_cargada()) {
+//                $datos=$this->controlador()->dep('datos')->tabla('becario_referencia')->get();
+//                if ($this->controlador()->dep('datos')->tabla('domicilio_ref')->esta_cargada()) {
+//                    $datosd=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();
+//                    $datos['cod_pais']=$datosd['cod_pais'];
+//                    $datos['cod_provincia']=$datosd['cod_provincia'];
+//                    $datos['cod_postal']=$datosd['cod_postal'];
+//                    $datos['calle']=$datosd['calle'];
+//                    $datos['numero']=$datosd['numero'];
+//                    $datos['telefono']=$datosd['telefono'];
+//                }
+//                $form->set_datos($datos);
+//            }
+//
+//	}
+//        function evt__form_refer__alta($datos)
+//        {
+//            //da de alta el domicilio
+//            $datosd['cod_pais']=$datos['cod_pais'];
+//            $datosd['cod_provincia']=$datos['cod_provincia'];
+//            $datosd['cod_postal']=$datos['cod_postal'];
+//            $datosd['calle']=$datos['calle'];
+//            $datosd['numero']=$datos['numero'];
+//            $datosd['telefono']=$datos['telefono'];
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
+//            $domi=$this->controlador()->dep('datos')->tabla('domicilio_ref')->get();  
+//            $datos['id_domicilio']=$domi['nro_domicilio'];
+//            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+//            $datos['id_becario']=$insc['id_becario'];
+//            $datos['fecha']=$insc['fecha_presentacion'];
+//            //da de alta el becario
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();  
+//            $this->s__mostrar=0;
+//        }
+//        function evt__form_refer__modificacion($datos)
+//        {
+//            $datosd['cod_pais']=$datos['cod_pais'];
+//            $datosd['cod_provincia']=$datos['cod_provincia'];
+//            $datosd['cod_postal']=$datos['cod_postal'];
+//            $datosd['calle']=$datos['calle'];
+//            $datosd['numero']=$datos['numero'];
+//            $datosd['telefono']=$datos['telefono'];
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->set($datosd);
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->sincronizar();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear(); 
+//            //referencista
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->set($datos);
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->sincronizar();
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear(); 
+//            $this->s__mostrar=0;
+//            toba::notificacion()->agregar('Los datos se han guardado correctamente', 'info');  
+//        }
+//        function evt__form_refer__cancelar($datos)
+//        {
+//            $this->s__mostrar=0;
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
+//        }
+//        function evt__form_refer__baja($datos)
+//        {
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->eliminar_todo();
+//            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->eliminar_todo();
+//            $this->controlador()->dep('datos')->tabla('domicilio_ref')->resetear();
+//            $this->s__mostrar=0;
+//        }
          //-----------------------------------------------------------------------------------
         //---- formulario referencias ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -773,25 +771,10 @@ class ci_antecedentes extends toba_ci
              toba::notificacion()->agregar('La inscripcion ya ha sido enviada, no puede ser modificada', "info");
          }
 	}
-        function evt__alta()//para dar de alta un referencista
-        {
-            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            if($insc['estado']=='I'){
-                if($insc['categ_beca']==3){//es estudiante
-                    $this->s__mostrar_e=1;
-                }else{
-                    $this->s__mostrar=1;
-                }
-                $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            }else{
-                toba::notificacion()->agregar('La inscripcion ya ha sido enviada', "info");
-            }
-            
-        }
+
         function evt__cambiar_tab__anterior(){
             $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-            $this->s__mostrar=0;
-            $this->s__mostrar_e=0;
+           
         }
 }
 ?>

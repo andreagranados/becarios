@@ -299,7 +299,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --edit_resaltar
 	NULL, --edit_ajustable
 	NULL, --edit_confirmar_clave
-	NULL, --edit_expreg
+	'/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', --edit_expreg
 	NULL, --popup_item
 	NULL, --popup_proyecto
 	NULL, --popup_editable
@@ -656,7 +656,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_docentec', --identificador
 	'ef_combo', --elemento_formulario
 	'id_docentec', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'17', --orden
 	'CODIRECTOR', --etiqueta
@@ -736,21 +736,21 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'correoc', --identificador
 	'ef_editable', --elemento_formulario
 	'correoc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'18', --orden
 	'CORREO', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
-	NULL, --colapsado
-	NULL, --desactivado
+	'0', --colapsado
+	'0', --desactivado
 	NULL, --estilo
 	NULL, --total
 	NULL, --inicializacion
-	NULL, --permitir_html
-	NULL, --deshabilitar_rest_func
+	'0', --permitir_html
+	'0', --deshabilitar_rest_func
 	NULL, --estado_defecto
-	NULL, --solo_lectura
+	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
 	NULL, --carga_metodo
 	NULL, --carga_clase
@@ -779,7 +779,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --edit_resaltar
 	NULL, --edit_ajustable
 	NULL, --edit_confirmar_clave
-	NULL, --edit_expreg
+	'/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i', --edit_expreg
 	NULL, --popup_item
 	NULL, --popup_proyecto
 	NULL, --popup_editable
@@ -816,7 +816,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_designacionc', --identificador
 	'ef_combo', --elemento_formulario
 	'id_designacionc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'19', --orden
 	'CARGO DOCENTE', --etiqueta
@@ -896,7 +896,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'tituloc', --identificador
 	'ef_editable', --elemento_formulario
 	'tituloc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'20', --orden
 	'MAX TITULACIÓN ACAD', --etiqueta
@@ -976,7 +976,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'institucionc', --identificador
 	'ef_editable', --elemento_formulario
 	'institucionc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'21', --orden
 	'INSTITUCIÓN', --etiqueta
@@ -1056,7 +1056,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'lugar_trabajoc', --identificador
 	'ef_editable', --elemento_formulario
 	'lugar_trabajoc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'22', --orden
 	'LUGAR DE TRABAJO', --etiqueta
@@ -1252,8 +1252,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --carga_maestros
 	'0', --carga_cascada_relaj
 	'0', --cascada_mantiene_estado
-	'0', --carga_permite_no_seteado
-	NULL, --carga_no_seteado
+	'1', --carga_permite_no_seteado
+	'--Seleccione--', --carga_no_seteado
 	'0', --carga_no_seteado_ocultar
 	NULL, --edit_tamano
 	NULL, --edit_maximo
@@ -1383,7 +1383,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_investc', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_investc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'23', --orden
 	'CATEG EQUIV INVEST', --etiqueta
@@ -1463,7 +1463,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_conicetc', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_conicetc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'24', --orden
 	'CATEG OTRO ORGANISMO', --etiqueta
@@ -1703,7 +1703,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'hs_dedic_invesc', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'hs_dedic_invesc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'25', --orden
 	'HS DEDIC INVEST', --etiqueta
@@ -2263,7 +2263,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_paisc', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_paisc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'26', --orden
 	'País', --etiqueta
@@ -2343,7 +2343,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_provinciac', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_provinciac', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'27', --orden
 	'Provincia', --etiqueta
@@ -2423,7 +2423,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_postalc', --identificador
 	'ef_editable', --elemento_formulario
 	'cod_postalc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'28', --orden
 	'Código Postal', --etiqueta
@@ -2503,7 +2503,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'callec', --identificador
 	'ef_editable', --elemento_formulario
 	'callec', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'29', --orden
 	'Calle', --etiqueta
@@ -2583,7 +2583,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'numeroc', --identificador
 	'ef_editable', --elemento_formulario
 	'numeroc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'30', --orden
 	'Número', --etiqueta
@@ -2663,7 +2663,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'telefonoc', --identificador
 	'ef_editable', --elemento_formulario
 	'telefonoc', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
 	'31', --orden
 	'Teléfono', --etiqueta
