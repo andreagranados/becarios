@@ -49,7 +49,8 @@ class consultas_designa
         $sql="select p.id_pinv,coalesce(codigo,'')||' '||SUBSTRING(p.denominacion,1,60)||'....' as descripcion
               from pinvestigacion p
               where extract (year from p.fec_desde) in (2015,2016,2017,2018,2019)
-              and p.estado<>'X'";
+              and p.estado<>'X'
+              order by descripcion";
 	$res= toba::db('designa')->consultar($sql);
 	return $res;
     }
@@ -58,7 +59,11 @@ class consultas_designa
               from pinvestigacion
               where id_pinv=$id";
 	$res= toba::db('designa')->consultar($sql);
-	return $res[0]['codigo'];
+        if(isset($res[0]['codigo'])){
+            return $res[0]['codigo'];
+        }else{
+            return 'S/C';
+        }
     }
     function get_ua_proyecto($id){
         $sql="select  uni_acad
@@ -91,7 +96,7 @@ class consultas_designa
 	return $salida;
     }
     function get_ordenanza_proyecto($id){
-        $sql="select nro_ord_cs as ordenanza
+        $sql="select case when nro_ord_cs is null then 'S/D' else nro_ord_cs end as ordenanza
               from pinvestigacion
               where id_pinv=$id";
 	$res= toba::db('designa')->consultar($sql);

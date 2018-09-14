@@ -108,13 +108,22 @@ class ci_antecedentes extends toba_ci
 
 	function conf__form_car(toba_ei_formulario $form)
 	{
+            $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+            //los ef desactivados ya no salen en vista previa del boton final
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2 ){
+              $form->desactivar_efs(array('cant_materias_aprobadas','porc_mat_aprob'));
+            }else{//estudiante
+               $form->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion'));  
+            }
+            
             $datos=$this->controlador()->dep('datos')->tabla('carrera_inscripcion_beca')->get();
             if(isset($datos)){
                 $datos['car']=$datos['carrera'];
             }
             $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
             $datos['categ']=$insc['categ_beca']; 
-        
+            
+            
             if(isset($datos)){
                 $form->set_datos($datos);
             }

@@ -97,8 +97,12 @@ class ci_alta_solicitud extends toba_ci
             $datos=$this->dep('datos')->tabla('director_beca')->get();
             $datosc=$this->dep('datos')->tabla('codirector_beca')->get();
             $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
+            //los ef desactivados ya no salen en vista previa del boton final
+            if($insc['categ_beca']==3 ){//estudiante
+              $form->desactivar_efs(array('id_docentec','correoc','id_designacionc','tituloc','institucionc','lugar_trabajoc','cat_investc','cat_conicetc','hs_dedic_invesc','cod_paisc','cod_provinciac','cod_postalc','callec','numeroc','telefonoc'));
+            }
             //hago un set de categ para ocultar o no formulario de codirector
-            $datos['categ']=$insc['categ_beca'];
+            //$datos['categ']=$insc['categ_beca'];//esto lo elimino porque ya no lo hago con javascript
             $form->set_datos($datos);
             if(isset($datos['id_designacion'])){
                  $id_doc=$this->dep('datos')->tabla('director_beca')->get_docente($datos['id_designacion']);
@@ -465,6 +469,12 @@ class ci_alta_solicitud extends toba_ci
         function conf__pant_director(toba_ei_pantalla $pantalla)
         {
             $this->s__pantalla='pant_director';
+            if($this->s__categ_beca['categ_beca']==1 or $this->s__categ_beca['categ_beca']==2){
+                $pantalla->set_descripcion('DATOS DEL DIRECTOR/CODIRECTOR (si corresponde)');
+            }else{
+                $pantalla->set_descripcion('DATOS DEL DIRECTOR');
+            }
+            
         } 
         function conf__pant_antec(toba_ei_pantalla $pantalla)
         {
@@ -479,12 +489,15 @@ class ci_alta_solicitud extends toba_ci
         //cuil,documento,comprobantes,cert antecedentes siempre son obligatorios
         function conf__form_adj(toba_ei_formulario $form)
 	{
-            if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
-                $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-                if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando tiene codirector
+            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
+                if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando hay cargado al codirector
                     $form->ef('cv_codir')->set_obligatorio(true);
                 }
-                
+            }else{//estudiante desactiva el codirector
+                $form->desactivar_efs(array('cv_codir'));  
+            }
+            if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 if(isset($adj['cert_ant'])){
                     $nomb_ca='/becarios/1.0/becarios_2019/'.$adj['cert_ant'];//en windows
@@ -623,7 +636,7 @@ class ci_alta_solicitud extends toba_ci
                 if(isset($datos['comprob'])){
                     $nombre_comprob="comprob".$cuil_becario.".pdf";
                    // $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_comprob;
-                    $destino_docum="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
+                    $destino_comprob="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
                     move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['comprob']=strval($nombre_comprob);
                 }
@@ -979,7 +992,12 @@ class ci_alta_solicitud extends toba_ci
             
             //------------------------3
             $pdf->ezNewPage(); 
-            $pdf->ezText(utf8_d_seguro(' <b>3. DATOS DEL DIRECTOR DE BECA </b>'), 12,$centrado);
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){
+                $pdf->ezText(utf8_d_seguro(' <b>3. DATOS DEL DIRECTOR/CODIRECTOR (si corresponde) </b>'), 12,$centrado);
+            }else{
+                $pdf->ezText(utf8_d_seguro(' <b>3. DATOS DEL DIRECTOR DE BECA </b>'), 12,$centrado);
+            }
+            
             $pdf->ezText("\n", 10);
                      
             $tabla_director=array();
@@ -1222,11 +1240,12 @@ class ci_alta_solicitud extends toba_ci
         }//fin vista_pdf
         function vista_impresion( toba_impresion $salida )
 	{
-		$salida->titulo('Datos de Inscripcion a Beca ');
+		$salida->titulo(utf8_d_seguro('DATOS DE INSCRIPCIÓN A BECA '));
                 $this->dependencia('form')->vista_impresion($salida);
                 $salida->mensaje('DATOS PERSONALES:');
 		$this->dependencia('ci_antecedentes')->dependencia('form_dp')->vista_impresion($salida);
                 $salida->mensaje('DATOS DE LA CARRERA DE GRADO/PREGRADO POR LA QUE SE SOLICITA LA BECA:');
+                
                 $this->dependencia('ci_antecedentes')->dependencia('form_car')->vista_impresion($salida);
                 $salida->mensaje('OTROS ESTUDIOS UNIVERSITARIOS:');
                 $this->dependencia('ci_antecedentes')->dependencia('form_est')->vista_impresion($salida);
@@ -1240,17 +1259,17 @@ class ci_alta_solicitud extends toba_ci
                 $this->dependencia('ci_antecedentes')->dependencia('form_pi')->vista_impresion($salida);
                 $this->dependencia('ci_antecedentes')->dependencia('form_pe')->vista_impresion($salida);
                 $salida->mensaje('TRABAJOS REALIZADOS:');
+                
                 $this->dependencia('ci_antecedentes')->dependencia('form_trab')->vista_impresion($salida);
                 $salida->mensaje('CONOCIMIENTO DE IDIOMAS:');
                 $this->dependencia('ci_antecedentes')->dependencia('form_idio')->vista_impresion($salida);
-                $salida->mensaje('¿TIENE BECA EN CURSO?');
+                $salida->mensaje(utf8_d_seguro('¿TIENE BECA EN CURSO?'));
                 $this->dependencia('ci_antecedentes')->dependencia('form_bc')->vista_impresion($salida);
-                $salida->mensaje('PERSONAS A QUIENES EL POSTULANTE SOLICITO REFERENCIAS');
-                $this->dependencia('ci_antecedentes')->dependencia('cuadro_ref')->vista_impresion($salida);
-                $salida->mensaje('LUGAR DE TRABAJO EN EL QUE DESARROLLARA LA BECA');
+                $salida->mensaje(utf8_d_seguro('LUGAR DE TRABAJO EN EL QUE DESARROLLARÁ LA BECA'));
                 $this->dependencia('ci_antecedentes')->dependencia('form_lt')->vista_impresion($salida);
                 $this->dependencia('form_dir')->vista_impresion($salida);
-                $salida->mensaje('DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA ');
+                $salida->mensaje(utf8_d_seguro('DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA '));
+                
                 $this->dependencia('form_pinv')->vista_impresion($salida);
                 $salida->mensaje('DATOS DEL PLAN DE TRABAJO');
                 $this->dependencia('form_pt')->vista_impresion($salida);
