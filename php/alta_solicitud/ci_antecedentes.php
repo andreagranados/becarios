@@ -112,8 +112,13 @@ class ci_antecedentes extends toba_ci
             //los ef desactivados ya no salen en vista previa del boton final
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2 ){
               $form->desactivar_efs(array('cant_materias_aprobadas','porc_mat_aprob'));
+              if($inscripcion['categ_beca']==1){//perfeccionamiento
+                  $form->ef('fecha_finalizacion')->set_obligatorio(true);
+              }else{//de iniciacion
+                  
+              }
             }else{//estudiante
-               $form->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion'));  
+               $form->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion','carrera'));  
             }
             
             $datos=$this->controlador()->dep('datos')->tabla('carrera_inscripcion_beca')->get();
@@ -130,7 +135,6 @@ class ci_antecedentes extends toba_ci
 	}
         function evt__form_car__guardar($datos)
         {
-            //print_r($datos);
             $band=true;
             $primera=true;
             if ($this->controlador()->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
@@ -235,50 +239,59 @@ class ci_antecedentes extends toba_ci
          //-----------------------------------------------------------------------------------
 	//---- formulario empleos ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
-
+//empleos actuales
 	function conf__form_emp(toba_ei_formulario_ml $form)
 	{
             $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos(true,$insc['id_becario'],$insc['fecha_presentacion']);
+            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos_becario($insc['id_becario'],$insc['fecha_presentacion']);
             if(isset($datos)){
                  $form->set_datos($datos);
             }
 	}
         function evt__form_emp__guardar($datos)
         {
+           // print_r($datos);
             $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
                     $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
-                    $datos[$clave]['actual']=true;
                 }
                 $this->controlador()->dep('datos')->tabla('becario_empleo')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('becario_empleo')->sincronizar();
           }
         }
         //empleos anteriores
-        function conf__form_empa(toba_ei_formulario_ml $form)
-	{
-            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos(false,$insc['id_becario'],$insc['fecha_presentacion']);
-            if(isset($datos)){
-                 $form->set_datos($datos);
-            }
-	}
-        function evt__form_empa__guardar($datos)
-        { 
-            $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            if($inscripcion['estado']=='I'){
-                foreach ($datos as $clave => $elem) {
-                    $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
-                    $datos[$clave]['actual']=false;
-                }
-                $this->controlador()->dep('datos')->tabla('becario_empleo')->procesar_filas($datos);
-                $this->controlador()->dep('datos')->tabla('becario_empleo')->sincronizar();
-          }
-        }
+//        function conf__form_empa(toba_ei_formulario_ml $form)
+//	{
+//            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+//            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos(false,$insc['id_becario'],$insc['fecha_presentacion']);
+//            if(isset($datos)){
+//                $datos2['instituciona']=$datos['institucion'];
+//                $datos2['direcciona']=$datos['direccion'];
+//                $datos2['cargoa']=$datos['cargo'];
+//                $datos2['anio_ingresoa']=$datos['anio_ingreso'];
+//                $form->set_datos($datos);
+//            }
+//	}
+//        function evt__form_empa__guardar($datos)
+//        { 
+//            print_r($datos);
+//            $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
+//            if($inscripcion['estado']=='I'){
+//                foreach ($datos as $clave => $elem) {
+//                    $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
+//                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+//                    $datos[$clave]['actual']=false;
+////                    $datos[$clave]['institucion']=$datos['instituciona']; 
+////                    $datos[$clave]['direccion']=$datos['direcciona']; 
+////                    $datos[$clave]['cargo']=$datos['cargoa']; 
+////                    $datos[$clave]['anio_ingresoa']=$datos['anio_ingresoa']; 
+//                }
+//                $this->controlador()->dep('datos')->tabla('becario_empleo')->procesar_filas($datos);
+//                $this->controlador()->dep('datos')->tabla('becario_empleo')->sincronizar();
+//          }
+//        }
          //-----------------------------------------------------------------------------------
 	//---- formulario proyectos de investigacion  ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -782,9 +795,6 @@ class ci_antecedentes extends toba_ci
          }
 	}
 
-        function evt__cambiar_tab__anterior(){
-            $this->controlador()->dep('datos')->tabla('becario_referencia')->resetear();
-           
-        }
+        
 }
 ?>

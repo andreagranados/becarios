@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[4209]--  DT - ua_evaluadora 
+--[4214]--  DT - convocatoria 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,18 +9,18 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'becarios', --proyecto
-	'4209', --objeto
+	'4214', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
 	'toba', --clase_proyecto
 	'toba_datos_tabla', --clase
 	'25', --punto_montaje
-	'dt_ua_evaluadora', --subclase
-	'datos/dt_ua_evaluadora.php', --subclase_archivo
+	'dt_convocatoria', --subclase
+	'datos/dt_convocatoria.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - ua_evaluadora', --nombre
+	'DT - convocatoria', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,7 +36,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2018-09-13 20:40:02', --creacion
+	'2018-09-18 11:24:58', --creacion
 	NULL  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
@@ -46,14 +46,14 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, min_registros, punto_montaje, ap, ap_clase, ap_archivo, tabla, tabla_ext, alias, modificar_claves, fuente_datos_proyecto, fuente_datos, permite_actualizacion_automatica, esquema, esquema_ext) VALUES (
 	'becarios', --objeto_proyecto
-	'4209', --objeto
+	'4214', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
 	'25', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'ua_evaluadora', --tabla
+	'convocatoria', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -71,51 +71,23 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
-	'4209', --objeto
-	'2154', --col_id
-	'id', --columna
+	'4214', --objeto
+	'2163', --col_id
+	'id_conv', --columna
 	'E', --tipo
 	'1', --pk
-	'ua_evaluadora_id_seq', --secuencia
+	'convocatoria_id_conv_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
 	'0', --externa
-	'ua_evaluadora'  --tabla
+	'convocatoria'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
-	'4209', --objeto
-	'2155', --col_id
-	'uni_acad', --columna
-	'C', --tipo
-	'0', --pk
-	'', --secuencia
-	'4', --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'ua_evaluadora'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becarios', --objeto_proyecto
-	'4209', --objeto
-	'2156', --col_id
-	'nombre_evaluador', --columna
-	'C', --tipo
-	'0', --pk
-	'', --secuencia
-	'40', --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'ua_evaluadora'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'becarios', --objeto_proyecto
-	'4209', --objeto
-	'2161', --col_id
-	'id_convocatoria', --columna
+	'4214', --objeto
+	'2164', --col_id
+	'anio', --columna
 	'E', --tipo
 	'0', --pk
 	'', --secuencia
@@ -123,6 +95,48 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa
-	'ua_evaluadora'  --tabla
+	'convocatoria'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becarios', --objeto_proyecto
+	'4214', --objeto
+	'2165', --col_id
+	'descripcion', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'100', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'convocatoria'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becarios', --objeto_proyecto
+	'4214', --objeto
+	'2166', --col_id
+	'fec_inicio_ua', --columna
+	'F', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'convocatoria'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'becarios', --objeto_proyecto
+	'4214', --objeto
+	'2167', --col_id
+	'fec_fin_ua', --columna
+	'F', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'convocatoria'  --tabla
 );
 --- FIN Grupo de desarrollo 0

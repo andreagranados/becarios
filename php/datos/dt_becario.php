@@ -17,5 +17,16 @@ class dt_becario extends toba_datos_tabla
         return $salida;
         
     }
+    function get_nombre($id_bec){
+        $sql="select upper(trim(apellido)||', '||trim(nombre)) as nombre  "
+                . "from becario where id_becario=$id_bec";
+        $res= toba::db('becarios')->consultar($sql);
+        
+        if(count($res)>0){
+            return $res[0]['nombre'];
+        }else{
+            return '';
+        }
+    }
 }
 ?>        

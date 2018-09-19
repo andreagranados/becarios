@@ -30,6 +30,13 @@ class dt_becario_empleo extends toba_datos_tabla
                    . $where; 
            return toba::db('becarios')->consultar($sql);
         }
+        function get_empleos_becario($bec,$fec){
+            $sql="select * from becario_empleo"
+                   . " where id_becario=".$bec
+                   . " and fecha='".$fec."'";
+                   
+           return toba::db('becarios')->consultar($sql);
+        }
 }
 
 ?>

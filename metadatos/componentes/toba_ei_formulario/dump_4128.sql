@@ -1539,7 +1539,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'hs_dedic_inves', --identificador
 	'ef_editable_numero', --elemento_formulario
 	'hs_dedic_inves', --columnas
-	'1', --obligatorio
+	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'9', --orden
 	'HS DEDIC INVEST', --etiqueta
