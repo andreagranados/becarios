@@ -90,7 +90,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	NULL, --confirmacion
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
-	'instanciar.gif', --imagen
+	'administrador.png', --imagen
 	'0', --en_botonera
 	NULL, --ayuda
 	'2', --orden
@@ -789,7 +789,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4377', --objeto_cuadro_col
 	'puntaje', --clave
 	'21', --orden
-	'Puntaje', --titulo
+	'Puntaje Definitivo', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho

@@ -1081,7 +1081,7 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText(utf8_decode($texto), 10);
             $pdf->ezText("\n", 7);
             $tabla_cod=array();
-            $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Categoría de Beca:</b>'),'col2' => $cat),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+            $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Categoría de Beca:</b>'),'col2' => utf8_d_seguro($cat)),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
             $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Código de proyecto:</b>'),'col2' => $datos_proy['codigo']),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
             $cols_dp = array('col1'=>"<b>Datos Personales</b>",'col2'=>'');
             $tabla_dp=array();

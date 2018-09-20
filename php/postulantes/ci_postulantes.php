@@ -56,12 +56,18 @@ class ci_postulantes extends toba_ci
         }
         
         function evt__cuadro__asignarp($datos){
-            $this->dep('datos')->tabla('inscripcion_beca')->cargar($datos);
-            //cargo los evaluadores del becario seleccionado y luego uso el get_filas
-            $datos2['id_becario']=$datos['id_becario'];
-            $datos2['fecha']=$datos['fecha_presentacion'];
-            $this->dep('datos')->tabla('evaluador')->cargar($datos2);
-            $this->set_pantalla('pant_asigna');
+            $estado=$this->dep('datos')->tabla('inscripcion_beca')->get_estado($datos);
+            if($estado=='A'){
+                $this->dep('datos')->tabla('inscripcion_beca')->cargar($datos);
+                //cargo los evaluadores del becario seleccionado y luego uso el get_filas
+                $datos2['id_becario']=$datos['id_becario'];
+                $datos2['fecha']=$datos['fecha_presentacion'];
+                $this->dep('datos')->tabla('evaluador')->cargar($datos2);
+                $this->set_pantalla('pant_asigna');
+            }else{
+                toba::notificacion()->agregar(utf8_decode('La inscripción debe estar Admitida(A) para poder asignarle evaluadores.'), 'info');   
+            }
+            
         }
         
         function conf__formulario(toba_ei_formulario $form)
@@ -116,40 +122,54 @@ class ci_postulantes extends toba_ci
                 }
         }
         function evt__formulario__modificacion($datos)
-        {
-            $band=true;
+        {//solo estado, puntaje y observaciones
+            //print_r($datos);exit;
             $mensaje='';
+            $band=true;
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-            if(isset($datos['puntaje'])){//si han cargado puntaje en el formulario
-                if($inscripcion['estado']=='A'){//solo si esta aceptado puede cambiar puntaje
-                    $datos2['puntaje']=$datos['puntaje'];
-                }else{
-                    $band=false;
-                    toba::notificacion()->agregar('La inscripcion debe estar Admitida para poder ingresarle el puntaje', 'info');   
+            $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
+            //$conv=$this->dep('datos')->tabla('convocatoria')->get();
+            if($inscripcion['estado']=='I'){//cuando la inscripcion esta en I nadie puede cambiar nada
+                toba::notificacion()->agregar('No puede modificar una inscripción que no ha sido enviada por el becario.', 'error');   
+            }else{
+                //esto es para todos porque nadie puede pasar a E
+                if($inscripcion['estado']<>'E' && $datos['estado']=='E' ){//la inscripcion no esta en estado E y se la quiere pasar
+                    toba::notificacion()->agregar('La inscripcion no puede ser pasada a E por la UA. Es el becario es quien debe hacerlo.', 'error');   
+                    //$mensaje.='La inscripcion no puede ser pasada a E por la UA. Es el becario es quien debe hacerlo. <br>';
+                    //$datos2['estado']=$inscripcion['estado'];//conservo el estado
+                }else{//puedo cambiar estado
+                    
+                    $perfil = toba::usuario()->get_perfil_datos();
+                    if ($perfil == null) {//es usuario de SCyT
+                    //usuario de SCyT puede modificar siempre salvo por no pasar a E que ya se chequeo antes
+                        $datos2['estado']=$datos['estado'];
+                        $datos2['observaciones']=$datos['observaciones'];
+                        if(isset($datos['puntaje'])){//si han cargado puntaje en el formulario
+                            if($inscripcion['estado']=='A'){//solo si esta aceptado puede cambiar puntaje
+                                $datos2['puntaje']=$datos['puntaje'];
+                            }else{
+                                $band=false;
+                                toba::notificacion()->agregar(utf8_decode('La inscripción debe estar Admitida (A) para poder ingresarle el puntaje'), 'info');   
+                            }
+                        }
+                    }else{//usuario de la UA solo puede modificar durante el periodo indicado en la convocatoria
+                    //solo estado y observaciones
+                        $band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio+1);
+                        if(!$band){
+                            $mensaje=utf8_decode('No puede modificar porque ha pasado el período para hacer cambios');}
+                    }
+                    if($band){
+                        $datos2['estado']=$datos['estado'];
+                        $datos2['observaciones']=$datos['observaciones'];
+                        $this->dep('datos')->tabla('inscripcion_beca')->set($datos2);
+                        $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+                        toba::notificacion()->agregar('Los datos se han guardado correctamente', 'info');   
+                    }else{
+                      toba::notificacion()->agregar($mensaje, 'info');   
+                    }
+             
                 }
             }
-            //print_r($datos);
-            if($datos['estado']=='E'){//la UA no puede cambiar a E el estado de la inscripcion. Solo el becario puede hacerlo
-                $band=false;
-                $mensaje.='La inscripcion no puede ser enviada por la UA<br>';
-            }
-            
-            switch ($inscripcion['estado']) {//cuando la inscripcion esta en I entonces nadie puede cambiar estado
-                case 'I':$mensaje.='No puede cambiar el estado porque la inscripcion no ha sido enviada! ';
-                    $band=false;
-                    break;
-                
-                default:
-                    break;
-            }
-            if($band){
-                $datos2['estado']=$datos['estado'];
-                $datos2['observaciones']=$datos['observaciones'];
-                $this->dep('datos')->tabla('inscripcion_beca')->set($datos2);
-                $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
-                $mensaje='Los datos se han guardado correctamente';
-            }
-         toba::notificacion()->agregar($mensaje, 'info');
         }
         
         function evt__formulario__cancelar($datos)

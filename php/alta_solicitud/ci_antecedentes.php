@@ -111,14 +111,15 @@ class ci_antecedentes extends toba_ci
             $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
             //los ef desactivados ya no salen en vista previa del boton final
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2 ){
-              $form->desactivar_efs(array('cant_materias_aprobadas','porc_mat_aprob'));
+              //$form->desactivar_efs(array('cant_materias_aprobadas','porc_mat_aprob'));
               if($inscripcion['categ_beca']==1){//perfeccionamiento
                   $form->ef('fecha_finalizacion')->set_obligatorio(true);
               }else{//de iniciacion
                   
               }
             }else{//estudiante
-               $form->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion','carrera'));  
+            ////los desactivar rompen todo
+               //$form->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion','carrera'));  
             }
             
             $datos=$this->controlador()->dep('datos')->tabla('carrera_inscripcion_beca')->get();
