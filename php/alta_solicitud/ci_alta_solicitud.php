@@ -54,12 +54,8 @@ class ci_alta_solicitud extends toba_ci
             $datos=$this->dep('datos')->tabla('director_beca')->get();
             $datosc=$this->dep('datos')->tabla('codirector_beca')->get();
             $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
-            //los ef desactivados ya no salen en vista previa del boton final
-            if($insc['categ_beca']==3 ){//estudiante
-              $form->desactivar_efs(array('id_docentec','correoc','id_designacionc','tituloc','institucionc','lugar_trabajoc','cat_investc','cat_conicetc','hs_dedic_invesc','cod_paisc','cod_provinciac','cod_postalc','callec','numeroc','telefonoc'));
-            }
             //hago un set de categ para ocultar o no formulario de codirector
-            //$datos['categ']=$insc['categ_beca'];//esto lo elimino porque ya no lo hago con javascript
+            $datos['categ']=$insc['categ_beca'];
             $form->set_datos($datos);
             if(isset($datos['id_designacion'])){
                  $id_doc=$this->dep('datos')->tabla('director_beca')->get_docente($datos['id_designacion']);
@@ -501,6 +497,16 @@ class ci_alta_solicitud extends toba_ci
                     $datos['comprob']=$adj['comprob'];
                     $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                 }
+                if(isset($adj['des_pt'])){
+                    $nomb_des_pt='/becarios/1.0/becarios_2019/'.$adj['des_pt'];
+                    $datos['des_pt']=$adj['des_pt'];
+                    $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
+                }
+                if(isset($adj['informe_final'])){
+                    $nomb_informe_final='/becarios/1.0/becarios_2019/'.$adj['informe_final'];
+                    $datos['informe_final']=$adj['informe_final'];
+                    $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
+                }
                 return $datos;
             }
 	}
@@ -599,6 +605,20 @@ class ci_alta_solicitud extends toba_ci
                     $destino_comprob="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
                     move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                     $datos2['comprob']=strval($nombre_comprob);
+                }
+                if(isset($datos['des_pt'])){
+                    $nombre_des_pt="des_pt".$cuil_becario.".pdf";
+                   // $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_comprob;
+                    $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                    move_uploaded_file($datos['des_pt']['tmp_name'], $destino_des_pt);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $datos2['des_pt']=strval($nombre_des_pt);
+                }
+                if(isset($datos['informe_final'])){
+                    $nombre_ifinal="ifinal".$cuil_becario.".pdf";
+                   // $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_comprob;
+                    $destino_ifinal="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
+                    move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                    $datos2['informe_final']=strval($nombre_ifinal);
                 }
                 //print_r($datos2);
                 $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
@@ -756,22 +776,22 @@ class ci_alta_solicitud extends toba_ci
                 
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
                 $copias_ref=3;
-                $tabla_carrera[0]=array('dato'=>utf8_d_seguro('INSTITUCIÓN: '.$datos_carrera['institucion']));
-                $tabla_carrera[1]=array('dato'=>utf8_d_seguro('CARRERA: '.$datos_carrera['carrera']));
-                $tabla_carrera[2]=array('dato'=>utf8_d_seguro('DURACIÓN PLAN DE ESTUDIOS: '.$datos_carrera['duracion_plan_estudio']));
-                $tabla_carrera[3]=array('dato'=>utf8_d_seguro('AÑOS DE ESTUDIO - FECHA DE INGRESO: '.date("d/m/Y",strtotime($datos_carrera['fecha_inicio'])).' FECHA DE EGRESO: '.date("d/m/Y",strtotime($datos_carrera['fecha_finalizacion']))));
-                $tabla_carrera[4]=array('dato'=>utf8_d_seguro('CANTIDAD DE MATERIAS DEL PLAN DE ESTUDIOS: '.$datos_carrera['cant_mat_plan']));
-                $tabla_carrera[5]=array('dato'=>utf8_d_seguro('CANTIDAD DE MATERIAS ADEUDADAS: '.$datos_carrera['cant_materias_adeuda']));
+                $tabla_carrera[0]=array('dato'=>utf8_decode('INSTITUCIÓN: ').$datos_carrera['institucion']);
+                $tabla_carrera[1]=array('dato'=>'CARRERA: '.$datos_carrera['carrera']);
+                $tabla_carrera[2]=array('dato'=>utf8_decode('DURACIÓN PLAN DE ESTUDIOS: ').$datos_carrera['duracion_plan_estudio']);
+                $tabla_carrera[3]=array('dato'=>utf8_decode('AÑOS DE ESTUDIO - FECHA DE INGRESO: '.date("d/m/Y",strtotime($datos_carrera['fecha_inicio'])).' FECHA DE EGRESO: '.date("d/m/Y",strtotime($datos_carrera['fecha_finalizacion']))));
+                $tabla_carrera[4]=array('dato'=>'CANTIDAD DE MATERIAS DEL PLAN DE ESTUDIOS: '.$datos_carrera['cant_mat_plan']);
+                $tabla_carrera[5]=array('dato'=>'CANTIDAD DE MATERIAS ADEUDADAS: '.$datos_carrera['cant_materias_adeuda']);
                 $tabla_carrera[6]=array('dato'=>'PROMEDIO SIN APLAZOS: '.$datos_carrera['promedio']);
                 $tabla_carrera[7]=array('dato'=>'PROMEDIO CON APLAZOS: '.$datos_carrera['promedio_ca']);
-                $tabla_carrera[8]=array('dato'=>utf8_d_seguro('TÍTULO OBTENIDO: '.$datos_carrera['titulo']));
+                $tabla_carrera[8]=array('dato'=>utf8_decode('TÍTULO OBTENIDO: ').$datos_carrera['titulo']);
                 
             }else{//estudiante
                 $copias_ref=2;
-                $tabla_carrera[0]=array('dato'=>utf8_d_seguro('UNIDAD ACADÉMICA: '.$datos_carrera['uni_acad']));
-                $tabla_carrera[1]=array('dato'=>'CARRERA: '.$datos_carrera['carrera']);
-                $tabla_carrera[2]=array('dato'=>utf8_d_seguro('DURACIÓN PLAN DE ESTUDIOS: '.$datos_carrera['duracion_plan_estudio']));
-                $tabla_carrera[3]=array('dato'=>utf8_d_seguro('FECHA INGRESO A LA CARRERA: '.$datos_carrera['fecha_inicio']));
+                $tabla_carrera[0]=array('dato'=>utf8_decode('UNIDAD ACADÉMICA: ').$datos_carrera['uni_acad']);
+                $tabla_carrera[1]=array('dato'=>utf8_decode('CARRERA: ').$datos_carrera['carrera']);
+                $tabla_carrera[2]=array('dato'=>utf8_decode('DURACIÓN PLAN DE ESTUDIOS: ').$datos_carrera['duracion_plan_estudio']);
+                $tabla_carrera[3]=array('dato'=>utf8_decode('FECHA INGRESO A LA CARRERA: '.$datos_carrera['fecha_inicio']));
                 $tabla_carrera[4]=array('dato'=>'CANTIDAD DE MATERIAS DEL PLAN DE ESTUDIOS: '.$datos_carrera['cant_mat_plan']);
                 $tabla_carrera[5]=array('dato'=>'CANTIDAD DE MATERIAS APROBADAS: '.$datos_carrera['cant_materias_aprobadas']);
                 $tabla_carrera[6]=array('dato'=>'PORCENTAJE DE MATERIAS APROBADAS: '.$datos_carrera['porc_mat_aprob']);
@@ -789,11 +809,11 @@ class ci_alta_solicitud extends toba_ci
                 foreach ($datos_estudio as $des) {
                     $fec_desde=date("d/m/Y",strtotime($des['desde']));
                     $fec_hasta=date("d/m/Y",strtotime($des['hasta']));
-                    $tabla_estudio[$i]=array( 'col1'=>utf8_d_seguro(trim($des['institucion'])),'col2' => $fec_desde,'col3' => $fec_hasta,'col4' => utf8_d_seguro(trim($des['titulo'])));
+                    $tabla_estudio[$i]=array( 'col1'=>trim($des['institucion']),'col2' => $fec_desde,'col3' => $fec_hasta,'col4' => trim($des['titulo']));
                     $i++;
                 }   
                 
-                $pdf->ezTable($tabla_estudio,array('col1'=>utf8_d_seguro('<b>INSTITUCIÓN</b>'),'col2'=>'<b>DESDE</b>','col3'=>'<b>HASTA</b>','col4'=>utf8_d_seguro('<b>TÍTULO OBTENIDO</b>')),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
+                $pdf->ezTable($tabla_estudio,array('col1'=>utf8_decode('<b>INSTITUCIÓN</b>'),'col2'=>'<b>DESDE</b>','col3'=>'<b>HASTA</b>','col4'=>utf8_decode('<b>TÍTULO OBTENIDO</b>')),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
                 $pdf->ezText("\n", 10);
             }
            
@@ -806,12 +826,12 @@ class ci_alta_solicitud extends toba_ci
                 foreach ($datos_beca as $des) {
                     $fec_desde=date("d/m/Y",strtotime($des['desde']));
                     $fec_hasta=date("d/m/Y",strtotime($des['hasta']));
-                    $tabla_beca[$i]=array( 'col1'=>utf8_d_seguro(trim($des['institucion'])),'col2' => utf8_d_seguro(trim($des['objeto'])),'col3' => $fec_desde,'col4' => $fec_hasta);
+                    $tabla_beca[$i]=array( 'col1'=>trim($des['institucion']),'col2' => trim($des['objeto']),'col3' => $fec_desde,'col4' => $fec_hasta);
                     $i++;
                 }
                 //'shaded'=>0,'showLines'=>0
                 //'num'=>array('justification'=>'right')
-                $pdf->ezTable($tabla_beca,array('col1'=>utf8_d_seguro('<b>INSTITUCIÓN</b>'),'col2'=>'<b>OBJETO</b>','col3'=>'<b>DESDE</b>','col4'=>'<b>HASTA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
+                $pdf->ezTable($tabla_beca,array('col1'=>utf8_decode('<b>INSTITUCIÓN</b>'),'col2'=>'<b>OBJETO</b>','col3'=>'<b>DESDE</b>','col4'=>'<b>HASTA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
                 $pdf->ezText("\n", 10);
             }
             //------------------DISTINCIONES
@@ -822,10 +842,10 @@ class ci_alta_solicitud extends toba_ci
                 $tabla_disti=array();              
                 foreach ($datos_disti as $des) {
                     $fecha=date("d/m/Y",strtotime($des['fecha_dis']));
-                    $tabla_disti[$i]=array( 'col1'=>utf8_d_seguro($des['distincion']),'col2' => $fecha);
+                    $tabla_disti[$i]=array( 'col1'=>trim($des['distincion']),'col2' => $fecha);
                     $i++;
                 }   
-                $pdf->ezTable($tabla_disti,array('col1'=>utf8_d_seguro('<b>DISTINCIÓN</b>'),'col2'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1));
+                $pdf->ezTable($tabla_disti,array('col1'=>utf8_decode('<b>DISTINCIÓN</b>'),'col2'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1));
                 $pdf->ezText("\n", 10);
              }
             if(count($datos_empleo_actual)>0 or count($datos_empleo_anterior)>0 or count($datos_pi)>0 or count($datos_pe)>0){
@@ -833,13 +853,14 @@ class ci_alta_solicitud extends toba_ci
                  $pdf->ezText("\n", 10);
                   if(count($datos_empleo_actual)>0){
                      $pdf->ezText(' <b>EMPLEOS ACTUALES </b>', 10);
+                     $pdf->ezText("\n", 10);
                      $i=0;
                      $tabla_empleo_actual=array();              
                      foreach ($datos_empleo_actual as $des) {
-                        $tabla_empleo_actual[$i]=array( 'col1'=>$des['institucion'].'/'.$des['direccion'],'col2' => $des['cargo'],'col3'=>$des['anio_ingreso']);
+                        $tabla_empleo_actual[$i]=array( 'col1'=>trim($des['institucion'].'/'.trim($des['direccion'])),'col2' => $des['cargo'],'col3'=>$des['anio_ingreso']);
                         $i++;
                      }   
-                     $pdf->ezTable($tabla_empleo_actual,array('col1'=>utf8_d_seguro('INSTITUCIÓN: NOMBRE/DIRECCIÓN'),'col2'=>'CARGO','col3'=>utf8_d_seguro('AÑO DE INGRESO')),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
+                     $pdf->ezTable($tabla_empleo_actual,array('col1'=>  utf8_decode('<b>INSTITUCIÓN: NOMBRE/DIRECCIÓN</b>'),'col2'=>'<b>CARGO</b>','col3'=>utf8_decode('<b>AÑO DE INGRESO</b>')),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
                      $pdf->ezText("\n", 10);
                   }
                   if(count($datos_empleo_anterior)>0){
@@ -851,11 +872,11 @@ class ci_alta_solicitud extends toba_ci
                         $tabla_empleo_ant[$i]=array( 'col1'=>trim($des['institucion']).'/'.trim($des['direccion']),'col2' => trim($des['cargo']),'col3'=>$des['anio_ingreso']);
                         $i++;
                       }  
-                      $pdf->ezTable($tabla_empleo_ant,array('col1'=>utf8_d_seguro('<b>INSTITUCIÓN: NOMBRE/DIRECCIÓN</b>'),'col2'=>'<b>CARGO</b>','col3'=>utf8_d_seguro('<b>AÑO DE INGRESO</b>')),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
+                      $pdf->ezTable($tabla_empleo_ant,array('col1'=>utf8_decode('<b>INSTITUCIÓN: NOMBRE/DIRECCIÓN</b>'),'col2'=>'<b>CARGO</b>','col3'=>utf8_d_seguro('<b>AÑO DE INGRESO</b>')),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
                       $pdf->ezText("\n", 10);
                   }
                   if(count($datos_pi)>0){
-                      $pdf->ezText(utf8_d_seguro('<b>PARTICIPACIÓN EN PROYECTOS DE INVESTIGACIÓN </b>'), 10);
+                      $pdf->ezText(utf8_decode('<b>PARTICIPACIÓN EN PROYECTOS DE INVESTIGACIÓN </b>'), 10);
                       $pdf->ezText("\n", 10);
                       $i=0;
                       $tabla_pi=array();              
@@ -865,7 +886,7 @@ class ci_alta_solicitud extends toba_ci
                         $tabla_pi[$i]=array( 'col1'=>$des['codigo'],'col2' => $des['nombredirector'],'col3'=>$fecha_desde,'col4'=>$fecha_hasta);
                         $i++;
                       }   
-                      $pdf->ezTable($tabla_pi,array('col1'=>utf8_d_seguro('<b>CÓDIGO DEL PROYECTO</b>'),'col2'=>'<b>DIRECTOR DEL PROYECTO</b>','col3'=>'<b>DESDE</b>','col4'=>'<b>HASTA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
+                      $pdf->ezTable($tabla_pi,array('col1'=>utf8_decode('<b>CÓDIGO DEL PROYECTO</b>'),'col2'=>'<b>DIRECTOR DEL PROYECTO</b>','col3'=>'<b>DESDE</b>','col4'=>'<b>HASTA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
                       $pdf->ezText("\n", 10); 
                   }
                 if(count($datos_pe)>0){
@@ -941,10 +962,10 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText(utf8_decode(' <b>2.10 LUGAR DE TRABAJO EN EL QUE DESARROLLARÁ LA BECA</b>'), 10);
             $pdf->ezText("\n", 10);
             //utf8_decode($tabla_empleo_ant)
-            $pdf->ezText(utf8_decode(' <b>UNIDAD ACADÉMICA: </b>'.$datos_insc['ua_trabajo_beca']), 10);
-            $pdf->ezText(utf8_decode(' <b>DEPARTAMENTO ACADÉMICO: </b>').utf8_d_seguro($datos_insc['dpto_trabajo_beca']), 10);
-            $pdf->ezText(utf8_decode(' <b>LABORATORIO, ÁREA, CENTRO, INSTITUTO: </b>').utf8_d_seguro(trim($datos_insc['desc_trabajo_beca'])), 10);
-            $pdf->ezText(utf8_decode(' <b>DOMICILIO COMPLETO: </b>'.utf8_d_seguro($datos_insc['domi_lt'])), 10);
+            $pdf->ezText(utf8_decode(' <b>UNIDAD ACADÉMICA: </b>').$datos_insc['ua_trabajo_beca'], 10);
+            $pdf->ezText(utf8_decode(' <b>DEPARTAMENTO ACADÉMICO: </b>').$datos_insc['dpto_trabajo_beca'], 10);
+            $pdf->ezText(utf8_decode(' <b>LABORATORIO, ÁREA, CENTRO, INSTITUTO: </b>').trim($datos_insc['desc_trabajo_beca']), 10);
+            $pdf->ezText(' <b>DOMICILIO COMPLETO: </b>'.$datos_insc['domi_lt'], 10);
             
             //------------------------3
             $pdf->ezNewPage(); 
@@ -959,18 +980,18 @@ class ci_alta_solicitud extends toba_ci
             $tabla_director=array();
             $tabla_codirector=array();
             if(isset($inscripcion['id_director'])){
-                $tabla_director[0]=array('dato'=>utf8_decode('APELLIDO Y NOMBRES: '.$datos_dir['nombre']));
+                $tabla_director[0]=array('dato'=>utf8_decode('APELLIDO Y NOMBRES: ').$datos_dir['nombre']);
                 $tabla_director[1]=array('dato'=>'DOMICILIO: '.$datos_dir['domi']);
                 $tabla_director[2]=array('dato'=>'E-MAIL: '.$datos_dir['correo']);
                 $tabla_director[3]=array('dato'=>'CUIL: '.$datos_dir['cuil']);
-                $tabla_director[4]=array('dato'=>utf8_decode('CATEGORÍA DOCENTE: '.$datos_dir['cat_estat']));
-                $tabla_director[5]=array('dato'=>utf8_decode('DEDICACIÓN: '.$datos_dir['dedicacion']));
+                $tabla_director[4]=array('dato'=>utf8_decode('CATEGORÍA DOCENTE: ').$datos_dir['cat_estat']);
+                $tabla_director[5]=array('dato'=>utf8_decode('DEDICACIÓN: ').$datos_dir['dedicacion']);
                 $tabla_director[6]=array('dato'=>'REGULAR O INTERINO: '.$datos_dir['carac']);
-                $tabla_director[7]=array('dato'=>utf8_decode('CATEGORÍA OTRO ORGANISMO: '.$datos_dir['cat_conicet']));
-                $tabla_director[8]=array('dato'=>utf8_decode('INSTITUCIÓN: '.$datos_dir['institucion']));
-                $tabla_director[9]=array('dato'=>'LUGAR DE TRABAJO: '.$datos_dir['lugar_trabajo']);
-                $tabla_director[10]=array('dato'=>utf8_decode('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: '.$datos_dir['cat_inv']));
-                $tabla_director[11]=array('dato'=>utf8_decode('MAX TITULACIÓN ALCANZADA: '.$datos_dir['titulo']));
+                $tabla_director[7]=array('dato'=>utf8_decode('CATEGORÍA OTRO ORGANISMO: ').$datos_dir['cat_conicet']);
+                $tabla_director[8]=array('dato'=>utf8_decode('INSTITUCIÓN: ').$datos_dir['institucion']);
+                $tabla_director[9]=array('dato'=>'LUGAR DE TRABAJO: '.trim($datos_dir['lugar_trabajo']));
+                $tabla_director[10]=array('dato'=>utf8_decode('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: ').$datos_dir['cat_inv']);
+                $tabla_director[11]=array('dato'=>utf8_decode('MAX TITULACIÓN ALCANZADA: ').$datos_dir['titulo']);
                 $tabla_director[12]=array('dato'=>utf8_decode('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'.$datos_dir_cantpost));
                 $pdf->ezTable($tabla_director,array('dato'=>''),'<b>DATOS DEL DIRECTOR DE BECA: </b>',array('showHeadings'=>0,'shaded'=>0,'fontSize'=>10));
                 
@@ -981,14 +1002,14 @@ class ci_alta_solicitud extends toba_ci
                     $tabla_codirector[1]=array('dato'=>'DOMICILIO: '.$datos_codir['domi']);
                     $tabla_codirector[2]=array('dato'=>'E-MAIL: '.$datos_codir['correo']);
                     $tabla_codirector[3]=array('dato'=>'CUIL: '.$datos_codir['cuil']);
-                    $tabla_codirector[4]=array('dato'=>utf8_decode('CATEGORÍA DOCENTE: '.$datos_codir['cat_estat']));
-                    $tabla_codirector[5]=array('dato'=>utf8_decode('DEDICACIÓN: '.$datos_codir['dedicacion']));
+                    $tabla_codirector[4]=array('dato'=>utf8_decode('CATEGORÍA DOCENTE: ').$datos_codir['cat_estat']);
+                    $tabla_codirector[5]=array('dato'=>utf8_decode('DEDICACIÓN: ').$datos_codir['dedicacion']);
                     $tabla_codirector[6]=array('dato'=>'REGULAR O INTERINO: '.$datos_codir['carac']);
-                    $tabla_codirector[7]=array('dato'=>utf8_decode('CATEGORÍA OTRO ORGANISMO: '.$datos_codir['cat_conicet']));
-                    $tabla_codirector[8]=array('dato'=>utf8_decode('INSTITUCIÓN: '.$datos_codir['institucion']));
-                    $tabla_codirector[9]=array('dato'=>'LUGAR DE TRABAJO: '.utf8_decode($datos_codir['lugar_trabajo']));
-                    $tabla_codirector[10]=array('dato'=>utf8_decode('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: '.$datos_codir['cat_inv']));
-                    $tabla_codirector[11]=array('dato'=>utf8_decode('MAX TITULACIÓN ALCANZADA: '.$datos_codir['titulo']));
+                    $tabla_codirector[7]=array('dato'=>utf8_decode('CATEGORÍA OTRO ORGANISMO: ').$datos_codir['cat_conicet']);
+                    $tabla_codirector[8]=array('dato'=>utf8_decode('INSTITUCIÓN: ').$datos_codir['institucion']);
+                    $tabla_codirector[9]=array('dato'=>'LUGAR DE TRABAJO: '.trim($datos_codir['lugar_trabajo']));
+                    $tabla_codirector[10]=array('dato'=>utf8_decode('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: ').$datos_codir['cat_inv']);
+                    $tabla_codirector[11]=array('dato'=>utf8_decode('MAX TITULACIÓN ALCANZADA: ').$datos_codir['titulo']);
                     $tabla_codirector[12]=array('dato'=>utf8_decode('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'));
                     $pdf->ezTable($tabla_codirector,array('dato'=>''),'<b>DATOS DEL CODIRECTOR DE BECA:</b> ',array('showHeadings'=>0,'shaded'=>0));
                   }
@@ -997,14 +1018,14 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText("\n", 10);
             $pdf->ezText(utf8_d_seguro(' <b>4. DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA (APROBADO O EN EVALUACIÓN) </b>'), 12,$centrado);
             if(isset($datos_proy)>0){
-                $datos[0]=array('dato'=>utf8_decode('CÓDIGO DEL PROYECTO: '.$datos_proy['codigo']));
-                $datos[1]=array('dato'=>utf8_decode('TITULO: '.$datos_proy['denominacion']));
+                $datos[0]=array('dato'=>utf8_decode('CÓDIGO DEL PROYECTO: ').$datos_proy['codigo']);
+                $datos[1]=array('dato'=>utf8_decode('TÍTULO: ').$datos_proy['denominacion']);//no va decodificado el nombre del titulo
                 $fecha_desde=date("d/m/Y",strtotime($datos_proy['fec_desde']));
                 $fecha_hasta=date("d/m/Y",strtotime($datos_proy['fec_hasta']));
                 $datos[2]=array('dato'=>'FECHA DE INICIO: '.$fecha_desde);
                 $datos[3]=array('dato'=>utf8_decode('FECHA DE FINALIZACIÓN: ').$fecha_hasta);
                 $datos[4]=array('dato'=>utf8_decode('ORDENANZA DE APROBACIÓN N° : ').$datos_proy['nro_ord_cs']);
-                $datos[5]=array('dato'=>utf8_decode('DIRECTOR: '.$datos_proy['apnom_director']));
+                $datos[5]=array('dato'=>'DIRECTOR: '.$datos_proy['apnom_director']);
                 $pdf->ezTable($datos,array('dato'=>''),' ',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
                 $pdf->ezText("\n", 10);
             }
@@ -1014,7 +1035,7 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText("\n", 10);
             $pdf->ezText(utf8_decode(' Título del Plan de Trabajo (tema de la beca)'), 12);
             if(isset($inscripcion['titulo_plan_trabajo'])){
-                $pdf->ezText(utf8_decode($inscripcion['titulo_plan_trabajo']), 10,$centrado);
+                $pdf->ezText($inscripcion['titulo_plan_trabajo'], 10,$centrado);
             }
             
 //            $pdf->ezText(utf8_d_seguro(' <b> DESARROLLO DEL PLAN DE TRABAJO </b>'), 10,$centrado);
@@ -1035,7 +1056,7 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText("\n", 8);
             unset($datos);//limpio la variable
             if(isset($inscripcion['fundamentos_solicitud'])){
-                $datos[0]=array('dato'=>utf8_decode($inscripcion['fundamentos_solicitud']));
+                $datos[0]=array('dato'=>$inscripcion['fundamentos_solicitud']);
                 $pdf->ezTable($datos,array('dato'=>''),' ',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
                 $pdf->ezText("\n", 8);
             }
@@ -1096,15 +1117,16 @@ class ci_alta_solicitud extends toba_ci
             $tabla_dir[0]=array( 'col1'=>'Apellido y Nombre:','col2' => utf8_decode($datos_dir['nombre']));
             $tabla_dir[1]=array( 'col1'=>'CUIL:','col2' => $datos_dir['cuil']);
             $tabla_dir[2]=array( 'col1'=>utf8_decode('e-mail:'),'col2' => $datos_dir['correo']);
-            $tabla_dir[3]=array( 'col1'=>'Domicilio:','col2' => $datos_dir['domi']);
+            $tabla_dir[3]=array( 'col1'=>'Domicilio:','col2' => $datos_dir['domi']);//no va decodificado, lo toma bien
             $tabla_dir[4]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_dir['telefono']);
             $tabla_dir[5]=array( 'col1'=>utf8_decode('Máxima titulación alcanzada'),'col2' => $datos_dir['titulo']);
             $tabla_dir[6]=array( 'col1'=>'Cargo Docente:','col2' => $datos_dir['cat_estat']);
-            $tabla_dir[7]=array( 'col1'=>utf8_decode('Dedicación en el cargo'),'col2' => $datos_dir['dedicacion']);
-            $tabla_dir[8]=array( 'col1'=>utf8_decode('Categoría Equiv Investigador'),'col2' =>  $datos_dir['cat_inv']);
-            $tabla_dir[9]=array( 'col1'=>utf8_decode('Categoría  Investigador'),'col2' => $datos_dir['cat_conicet']);
-            $tabla_dir[10]=array( 'col1'=>'Lugar de trabajo:','col2' => $datos_dir['lugar_trabajo']);
-            $tabla_dir[11]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_dir['hs_dedic_inves']);
+            $tabla_dir[7]=array( 'col1'=>utf8_decode('Dedicación en el cargo:'),'col2' => $datos_dir['dedicacion']);
+            $tabla_dir[8]=array( 'col1'=>utf8_decode('Categoría Equiv Investigador:'),'col2' =>  $datos_dir['cat_inv']);
+            $tabla_dir[9]=array( 'col1'=>utf8_decode('Categoría Otro Organismo:'),'col2' => $datos_dir['cat_conicet']);
+            $tabla_dir[10]=array( 'col1'=>utf8_decode('Institución Otro Organismo:'),'col2' => trim($datos_dir['institucion']));
+            $tabla_dir[11]=array( 'col1'=>'Lugar de trabajo:','col2' => trim($datos_dir['lugar_trabajo']));
+            $tabla_dir[12]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_dir['hs_dedic_inves']);
             $cols_dir = array('col1'=>"<b>Datos del Director</b>",'col2'=>'');
             $pdf->ezTable($tabla_dir,$cols_dir,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){
@@ -1116,12 +1138,14 @@ class ci_alta_solicitud extends toba_ci
                     $tabla_codir[2]=array( 'col1'=>utf8_decode('e-mail:'),'col2' => $datos_codir['correo']);
                     $tabla_codir[3]=array( 'col1'=>'Domicilio:','col2' => $datos_codir['domi']);
                     $tabla_codir[4]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_codir['telefono']);
-                    $tabla_codir[5]=array( 'col1'=>utf8_decode('Máxima titulación alcanzada'),'col2' => $datos_codir['titulo']);
+                    $tabla_codir[5]=array( 'col1'=>utf8_decode('Máxima titulación alcanzada:'),'col2' => $datos_codir['titulo']);
                     $tabla_codir[6]=array( 'col1'=>'Cargo Docente:','col2' => $datos_codir['cat_estat']);
-                    $tabla_codir[7]=array( 'col1'=>utf8_decode('Dedicación en el cargo'),'col2' => $datos_codir['dedicacion']);
-                    $tabla_codir[8]=array( 'col1'=>utf8_decode('Categoría Investigador'),'col2' => $datos_codir['cat_conicet']);
-                    $tabla_codir[9]=array( 'col1'=>'Lugar de trabajo:','col2' => trim(utf8_decode($datos_codir['lugar_trabajo'])));
-                    $tabla_codir[10]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_codir['hs_dedic_inves']);
+                    $tabla_codir[7]=array( 'col1'=>utf8_decode('Dedicación en el cargo:'),'col2' => $datos_codir['dedicacion']);
+                    $tabla_codir[8]=array( 'col1'=>utf8_decode('Categoría Equiv Investigador:'),'col2' => $datos_codir['cat_inv']);
+                    $tabla_codir[9]=array( 'col1'=>utf8_decode('Categoría Otro Organismo:'),'col2' => $datos_codir['cat_conicet']);
+                    $tabla_codir[10]=array( 'col1'=>utf8_decode('Institución Otro Organismo:'),'col2' => utf8_decode(trim($datos_codir['institucion'])));
+                    $tabla_codir[11]=array( 'col1'=>'Lugar de trabajo:','col2' => trim(utf8_decode($datos_codir['lugar_trabajo'])));
+                    $tabla_codir[12]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_codir['hs_dedic_inves']);
                     $pdf->ezTable($tabla_dir,array('col1'=>"<b>Datos del Co-director</b>",'col2'=>''),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
                }
             }
@@ -1158,7 +1182,7 @@ class ci_alta_solicitud extends toba_ci
             //lugar de la beca
             $tabla_lugar=array();
             $tabla_lugar[0]=array( 'col1'=>utf8_decode('Unidad Académica:'),'col2' => $datos_insc['ua_trabajo_beca']);
-            $tabla_lugar[1]=array( 'col1'=>utf8_decode('Laboratorio/Área/Centro/Instituto:'),'col2' => $datos_insc['desc_trabajo_beca']);
+            $tabla_lugar[1]=array( 'col1'=>utf8_decode('Laboratorio/Área/Centro/Instituto:'),'col2' => trim($datos_insc['desc_trabajo_beca']));
             $tabla_lugar[2]=array( 'col1'=>utf8_decode('Departamento Académico:'),'col2' => $datos_insc['dpto_trabajo_beca']);
             $tabla_lugar[3]=array( 'col1'=>'Domicilio:','col2' => $datos_insc['domi_lt']);
             $pdf->ezTable($tabla_lugar,array('col1'=>utf8_decode('<b>Lugar de trabajo en donde desarrollará la beca</b>'),'col2'=>''),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right')) ));
@@ -1207,6 +1231,16 @@ class ci_alta_solicitud extends toba_ci
                 $salida->mensaje('DATOS PERSONALES:');
 		$this->dependencia('ci_antecedentes')->dependencia('form_dp')->vista_impresion($salida);
                 $salida->mensaje('DATOS DE LA CARRERA DE GRADO/PREGRADO POR LA QUE SE SOLICITA LA BECA:');
+                 //los ef desactivados ya no salen en vista previa del boton final
+              //esto en funcion de la categoria
+                 $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+                 if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
+                     $this->dependencia('ci_antecedentes')->dependencia('form_car')->desactivar_efs(array('cant_materias_aprobadas','porc_mat_aprob'));
+                 }else{//estudiante
+                     $this->dependencia('ci_antecedentes')->dependencia('form_car')->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion','carrera'));
+                     $this->dependencia('form_dir')->desactivar_efs(array('id_docentec','correoc','id_designacionc','tituloc','institucionc','lugar_trabajoc','cat_investc','cat_conicetc','hs_dedic_invesc','cod_paisc','cod_provinciac','cod_postalc','callec','numeroc','telefonoc'));
+                 }
+                 
                 
                 $this->dependencia('ci_antecedentes')->dependencia('form_car')->vista_impresion($salida);
                 $salida->mensaje('OTROS ESTUDIOS UNIVERSITARIOS:');

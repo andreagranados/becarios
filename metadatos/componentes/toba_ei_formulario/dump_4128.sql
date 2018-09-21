@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_ei_formulario', --clase
 	'25', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'form_dir_extension', --subclase
+	'alta_solicitud/form_dir_extension.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'alta_solicitud - form_dir', --nombre
@@ -126,6 +126,12 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	<tbody>
 		<tr>
 			<td>
+				[ef id=categ]</td>
+			<td>
+				[ef id=tiene_codir]</td>
+		</tr>
+		<tr>
+			<td>
 				[ef id=id_docente]</td>
 			<td>
 				[ef id=id_docentec]</td>
@@ -177,12 +183,6 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 				[ef id=titulo]</td>
 			<td>
 				[ef id=tituloc]</td>
-		</tr>
-		<tr>
-			<td>
-				[ef id=categ]</td>
-			<td>
-				&nbsp;</td>
 		</tr>
 		<tr>
 			<td>
@@ -252,7 +252,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'correo', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'2', --orden
+	'3', --orden
 	'CORREO', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -332,7 +332,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'titulo', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'8', --orden
+	'9', --orden
 	'MAX TITULACIÓN ACAD', --etiqueta
 	NULL, --etiqueta_estilo
 	'Máxima titulación académica alcanzada', --descripcion
@@ -412,7 +412,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'institucion', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'5', --orden
+	'7', --orden
 	'INSTITUCIÓN OTRO ORG', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -492,7 +492,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'lugar_trabajo', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'6', --orden
+	'8', --orden
 	'LUGAR DE TRABAJO', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -572,7 +572,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_docente', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'1', --orden
+	'2', --orden
 	'DIRECTOR', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -650,9 +650,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_docentec', --identificador
 	'ef_combo', --elemento_formulario
 	'id_docentec', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'17', --orden
+	'19', --orden
 	'CODIRECTOR', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -730,9 +730,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'correoc', --identificador
 	'ef_editable', --elemento_formulario
 	'correoc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'18', --orden
+	'20', --orden
 	'CORREO', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -810,9 +810,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_designacionc', --identificador
 	'ef_combo', --elemento_formulario
 	'id_designacionc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'19', --orden
+	'21', --orden
 	'CARGO DOCENTE', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -890,9 +890,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'tituloc', --identificador
 	'ef_editable', --elemento_formulario
 	'tituloc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'20', --orden
+	'26', --orden
 	'MAX TITULACIÓN ACAD', --etiqueta
 	NULL, --etiqueta_estilo
 	'Máxima titulación académica alcanzada', --descripcion
@@ -972,8 +972,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'institucionc', --columnas
 	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'21', --orden
-	'INSTITUCIÓN', --etiqueta
+	'24', --orden
+	'INSTITUCIÓN OTRO ORG', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	NULL, --colapsado
@@ -1050,9 +1050,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'lugar_trabajoc', --identificador
 	'ef_editable', --elemento_formulario
 	'lugar_trabajoc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'22', --orden
+	'25', --orden
 	'LUGAR DE TRABAJO', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -1132,7 +1132,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'id_designacion', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'3', --orden
+	'4', --orden
 	'CARGO DOCENTE', --etiqueta
 	NULL, --etiqueta_estilo
 	'AYS (Ayudante de Segunda) <br>
@@ -1221,7 +1221,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_conicet', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'4', --orden
+	'6', --orden
 	'CATEG OTRO ORGANISMO', --etiqueta
 	NULL, --etiqueta_estilo
 	'Categoría Investigador de otro organismo (CONICET/CONEA/Otro)', --descripcion
@@ -1301,7 +1301,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_invest', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'7', --orden
+	'5', --orden
 	'CATEG EQUIV INVEST', --etiqueta
 	NULL, --etiqueta_estilo
 	'Categoría Equivalente de Investigador C.E.I Programa de Incentivos: I-II-III-IV-V', --descripcion
@@ -1379,9 +1379,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_investc', --identificador
 	'ef_combo', --elemento_formulario
 	'cat_investc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'23', --orden
+	'22', --orden
 	'CATEG EQUIV INVEST', --etiqueta
 	NULL, --etiqueta_estilo
 	'Categoría Equivalente de Investigador C.E.I Programa de Incentivos: I-II-III-IV-V', --descripcion
@@ -1461,7 +1461,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cat_conicetc', --columnas
 	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'24', --orden
+	'23', --orden
 	'CATEG OTRO ORGANISMO', --etiqueta
 	NULL, --etiqueta_estilo
 	'Categoría Investigador de otro organismo (CONICET/CONEA/Otro)', --descripcion
@@ -1541,7 +1541,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'hs_dedic_inves', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'9', --orden
+	'10', --orden
 	'HS DEDIC INVEST', --etiqueta
 	NULL, --etiqueta_estilo
 	'Horas totales de dedicación a la investigación', --descripcion
@@ -1621,7 +1621,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'hs_dedic_invesc', --columnas
 	'0', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'25', --orden
+	'27', --orden
 	'HS DEDIC INVEST', --etiqueta
 	NULL, --etiqueta_estilo
 	'Horas totales de dedicación a la investigación', --descripcion
@@ -1701,7 +1701,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_pais', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'11', --orden
+	'12', --orden
 	'País', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -1781,7 +1781,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_provincia', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'12', --orden
+	'13', --orden
 	'Provincia', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -1861,7 +1861,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_postal', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'13', --orden
+	'14', --orden
 	'Código Postal', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -1941,7 +1941,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'calle', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'14', --orden
+	'15', --orden
 	'Calle', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2021,7 +2021,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'numero', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'15', --orden
+	'16', --orden
 	'Número', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2101,7 +2101,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'telefono', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'16', --orden
+	'17', --orden
 	'Teléfono', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2179,9 +2179,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_paisc', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_paisc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'26', --orden
+	'28', --orden
 	'País', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2259,9 +2259,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_provinciac', --identificador
 	'ef_combo', --elemento_formulario
 	'cod_provinciac', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'27', --orden
+	'29', --orden
 	'Provincia', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2339,9 +2339,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'cod_postalc', --identificador
 	'ef_editable', --elemento_formulario
 	'cod_postalc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'28', --orden
+	'30', --orden
 	'Código Postal', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2419,9 +2419,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'callec', --identificador
 	'ef_editable', --elemento_formulario
 	'callec', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'29', --orden
+	'31', --orden
 	'Calle', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2499,9 +2499,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'numeroc', --identificador
 	'ef_editable', --elemento_formulario
 	'numeroc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'30', --orden
+	'32', --orden
 	'Número', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2579,9 +2579,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'telefonoc', --identificador
 	'ef_editable', --elemento_formulario
 	'telefonoc', --columnas
-	'0', --obligatorio
+	'1', --obligatorio
 	'1', --oculto_relaja_obligatorio
-	'31', --orden
+	'33', --orden
 	'Teléfono', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2661,7 +2661,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'direccion', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'10', --orden
+	'11', --orden
 	'------Dirección--------', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -2718,6 +2718,166 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --check_desc_no
 	NULL, --check_ml_toggle
 	'0', --fijo_sin_estado
+	NULL, --editor_ancho
+	NULL, --editor_alto
+	NULL, --editor_botonera
+	NULL, --selec_cant_minima
+	NULL, --selec_cant_maxima
+	NULL, --selec_utilidades
+	NULL, --selec_tamano
+	NULL, --selec_ancho
+	NULL, --selec_serializar
+	NULL, --selec_cant_columnas
+	NULL, --upload_extensiones
+	NULL, --punto_montaje
+	NULL  --placeholder
+);
+INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_formulario, objeto_ei_formulario_proyecto, identificador, elemento_formulario, columnas, obligatorio, oculto_relaja_obligatorio, orden, etiqueta, etiqueta_estilo, descripcion, colapsado, desactivado, estilo, total, inicializacion, permitir_html, deshabilitar_rest_func, estado_defecto, solo_lectura, solo_lectura_modificacion, carga_metodo, carga_clase, carga_include, carga_dt, carga_consulta_php, carga_sql, carga_fuente, carga_lista, carga_col_clave, carga_col_desc, carga_maestros, carga_cascada_relaj, cascada_mantiene_estado, carga_permite_no_seteado, carga_no_seteado, carga_no_seteado_ocultar, edit_tamano, edit_maximo, edit_mascara, edit_unidad, edit_rango, edit_filas, edit_columnas, edit_wrap, edit_resaltar, edit_ajustable, edit_confirmar_clave, edit_expreg, popup_item, popup_proyecto, popup_editable, popup_ventana, popup_carga_desc_metodo, popup_carga_desc_clase, popup_carga_desc_include, popup_puede_borrar_estado, fieldset_fin, check_valor_si, check_valor_no, check_desc_si, check_desc_no, check_ml_toggle, fijo_sin_estado, editor_ancho, editor_alto, editor_botonera, selec_cant_minima, selec_cant_maxima, selec_utilidades, selec_tamano, selec_ancho, selec_serializar, selec_cant_columnas, upload_extensiones, punto_montaje, placeholder) VALUES (
+	'9350', --objeto_ei_formulario_fila
+	'4128', --objeto_ei_formulario
+	'becarios', --objeto_ei_formulario_proyecto
+	'tiene_codir', --identificador
+	'ef_radio', --elemento_formulario
+	'tiene_codir', --columnas
+	'1', --obligatorio
+	'1', --oculto_relaja_obligatorio
+	'18', --orden
+	'Tiene Codirector?', --etiqueta
+	NULL, --etiqueta_estilo
+	NULL, --descripcion
+	'0', --colapsado
+	'0', --desactivado
+	NULL, --estilo
+	NULL, --total
+	NULL, --inicializacion
+	'0', --permitir_html
+	'0', --deshabilitar_rest_func
+	'no', --estado_defecto
+	'0', --solo_lectura
+	'0', --solo_lectura_modificacion
+	NULL, --carga_metodo
+	NULL, --carga_clase
+	NULL, --carga_include
+	NULL, --carga_dt
+	NULL, --carga_consulta_php
+	NULL, --carga_sql
+	'becarios', --carga_fuente
+	'si,no', --carga_lista
+	NULL, --carga_col_clave
+	NULL, --carga_col_desc
+	NULL, --carga_maestros
+	'0', --carga_cascada_relaj
+	'0', --cascada_mantiene_estado
+	'0', --carga_permite_no_seteado
+	NULL, --carga_no_seteado
+	'0', --carga_no_seteado_ocultar
+	NULL, --edit_tamano
+	NULL, --edit_maximo
+	NULL, --edit_mascara
+	NULL, --edit_unidad
+	NULL, --edit_rango
+	NULL, --edit_filas
+	NULL, --edit_columnas
+	NULL, --edit_wrap
+	NULL, --edit_resaltar
+	NULL, --edit_ajustable
+	NULL, --edit_confirmar_clave
+	NULL, --edit_expreg
+	NULL, --popup_item
+	NULL, --popup_proyecto
+	NULL, --popup_editable
+	NULL, --popup_ventana
+	NULL, --popup_carga_desc_metodo
+	NULL, --popup_carga_desc_clase
+	NULL, --popup_carga_desc_include
+	NULL, --popup_puede_borrar_estado
+	NULL, --fieldset_fin
+	NULL, --check_valor_si
+	NULL, --check_valor_no
+	NULL, --check_desc_si
+	NULL, --check_desc_no
+	NULL, --check_ml_toggle
+	NULL, --fijo_sin_estado
+	NULL, --editor_ancho
+	NULL, --editor_alto
+	NULL, --editor_botonera
+	NULL, --selec_cant_minima
+	NULL, --selec_cant_maxima
+	NULL, --selec_utilidades
+	NULL, --selec_tamano
+	NULL, --selec_ancho
+	NULL, --selec_serializar
+	'2', --selec_cant_columnas
+	NULL, --upload_extensiones
+	'25', --punto_montaje
+	NULL  --placeholder
+);
+INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_formulario, objeto_ei_formulario_proyecto, identificador, elemento_formulario, columnas, obligatorio, oculto_relaja_obligatorio, orden, etiqueta, etiqueta_estilo, descripcion, colapsado, desactivado, estilo, total, inicializacion, permitir_html, deshabilitar_rest_func, estado_defecto, solo_lectura, solo_lectura_modificacion, carga_metodo, carga_clase, carga_include, carga_dt, carga_consulta_php, carga_sql, carga_fuente, carga_lista, carga_col_clave, carga_col_desc, carga_maestros, carga_cascada_relaj, cascada_mantiene_estado, carga_permite_no_seteado, carga_no_seteado, carga_no_seteado_ocultar, edit_tamano, edit_maximo, edit_mascara, edit_unidad, edit_rango, edit_filas, edit_columnas, edit_wrap, edit_resaltar, edit_ajustable, edit_confirmar_clave, edit_expreg, popup_item, popup_proyecto, popup_editable, popup_ventana, popup_carga_desc_metodo, popup_carga_desc_clase, popup_carga_desc_include, popup_puede_borrar_estado, fieldset_fin, check_valor_si, check_valor_no, check_desc_si, check_desc_no, check_ml_toggle, fijo_sin_estado, editor_ancho, editor_alto, editor_botonera, selec_cant_minima, selec_cant_maxima, selec_utilidades, selec_tamano, selec_ancho, selec_serializar, selec_cant_columnas, upload_extensiones, punto_montaje, placeholder) VALUES (
+	'9351', --objeto_ei_formulario_fila
+	'4128', --objeto_ei_formulario
+	'becarios', --objeto_ei_formulario_proyecto
+	'categ', --identificador
+	'ef_editable', --elemento_formulario
+	'categ', --columnas
+	'0', --obligatorio
+	'0', --oculto_relaja_obligatorio
+	'1', --orden
+	NULL, --etiqueta
+	NULL, --etiqueta_estilo
+	NULL, --descripcion
+	NULL, --colapsado
+	NULL, --desactivado
+	NULL, --estilo
+	NULL, --total
+	NULL, --inicializacion
+	NULL, --permitir_html
+	NULL, --deshabilitar_rest_func
+	NULL, --estado_defecto
+	NULL, --solo_lectura
+	'0', --solo_lectura_modificacion
+	NULL, --carga_metodo
+	NULL, --carga_clase
+	NULL, --carga_include
+	NULL, --carga_dt
+	NULL, --carga_consulta_php
+	NULL, --carga_sql
+	NULL, --carga_fuente
+	NULL, --carga_lista
+	NULL, --carga_col_clave
+	NULL, --carga_col_desc
+	NULL, --carga_maestros
+	NULL, --carga_cascada_relaj
+	'0', --cascada_mantiene_estado
+	'0', --carga_permite_no_seteado
+	NULL, --carga_no_seteado
+	NULL, --carga_no_seteado_ocultar
+	NULL, --edit_tamano
+	NULL, --edit_maximo
+	NULL, --edit_mascara
+	NULL, --edit_unidad
+	NULL, --edit_rango
+	NULL, --edit_filas
+	NULL, --edit_columnas
+	NULL, --edit_wrap
+	NULL, --edit_resaltar
+	NULL, --edit_ajustable
+	NULL, --edit_confirmar_clave
+	NULL, --edit_expreg
+	NULL, --popup_item
+	NULL, --popup_proyecto
+	NULL, --popup_editable
+	NULL, --popup_ventana
+	NULL, --popup_carga_desc_metodo
+	NULL, --popup_carga_desc_clase
+	NULL, --popup_carga_desc_include
+	NULL, --popup_puede_borrar_estado
+	NULL, --fieldset_fin
+	NULL, --check_valor_si
+	NULL, --check_valor_no
+	NULL, --check_desc_si
+	NULL, --check_desc_no
+	NULL, --check_ml_toggle
+	NULL, --fijo_sin_estado
 	NULL, --editor_ancho
 	NULL, --editor_alto
 	NULL, --editor_botonera
