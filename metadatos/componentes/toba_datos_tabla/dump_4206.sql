@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_datos_tabla', --clase
 	'25', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'dt_inscripcion_adjuntos', --subclase
+	'datos/dt_inscripcion_adjuntos.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'DT - inscripcion_adjuntos', --nombre

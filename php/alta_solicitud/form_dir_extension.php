@@ -9,7 +9,7 @@ class form_dir_extension extends toba_ei_formulario
 				/*if (! es_inicial) {
 					this.evt__categ__procesar(es_inicial);
 				}*/
-                               /* alert(this.ef('tiene_codir').get_estado());*/
+                              
                                 switch (this.ef('tiene_codir').get_estado()) {
                                     case 'si':  
 						this.ef('id_docentec').mostrar();
@@ -54,6 +54,9 @@ class form_dir_extension extends toba_ei_formulario
 				switch (this.ef('categ').get_estado()) {                                     					
 					case '3':
                                                 this.ef('tiene_codir').ocultar();
+                                                this.ef('otro_organismoc').ocultar();
+                                                this.ef('rayac').ocultar();
+                                                this.ef('direccionc').ocultar();
 						this.ef('id_docentec').ocultar();
                                                 this.ef('correoc').ocultar();
                                                 this.ef('id_designacionc').ocultar();

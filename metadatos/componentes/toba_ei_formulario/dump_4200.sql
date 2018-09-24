@@ -124,7 +124,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
 	'extension_pdf.png', --imagen
-	'0', --en_botonera
+	'1', --en_botonera
 	NULL, --ayuda
 	'3', --orden
 	NULL, --ci_predep
@@ -157,7 +157,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
 	'extension_pdf.png', --imagen
-	'0', --en_botonera
+	'1', --en_botonera
 	NULL, --ayuda
 	'4', --orden
 	NULL, --ci_predep
@@ -884,7 +884,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'10', --orden
-	'CV POstulante', --etiqueta
+	'CV Postulante', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado
@@ -1524,7 +1524,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'17', --orden
-	'Desarrollo Plan Trabajo', --etiqueta
+	'Plan Trabajo', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
 	'0', --colapsado

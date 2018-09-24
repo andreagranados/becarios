@@ -681,13 +681,20 @@ class ci_antecedentes extends toba_ci
 	{
             $datos=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
             if(isset($datos)){
-                 $form->set_datos($datos);
+                //aqui agregar que si esta tilddado mostrar tilddad por defecto esta destildado!!
+//                if(!$datos['beca_en_curso']){
+//                    $datos['beca_en_curso']=0;
+//                }
+                $form->set_datos($datos);
             }
 	}
         function evt__form_bc__guardar($datos)
         {//se guarda en tabla inscripcion beca
             $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
             if($insc['estado']=='I'){
+                if($datos['beca_en_curso']==0){//destildado
+                    $datos['institucion_beca_en_curso']='';
+                }
                 $this->controlador()->dep('datos')->tabla('inscripcion_beca')->set($datos);
                 $this->controlador()->dep('datos')->tabla('inscripcion_beca')->sincronizar();
             }

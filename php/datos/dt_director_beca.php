@@ -79,26 +79,26 @@ class dt_director_beca extends toba_datos_tabla
             $dato = consultas_designa::get_cuil($id_doc);
             return $dato;
         }
-        function get_cant_postulantes($legajo,$anio){
-            $salida=0;
-            $sql="select legajo,sum(cant) as cantidad from (select 1,d.legajo,count(distinct i.id_becario)as cant from director_beca d
+        function get_cant_postulantes($filtro){
+           
+            if(isset($filtro)){
+                $condicion=" c.id_conv=".$filtro['id_conv']." and ";
+            }
+            $sql="select legajo,trim(apellido)||', '||trim(nombre) as docente,sum(cant) as cant from (select 1,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant 
+                   from director_beca d
                     inner join inscripcion_beca i on (i.id_director=d.id)
-                    where extract(year from i.fecha_presentacion)=$anio
-                        and d.legajo=$legajo
-                    group by d.legajo
+                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
+                    
+                    group by d.legajo,d.apellido,d.nombre
                     union
-                    select 2,d.legajo,count(distinct i.id_becario)as cant from director_beca d
+                    select 2,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant from director_beca d
                     inner join inscripcion_beca i on (i.id_codirector=d.id)
-                    where extract(year from i.fecha_presentacion)=$anio
-                        and d.legajo=$legajo
-                    group by d.legajo)sub
-                    group by legajo";
+                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
+                                           
+                    group by d.legajo,d.apellido,d.nombre)sub
+                    group by legajo,apellido,nombre";
             
-            $res=toba::db('becarios')->consultar($sql); 
-            if(count($res)>0){
-                $salida= $res[0]['cantidad'];
-                }
-            return $salida; 
+            return toba::db('becarios')->consultar($sql); 
         }
         function get_datos_director($id_dir){//lo llama para director y codirector
             $salida=array();

@@ -4,6 +4,7 @@ class ci_alta_solicitud extends toba_ci
         protected $s__pantalla;
         protected $s__categ_beca;
         protected $s__nombre_archivo_ca;
+        protected $s__guardo;
         
     
         function get_categ_beca()
@@ -51,6 +52,7 @@ class ci_alta_solicitud extends toba_ci
 
         function conf__form_dir(toba_ei_formulario $form)
 	{
+            $this->s__guardo=true;
             $datos=$this->dep('datos')->tabla('director_beca')->get();
             $datosc=$this->dep('datos')->tabla('codirector_beca')->get();
             $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
@@ -69,6 +71,7 @@ class ci_alta_solicitud extends toba_ci
                  $datos['numero']=$domi['numero'];
                  $datos['telefono']=$domi['telefono'];
                  if(isset($datosc['id_designacion'])){
+                     $datos['tiene_codir']='si';
                      $id_docc=$this->dep('datos')->tabla('director_beca')->get_docente($datosc['id_designacion']);
                      $datos['id_docentec']=$id_docc;
                      $datos['correoc']=$datosc['correo'];
@@ -239,6 +242,7 @@ class ci_alta_solicitud extends toba_ci
         function evt__form_pt__guardar($datos)
         {
            $band=true;
+           $this->s__guardo=true;
            if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
              $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
              if($insc['estado']<>'I'){
@@ -246,14 +250,20 @@ class ci_alta_solicitud extends toba_ci
              }
            }
            if($band){//solo puede modificar cuando el estado es I o cuando no esta cargada
-             $this->dep('datos')->tabla('inscripcion_beca')->set($datos);
-             $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+             if(strlen($datos['titulo_plan_trabajo'])>250){
+                 $this->s__guardo=false;
+                 toba::notificacion()->agregar(utf8_decode('El título supera los 250 caracteres'), "info");
+             }else{ 
+                $this->dep('datos')->tabla('inscripcion_beca')->set($datos);
+                $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+             }
            }
            
         }
         //------formulario de fundamentos de la solicitud
         function conf__form_fund(toba_ei_formulario $form)
 	{
+           $this->s__guardo=true;
            $datos=$this->dep('datos')->tabla('inscripcion_beca')->get();
            if(isset($datos['fundamentos_solicitud'])){
                  $form->set_datos($datos);
@@ -269,16 +279,21 @@ class ci_alta_solicitud extends toba_ci
              }
            }
            if($band){//solo puede modificar cuando el estado es I o cuando no esta cargada
-             $this->dep('datos')->tabla('inscripcion_beca')->set($datos);
-             $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+             if(strlen($datos['fundamentos_solicitud'])>1000){
+                 $this->s__guardo=false;
+                 toba::notificacion()->agregar(utf8_decode('El fundamente supera los 1000 caracteres'), "info");
+             }else{ 
+                $this->dep('datos')->tabla('inscripcion_beca')->set($datos);
+                $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
+             }  
            }
-           
         }
         //-----------------------------------------------------------------------------------
 	//---- formulario proyecto de investigacion ---------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
         function conf__form_pinv(toba_ei_formulario $form)
-	{
+	{ 
+            $this->s__guardo=true;
             $datos=$this->dep('datos')->tabla('proyecto_inv')->get();
             if(isset($datos)){
                  $form->set_datos($datos);
@@ -334,7 +349,10 @@ class ci_alta_solicitud extends toba_ci
             if($insc['estado']=='E'){
                 toba::notificacion()->agregar(utf8_decode('La inscripción ya ha sido enviada, no puede modificar los datos'), "info");
             }else{
-                toba::notificacion()->agregar(utf8_decode('Los datos han sido guardados correctamente'), "info");
+                if($this->s__guardo){
+                    toba::notificacion()->agregar(utf8_decode('Los datos han sido guardados correctamente'), "info");
+                }
+                
             } 
         }
 
@@ -442,14 +460,14 @@ class ci_alta_solicitud extends toba_ci
         //cuil,documento,comprobantes,cert antecedentes siempre son obligatorios
         function conf__form_adj(toba_ei_formulario $form)
 	{
+            $this->s__guardo=true;
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
                 if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando hay cargado al codirector
                     $form->ef('cv_codir')->set_obligatorio(true);
                 }
-            }else{//estudiante desactiva el codirector
-                $form->desactivar_efs(array('cv_codir'));  
             }
+            $datos['categ']=$inscripcion['categ_beca'];
             if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 if(isset($adj['cert_ant'])){
@@ -497,9 +515,9 @@ class ci_alta_solicitud extends toba_ci
                     $datos['comprob']=$adj['comprob'];
                     $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                 }
-                if(isset($adj['des_pt'])){
-                    $nomb_des_pt='/becarios/1.0/becarios_2019/'.$adj['des_pt'];
-                    $datos['des_pt']=$adj['des_pt'];
+                if(isset($adj['desarrollo_pt'])){
+                    $nomb_des_pt='/becarios/1.0/becarios_2019/'.$adj['desarrollo_pt'];
+                    $datos['desarrollo_pt']=$adj['desarrollo_pt'];
                     $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
                 }
                 if(isset($adj['informe_final'])){
@@ -507,8 +525,8 @@ class ci_alta_solicitud extends toba_ci
                     $datos['informe_final']=$adj['informe_final'];
                     $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                 }
-                return $datos;
             }
+            return $datos;
 	}
         
         function evt__form_adj__guardar($datos)
@@ -527,104 +545,154 @@ class ci_alta_solicitud extends toba_ci
                 }   
             }
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
-                if(isset($datos['cert_ant']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['cert_ant']['size']>3145728 ){$no_supera_tamano=false;
+                if(isset($datos['cert_ant']['size'])){
+                    if($datos['cert_ant']['size']>120000 ){$no_supera_tamano=false;
                     $mensaje.=' cert_ant ';
-                    }
-                }
-                if(isset($datos['const_titu']['size'])){
-                    if($datos['const_titu']['size']>3145728){$no_supera_tamano=false;
-                    $mensaje.=' const_titu ';
                     }                               
                 }
-               if($no_supera_tamano){//si los archivos no superan el tamano
-                $bec=$this->dep('datos')->tabla('becario')->get();
-                $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
-               // print_r($datos['cert_ant']['tmp_name']);
-                if (isset($datos['cert_ant'])) {
-                    //$nombre_archivo_ca = toba::proyecto()->get_www_temp($datos['cert_a']['name']);
-                    //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
-                    $nombre_ca="cert_ant".$cuil_becario.".pdf";
-                    //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ca;
-                    $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ca;
-                    move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['cert_ant']=strval($nombre_ca);
+                if(isset($datos['rend_acad']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['rend_acad']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' rend_acad ';
+                    }
                 }
-                if(isset($datos['const_titu'])){
-                    $nombre_ti="const_titu".$cuil_becario.".pdf";
-                    //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ti;
-                    $destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_titu".$cuil_becario.".pdf";
-                    move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['const_titu']=strval($nombre_ti);
+                if(isset($datos['cv_post']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['cv_post']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' cv_post ';
+                    }
                 }
-                if(isset($datos['rend_acad'])){
-                    $nombre_ra="rend_acad".$cuil_becario.".pdf";
-                    //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_ra;
-                    $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ra;
-                    move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['rend_acad']=strval($nombre_ra);
+                if(isset($datos['cv_dir']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['cv_dir']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' cv_dir ';
+                    }
                 }
-                if(isset($datos['cv_post'])){
-                    $nombre_cvp="cv_post".$cuil_becario.".pdf";
-                    //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvp;
-                    $destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
-                    move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['cv_post']=strval($nombre_cvp);
+                if(isset($datos['cuil']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['cuil']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' cuil ';
+                    }
                 }
-                if(isset($datos['cv_dir'])){
-                    $nombre_cvd="cv_dir".$cuil_becario.".pdf";
-                    //$destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvd;
-                    $destino_cvd="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
-                    move_uploaded_file($datos['cv_dir']['tmp_name'], $destino_cvd);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['cv_dir']=strval($nombre_cvd);
+                if(isset($datos['docum']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['docum']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' docum ';
+                    }
                 }
-                if(isset($datos['cv_codir'])){
-                    $nombre_cvc="cv_codir".$cuil_becario.".pdf";
-                    //$destino_cvc="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cvc;
-                    $destino_cvc="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".
-                    move_uploaded_file($datos['cv_codir']['tmp_name'], $destino_cvc);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['cv_codir']=strval($nombre_cvc);
+                if(isset($datos['comprob']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['comprob']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' comprob ';
+                    }
                 }
-                if(isset($datos['cuil'])){
-                    $nombre_cuil="cuil".$cuil_becario.".pdf";
-                    //$destino_cuil="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_cuil;
-                    $destino_cuil="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cuil;
-                    move_uploaded_file($datos['cuil']['tmp_name'], $destino_cuil);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['cuil']=strval($nombre_cuil);
+                if(isset($datos['desarrollo_pt']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['desarrollo_pt']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' desarrollo_pt ';
+                    }
                 }
-                if(isset($datos['docum'])){
-                    $nombre_docum="docum".$cuil_becario.".pdf";
-                    //$destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_docum;
-                    $destino_docum="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_docum;
-                    move_uploaded_file($datos['docum']['tmp_name'], $destino_docum);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['docum']=strval($nombre_docum);
+                if(isset($datos['informe_final']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                    if($datos['informe_final']['size']>120000 ){$no_supera_tamano=false;
+                    $mensaje.=' informe_final ';
+                    }
+                }//solo para graduados chequea cv codir y const titu
+                if($insc['categ_beca']!=3){//graduados
+                    if(isset($datos['cv_codir']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                        if($datos['cv_codir']['size']>120000 ){$no_supera_tamano=false;
+                            $mensaje.=' cv_codir ';
+                        }
+                    }
+                    if(isset($datos['const_titu']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+                        if($datos['const_titu']['size']>120000 ){$no_supera_tamano=false;
+                            $mensaje.=' const_titu ';
+                        }
+                    }
                 }
-                if(isset($datos['comprob'])){
-                    $nombre_comprob="comprob".$cuil_becario.".pdf";
-                   // $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_comprob;
-                    $destino_comprob="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
-                    move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['comprob']=strval($nombre_comprob);
-                }
-                if(isset($datos['des_pt'])){
-                    $nombre_des_pt="des_pt".$cuil_becario.".pdf";
-                   // $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_comprob;
-                    $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
-                    move_uploaded_file($datos['des_pt']['tmp_name'], $destino_des_pt);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['des_pt']=strval($nombre_des_pt);
-                }
-                if(isset($datos['informe_final'])){
-                    $nombre_ifinal="ifinal".$cuil_becario.".pdf";
-                   // $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/temp/becarios_2019/".$nombre_comprob;
-                    $destino_ifinal="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
-                    move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                    $datos2['informe_final']=strval($nombre_ifinal);
-                }
-                //print_r($datos2);
-                $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
-                $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
+                if($no_supera_tamano){//si los archivos no superan el tamano
+                        $bec=$this->dep('datos')->tabla('becario')->get();
+                        $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
+                       // print_r($datos['cert_ant']['tmp_name']);
+                        if (isset($datos['cert_ant'])) {
+                            //$nombre_archivo_ca = toba::proyecto()->get_www_temp($datos['cert_a']['name']);
+                            //$this->s__nombre_archiv_ca = $datos['cert_a']['name'];
+                            $nombre_ca="cert_ant".$cuil_becario.".pdf";
+                            $destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ca;
+                            //$destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ca;
+                            move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['cert_ant']=strval($nombre_ca);
+                        }
+                        if(isset($datos['const_titu'])){
+                            $nombre_ti="const_titu".$cuil_becario.".pdf";
+                            $destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ti;
+                            //$destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/temp/becarios_2019/cert_titu".$cuil_becario.".pdf";
+                            move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['const_titu']=strval($nombre_ti);
+                        }
+                        if(isset($datos['rend_acad'])){
+                            $nombre_ra="rend_acad".$cuil_becario.".pdf";
+                            $destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ra;
+                            //$destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ra;
+                            move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['rend_acad']=strval($nombre_ra);
+                        }
+                        if(isset($datos['cv_post'])){
+                            $nombre_cvp="cv_post".$cuil_becario.".pdf";
+                            $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
+                            //$destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
+                            move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['cv_post']=strval($nombre_cvp);
+                        }
+                        if(isset($datos['cv_dir'])){
+                            $nombre_cvd="cv_dir".$cuil_becario.".pdf";
+                            $destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
+                            //$destino_cvd="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
+                            move_uploaded_file($datos['cv_dir']['tmp_name'], $destino_cvd);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['cv_dir']=strval($nombre_cvd);
+                        }
+                        if(isset($datos['cv_codir'])){
+                            $nombre_cvc="cv_codir".$cuil_becario.".pdf";
+                            $destino_cvc="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvc;
+                            //$destino_cvc="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".
+                            move_uploaded_file($datos['cv_codir']['tmp_name'], $destino_cvc);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['cv_codir']=strval($nombre_cvc);
+                        }
+                        if(isset($datos['cuil'])){
+                            $nombre_cuil="cuil".$cuil_becario.".pdf";
+                            $destino_cuil="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cuil;
+                            //$destino_cuil="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cuil;
+                            move_uploaded_file($datos['cuil']['tmp_name'], $destino_cuil);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['cuil']=strval($nombre_cuil);
+                        }
+                        if(isset($datos['docum'])){
+                            $nombre_docum="docum".$cuil_becario.".pdf";
+                            $destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_docum;
+                            //$destino_docum="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_docum;
+                            move_uploaded_file($datos['docum']['tmp_name'], $destino_docum);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['docum']=strval($nombre_docum);
+                        }
+                        if(isset($datos['comprob'])){
+                            $nombre_comprob="comprob".$cuil_becario.".pdf";
+                            $destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
+                           // $destino_comprob="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
+                            move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['comprob']=strval($nombre_comprob);
+                        }
+                        if(isset($datos['desarrollo_pt'])){
+                            $nombre_des_pt="des_pt".$cuil_becario.".pdf";
+                            $destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                           // $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                            move_uploaded_file($datos['desarrollo_pt']['tmp_name'], $destino_des_pt);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['desarrollo_pt']=strval($nombre_des_pt);
+                        }
+                        if(isset($datos['informe_final'])){
+                            $nombre_ifinal="ifinal".$cuil_becario.".pdf";
+                            $destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
+                           // $destino_ifinal="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
+                            move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+                            $datos2['informe_final']=strval($nombre_ifinal);
+                        }
+//
+                        $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
+                        $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
               }else{
-                  toba::notificacion()->agregar(utf8_decode('Los siguientes campos superan el tamaño máximo: '.$mensaje), "info");
+                  //echo('Ha ocurrido un error, por favor inténtelo de nuevo.');
+                  //throw new toba_error(utf8_decode('Los siguientes archivos superan el tamaño máximo: ').$mensaje);
+                  toba::notificacion()->agregar(utf8_decode('Los siguientes archivos superan el tamaño máximo: '.$mensaje.". Intentelo nuevamente "), "info");
+                  $this->s__guardo=false;//para que no salga mensaje de que guardo correctamente
               }
             }//no modifica nada
  
@@ -658,13 +726,11 @@ class ci_alta_solicitud extends toba_ci
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
           $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
-          $datos_dir_cantpost=$this->dep('datos')->tabla('director_beca')->get_cant_postulantes($datos_dir['legajo'],date("Y",strtotime($inscripcion['fecha_presentacion']))); 
           $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
-          if(isset($inscripcion['id_codirector'])){
-              $datos_dir_cantpost=$this->dep('datos')->tabla('director_beca')->get_cant_postulantes($datos_codir['legajo'],date("Y",strtotime($inscripcion['fecha_presentacion']))); 
-          }
-          $proy=$this->dep('datos')->tabla('proyecto_inv')->get();
-          $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($proy['id_pinv']);
+          $datos_adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get_datos_adjuntos($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);          
+         
+          //$proy=$this->dep('datos')->tabla('proyecto_inv')->get();
+          $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($inscripcion['id_proyecto']);
           $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
           if($bandera=='imprimir1'){//imprimir el formulario
             $salida->set_nombre_archivo("Inscripcion_Becario.pdf");
@@ -714,7 +780,6 @@ class ci_alta_solicitud extends toba_ci
             $datos_disti=$this->dep('datos')->tabla('becario_distincion')->get_datos_distincion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_trab=$this->dep('datos')->tabla('becario_trabajo')->get_datos_trabajo($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_idioma=$this->dep('datos')->tabla('becario_idioma')->get_datos_idioma($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
-            $datos_referencias=$this->dep('datos')->tabla('becario_referencia')->get_datos_referencias($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             //$carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get();//no se usa
             //por si llega hasta el final sin guardar y presiona el botón imprimir ver!! pero como va a ser obligatorio entonces esta
          
@@ -808,7 +873,11 @@ class ci_alta_solicitud extends toba_ci
                 $tabla_estudio=array();              
                 foreach ($datos_estudio as $des) {
                     $fec_desde=date("d/m/Y",strtotime($des['desde']));
-                    $fec_hasta=date("d/m/Y",strtotime($des['hasta']));
+                    if(!isset($des['hasta'])){
+                        $fec_hasta='';
+                    }else{
+                        $fec_hasta=date("d/m/Y",strtotime($des['hasta']));
+                    }
                     $tabla_estudio[$i]=array( 'col1'=>trim($des['institucion']),'col2' => $fec_desde,'col3' => $fec_hasta,'col4' => trim($des['titulo']));
                     $i++;
                 }   
@@ -939,26 +1008,6 @@ class ci_alta_solicitud extends toba_ci
                 $pdf->ezText(' <b>NO </b>', 10);
             }
             $pdf->ezText("\n", 10);
-            
-//            $pdf->ezText(utf8_d_seguro(' <b>2.10 PERSONAS A QUIENES EL POSTULANTE SOLICITÓ REFERENCIAS </b>'), 10);
-//            $pdf->ezText("\n", 10);
-//            foreach ($datos_referencias as $des) {
-//              $tabla_ref=array();
-//              $tabla_ref[0]=array('dato'=>utf8_d_seguro('APELLIDO Y NOMBRES: '.$des['agente'])); 
-//              if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){
-//                   $tabla_ref[1]=array('dato'=>utf8_d_seguro('PROFESIÓN: '.$des['profesion'])); 
-//                   $tabla_ref[2]=array('dato'=>utf8_d_seguro('CARGO: '.$des['cargo'])); 
-//                   $tabla_ref[3]=array('dato'=>utf8_d_seguro('INSTITUCIÓN: '.$des['institucion'])); 
-//                   $tabla_ref[4]=array('dato'=>utf8_d_seguro('DOMICILIO: '.$des['domi'])); 
-//              }else{
-//                   $tabla_ref[1]=array('dato'=>utf8_d_seguro('UNIDAD ACADÉMICA: '.$des['uni_acad'])); 
-//                   $tabla_ref[2]=array('dato'=>utf8_d_seguro('DOMICILIO: '.$des['domi'])); 
-//              }
-//              
-//              $pdf->ezTable($tabla_ref,array('dato'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
-//              $pdf->ezText("\n", 10);
-//            }
-
             $pdf->ezText(utf8_decode(' <b>2.10 LUGAR DE TRABAJO EN EL QUE DESARROLLARÁ LA BECA</b>'), 10);
             $pdf->ezText("\n", 10);
             //utf8_decode($tabla_empleo_ant)
@@ -992,9 +1041,9 @@ class ci_alta_solicitud extends toba_ci
                 $tabla_director[9]=array('dato'=>'LUGAR DE TRABAJO: '.trim($datos_dir['lugar_trabajo']));
                 $tabla_director[10]=array('dato'=>utf8_decode('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: ').$datos_dir['cat_inv']);
                 $tabla_director[11]=array('dato'=>utf8_decode('MAX TITULACIÓN ALCANZADA: ').$datos_dir['titulo']);
-                $tabla_director[12]=array('dato'=>utf8_decode('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'.$datos_dir_cantpost));
-                $pdf->ezTable($tabla_director,array('dato'=>''),'<b>DATOS DEL DIRECTOR DE BECA: </b>',array('showHeadings'=>0,'shaded'=>0,'fontSize'=>10));
-                
+                //$tabla_director[12]=array('dato'=>utf8_decode('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'.$datos_dir_cantpost));
+                $pdf->ezTable($tabla_director,array('dato'=>''),'<b>DATOS DEL DIRECTOR DE BECA: </b>',array('showHeadings'=>0,'shaded'=>0,'fontSize'=>10,'width'=>500));
+                                                                                        
             }
               if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//solo graduados pide codirector
                 if(isset($inscripcion['id_codirector'])){
@@ -1010,8 +1059,8 @@ class ci_alta_solicitud extends toba_ci
                     $tabla_codirector[9]=array('dato'=>'LUGAR DE TRABAJO: '.trim($datos_codir['lugar_trabajo']));
                     $tabla_codirector[10]=array('dato'=>utf8_decode('CATEGORÍA EQUIVALENTE DE INVESTIGACIÓN: ').$datos_codir['cat_inv']);
                     $tabla_codirector[11]=array('dato'=>utf8_decode('MAX TITULACIÓN ALCANZADA: ').$datos_codir['titulo']);
-                    $tabla_codirector[12]=array('dato'=>utf8_decode('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'));
-                    $pdf->ezTable($tabla_codirector,array('dato'=>''),'<b>DATOS DEL CODIRECTOR DE BECA:</b> ',array('showHeadings'=>0,'shaded'=>0));
+                    //$tabla_codirector[12]=array('dato'=>utf8_decode('CANTIDAD DE POSTULANTES (en cualquier categoría) QUE PRESENTA EN ESTA CONVOCATORIA:'.$datos_codir_cantpost));
+                    $pdf->ezTable($tabla_codirector,array('dato'=>''),'<b>DATOS DEL CODIRECTOR DE BECA:</b> ',array('showHeadings'=>0,'shaded'=>0,'fontSize'=>10,'width'=>500));
                   }
             }
          //-------------------------4
@@ -1034,8 +1083,11 @@ class ci_alta_solicitud extends toba_ci
             $pdf->ezText(' <b>5. DATOS DEL PLAN DE TRABAJO DEL BECARIO</b>', 12,$centrado);
             $pdf->ezText("\n", 10);
             $pdf->ezText(utf8_decode(' Título del Plan de Trabajo (tema de la beca)'), 12);
+            unset($datos);//limpio la variable
             if(isset($inscripcion['titulo_plan_trabajo'])){
-                $pdf->ezText($inscripcion['titulo_plan_trabajo'], 10,$centrado);
+                $datos[0]=array('dato'=>$inscripcion['titulo_plan_trabajo']);
+                $pdf->ezTable($datos,array('dato'=>''),' ',array('showHeadings'=>0,'shaded'=>0,'width'=>500));
+                $pdf->ezText("\n", 8);
             }
             
 //            $pdf->ezText(utf8_d_seguro(' <b> DESARROLLO DEL PLAN DE TRABAJO </b>'), 10,$centrado);
@@ -1049,7 +1101,7 @@ class ci_alta_solicitud extends toba_ci
 //                $pdf->ezText("\n", 10);
 //            }
              //-------------------------6
-            $pdf->ezNewPage(); 
+            $pdf->ezText("\n", 10);$pdf->ezText("\n", 10);
             $pdf->ezText(' <b>6. FUNDAMENTOS DE LA SOLICITUD</b>', 12,$centrado);
             $pdf->ezText("\n", 8);
             $pdf->ezText(utf8_decode(' El solicitante expresará en esta hoja los motivos de su solicitud de una beca y de su elección de los temas propuestos.'), 10);
@@ -1091,12 +1143,11 @@ class ci_alta_solicitud extends toba_ci
             //$pdf->Line(10, 45, 550, 45);//primero: eje x desde donde comienza/tercero es el largo de la linea/cuarto:ultimo le da la inclinacion
             //segundo le da orientacion sobre x
             $pdf->ezText(utf8_decode(' <b>Ficha de Inscripción </b>'), 10);
-            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
             $texto=' La presente ficha deberá ser debidamente firmada y entregada en la Secretaría de Investigación de la Unidad Académica';
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
+                $texto.=' de pertenencia del proyecto en el que se inserta su plan de trabajo.';
+            }else{         
                 $texto.=' correspondiente a la carrera por la que solicita la beca.';         
-            }else{
-                $texto.=' de pertenencia del proyecto en el que se inserta su plan de trabajo.';         
             }
            
             $pdf->ezText(utf8_decode($texto), 10);
@@ -1135,7 +1186,7 @@ class ci_alta_solicitud extends toba_ci
                     $tabla_codir=array(); 
                     $tabla_codir[0]=array( 'col1'=>'Apellido y Nombre:','col2' => $datos_codir['nombre']);
                     $tabla_codir[1]=array( 'col1'=>'CUIL:','col2' => $datos_codir['cuil']);
-                    $tabla_codir[2]=array( 'col1'=>utf8_decode('e-mail:'),'col2' => $datos_codir['correo']);
+                    $tabla_codir[2]=array( 'col1'=>'e-mail:','col2' => $datos_codir['correo']);
                     $tabla_codir[3]=array( 'col1'=>'Domicilio:','col2' => $datos_codir['domi']);
                     $tabla_codir[4]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_codir['telefono']);
                     $tabla_codir[5]=array( 'col1'=>utf8_decode('Máxima titulación alcanzada:'),'col2' => $datos_codir['titulo']);
@@ -1146,10 +1197,25 @@ class ci_alta_solicitud extends toba_ci
                     $tabla_codir[10]=array( 'col1'=>utf8_decode('Institución Otro Organismo:'),'col2' => utf8_decode(trim($datos_codir['institucion'])));
                     $tabla_codir[11]=array( 'col1'=>'Lugar de trabajo:','col2' => trim(utf8_decode($datos_codir['lugar_trabajo'])));
                     $tabla_codir[12]=array( 'col1'=>utf8_decode('Hs de dedicación total de investigación:'),'col2' => $datos_codir['hs_dedic_inves']);
-                    $pdf->ezTable($tabla_dir,array('col1'=>"<b>Datos del Co-director</b>",'col2'=>''),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+                    $pdf->ezTable($tabla_codir,array('col1'=>"<b>Datos del Co-director</b>",'col2'=>''),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
                }
             }
-            
+            //adjuntos
+            $pdf->ezText("\n", 10);
+            $tabla_adj=array();
+            $cols_adj = array('col1'=>"<b>ARCHIVO</b>",'col2'=>'<b>NOMBRE INTERNO</b>');
+            $tabla_adj[0]=array('col1'=>'CERTIFICADO ANTECEDENTES','col2'=>$datos_adj['cert_ant']); 
+            $tabla_adj[1]=array('col1'=>'CONSTANCIA DE FIN DE ESTUDIOS','col2'=>$datos_adj['const_titu']); 
+            $tabla_adj[2]=array('col1'=>utf8_decode('RENDIMIENTO ACADÉMICO'),'col2'=>$datos_adj['rend_acad']); 
+            $tabla_adj[3]=array('col1'=>'CV POSTULANTE','col2'=>$datos_adj['cv_post']); 
+            $tabla_adj[4]=array('col1'=>'CV DIRECTOR','col2'=>$datos_adj['cv_dir']); 
+            $tabla_adj[5]=array('col1'=>'CV CODIRECTOR','col2'=>$datos_adj['cv_codir']);
+            $tabla_adj[6]=array('col1'=>'CUIL','col2'=>$datos_adj['cuil']);
+            $tabla_adj[7]=array('col1'=>'DOCUMENTO','col2'=>$datos_adj['docum']);
+            $tabla_adj[8]=array('col1'=>'COMPROBANTES','col2'=>$datos_adj['comprob']);
+            $tabla_adj[9]=array('col1'=>'PLAN DE TRABAJO','col2'=>$datos_adj['desarrollo_pt']);
+            $tabla_adj[10]=array('col1'=>'INFORME FINAL','col2'=>$datos_adj['informe_final']);         
+            $pdf->ezTable($tabla_adj,$cols_adj,'<b>DATOS ADJUNTOS</b>',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
             //-----------
             $pdf->ezNewPage(); 
             $tabla_texto=array();
@@ -1226,50 +1292,114 @@ class ci_alta_solicitud extends toba_ci
         }//fin vista_pdf
         function vista_impresion( toba_impresion $salida )
 	{
-		$salida->titulo(utf8_decode('DATOS DE INSCRIPCIÓN A BECA '));
+		$salida->titulo(utf8_decode('DATOS DE INSCRIPCIÓN A BECA <br> VISTA PREVIA no válida para presentar en la Unidad Académica'));
                 $this->dependencia('form')->vista_impresion($salida);
-                $salida->mensaje('DATOS PERSONALES:');
+                $salida->mensaje('2.1 DATOS PERSONALES');
 		$this->dependencia('ci_antecedentes')->dependencia('form_dp')->vista_impresion($salida);
-                $salida->mensaje('DATOS DE LA CARRERA DE GRADO/PREGRADO POR LA QUE SE SOLICITA LA BECA:');
+                $salida->mensaje('2.2 DATOS DE LA CARRERA DE GRADO/PREGRADO POR LA QUE SE SOLICITA LA BECA');
                  //los ef desactivados ya no salen en vista previa del boton final
               //esto en funcion de la categoria
                  $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
                  if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
                      $this->dependencia('ci_antecedentes')->dependencia('form_car')->desactivar_efs(array('cant_materias_aprobadas','porc_mat_aprob'));
+                     $titulo_dir='3 DATOS DEL DIRECTOR/CODIRECTOR (si corresponde)';
                  }else{//estudiante
                      $this->dependencia('ci_antecedentes')->dependencia('form_car')->desactivar_efs(array('institucion','cant_materias_adeuda','titulo','fecha_finalizacion','carrera'));
-                     $this->dependencia('form_dir')->desactivar_efs(array('id_docentec','correoc','id_designacionc','tituloc','institucionc','lugar_trabajoc','cat_investc','cat_conicetc','hs_dedic_invesc','cod_paisc','cod_provinciac','cod_postalc','callec','numeroc','telefonoc'));
+                     $this->dependencia('form_dir')->desactivar_efs(array('id_docentec','correoc','id_designacionc','tituloc','institucionc','lugar_trabajoc','cat_investc','cat_conicetc','hs_dedic_invesc','cod_paisc','cod_provinciac','cod_postalc','callec','numeroc','telefonoc','otro_organismoc','rayac','direccionc'));
+                     $titulo_dir='3 DATOS DEL DIRECTOR ';
                  }
                  
                 
                 $this->dependencia('ci_antecedentes')->dependencia('form_car')->vista_impresion($salida);
-                $salida->mensaje('OTROS ESTUDIOS UNIVERSITARIOS:');
+                $salida->mensaje('2.3 OTROS ESTUDIOS UNIVERSITARIOS');
                 $this->dependencia('ci_antecedentes')->dependencia('form_est')->vista_impresion($salida);
-                $salida->mensaje('BECAS OBTENIDAS:');
+                $salida->mensaje('2.4 BECAS OBTENIDAS');
                 $this->dependencia('ci_antecedentes')->dependencia('form_beca')->vista_impresion($salida);
-                $salida->mensaje('DISTINCIONES Y PREMIOS');
+                $salida->mensaje('2.5 DISTINCIONES Y PREMIOS');
                 //aqui las tablas ya tienen titulo
                 $this->dependencia('ci_antecedentes')->dependencia('form_dis')->vista_impresion($salida);
+                $salida->mensaje('2.6 EMPLEOS');
                 $this->dependencia('ci_antecedentes')->dependencia('form_emp')->vista_impresion($salida);
                 $this->dependencia('ci_antecedentes')->dependencia('form_pi')->vista_impresion($salida);
                 $this->dependencia('ci_antecedentes')->dependencia('form_pe')->vista_impresion($salida);
-                $salida->mensaje('TRABAJOS REALIZADOS:');
+                $salida->mensaje('2.7 TRABAJOS REALIZADOS');
                 
                 $this->dependencia('ci_antecedentes')->dependencia('form_trab')->vista_impresion($salida);
-                $salida->mensaje('CONOCIMIENTO DE IDIOMAS:');
+                $salida->mensaje('2.8 CONOCIMIENTO DE IDIOMAS');
                 $this->dependencia('ci_antecedentes')->dependencia('form_idio')->vista_impresion($salida);
-                $salida->mensaje(utf8_decode('¿TIENE BECA EN CURSO?'));
+                $salida->mensaje(utf8_decode('2.9 ¿TIENE BECA EN CURSO?'));
                 $this->dependencia('ci_antecedentes')->dependencia('form_bc')->vista_impresion($salida);
-                $salida->mensaje(utf8_decode('LUGAR DE TRABAJO EN EL QUE DESARROLLARÁ LA BECA'));
+                $salida->mensaje(utf8_decode('2.10 LUGAR DE TRABAJO EN EL QUE DESARROLLARÁ LA BECA'));
                 $this->dependencia('ci_antecedentes')->dependencia('form_lt')->vista_impresion($salida);
+                $salida->mensaje(utf8_decode($titulo_dir));
                 $this->dependencia('form_dir')->vista_impresion($salida);
-                $salida->mensaje(utf8_decode('DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA '));
-                
+                $salida->mensaje(utf8_decode('4 DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA '));
                 $this->dependencia('form_pinv')->vista_impresion($salida);
-                $salida->mensaje('DATOS DEL PLAN DE TRABAJO');
+                $salida->mensaje('5 DATOS DEL PLAN DE TRABAJO');
                 $this->dependencia('form_pt')->vista_impresion($salida);
-                $salida->mensaje('FUNDAMENTOS DE LA SOLICITUD');
+                $salida->mensaje('6 FUNDAMENTOS DE LA SOLICITUD');
                 $this->dependencia('form_fund')->vista_impresion($salida);
+                $salida->mensaje('7  DATOS ADJUNTOS');
+                $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
+                
+                $var="<table border=1 style='font-size:90%'>
+                      <tr>
+                        <th> ARCHIVO </th>
+                        <th>NOMBRE INTERNO</th> 
+                      </tr>
+                      <tr>
+                        <td>CERTIFICADO ANTECEDENTES</td>
+                        <td>".$adj['cert_ant']."</td> 
+                      </tr>
+                      ";
+                 if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
+                    $var.="<tr><td>CONTANCIA FIN ESTUDIOS</td>
+                            <td>".$adj['const_titu']."</td> 
+                            </tr>";
+                      
+                 }
+                $var.="<tr>
+                        <td>RENDIMIENTO ACADEMICO</td>
+                        <td>".$adj['rend_acad']."</td> 
+                      </tr>
+                      <tr>
+                        <td>CV POSTULANTE</td>
+                        <td>".$adj['cv_post']."</td> 
+                      </tr>
+                      <tr>
+                        <td>CV DIRECTOR</td>
+                        <td>".$adj['cv_dir']."</td> 
+                      </tr>";
+                 if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
+                      $var.="      <tr>
+                        <td>CV CODIRECTOR</td>
+                        <td>".$adj['cv_codir']."</td> 
+                      </tr>";
+                 }
+                $var.=" 
+                      <tr>
+                        <td>CONSTANCIA CUIL</td>
+                        <td>".$adj['cuil']."</td> 
+                      </tr>
+                      <tr>
+                        <td>FOTOCOPIA DE DOCUMENTO</td>
+                        <td>".$adj['docum']."</td> 
+                      </tr>
+                      <tr>
+                        <td>COMPROBANTES</td>
+                        <td>".$adj['comprob']."</td> 
+                      </tr>
+                      <tr>
+                        <td>PLAN DE TRABAJO</td>
+                        <td>".$adj['desarrollo_pt']."</td> 
+                      </tr>
+                      <tr>
+                        <td>INFORME FINAL</td>
+                        <td>".$adj['informe_final']."</td> 
+                      </tr>
+                    </table>";
+                echo($var);
+                //$this->dependencia('form_adj')->vista_impresion($salida);
 		$salida->salto_pagina();
 		
 	}
