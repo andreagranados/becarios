@@ -96,6 +96,7 @@ class ci_alta_solicitud extends toba_ci
 //boton implicito que se ejecuta cuando presiona siguiente
        function evt__form_dir__guardar($datos)
         {//si presiona el boton guardar tambien se ejecuta
+           //print_r($datos);
            $band=true;
            $primerad=true;
            $primerac=true;
@@ -109,7 +110,8 @@ class ci_alta_solicitud extends toba_ci
                  $primerad=false;
              }
              if(isset($insc['id_codirector'])){//la inscripcion tiene seteado el codirector
-                 if(!isset($datos['id_docentec'])){//y ahora ya lo borra
+                 //if(!isset($datos['id_docentec'])){//y ahora ya lo borra
+                 if($datos['tiene_codir']=='no'){
                      $datos_insc['id_codirector']=null;
                      $borrar_codir=true;
                      
