@@ -29,6 +29,9 @@ class form_dir_extension extends toba_ei_formulario
                                                 this.ef('hs_dedic_invesc').mostrar();
                                     break;
                                     case 'no':  
+                                                this.ef('otro_organismoc').ocultar();
+                                                this.ef('rayac').ocultar();
+                                                this.ef('direccionc').ocultar();
 						this.ef('id_docentec').ocultar();
                                                 this.ef('correoc').ocultar();
                                                 this.ef('id_designacionc').ocultar();
