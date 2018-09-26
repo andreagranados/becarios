@@ -686,14 +686,14 @@ class ci_alta_solicitud extends toba_ci
                         }
                         if(isset($datos['desarrollo_pt'])){
                             $nombre_des_pt="des_pt".$cuil_becario.".pdf";
-                            $destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
-                           // $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                            //$destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                            $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
                             move_uploaded_file($datos['desarrollo_pt']['tmp_name'], $destino_des_pt);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['desarrollo_pt']=strval($nombre_des_pt);
                         }
                         if(isset($datos['informe_final'])){
                             $nombre_ifinal="ifinal".$cuil_becario.".pdf";
-                           // $destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
+                            //$destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
                             $destino_ifinal="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
                             move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['informe_final']=strval($nombre_ifinal);
