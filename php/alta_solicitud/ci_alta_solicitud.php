@@ -5,7 +5,7 @@ class ci_alta_solicitud extends toba_ci
         protected $s__categ_beca;
         protected $s__nombre_archivo_ca;
         protected $s__guardo;
-        
+             
     
         function get_categ_beca()
         {
@@ -359,8 +359,12 @@ class ci_alta_solicitud extends toba_ci
         }
 
         function evt__cambiar_tab__siguiente(){
-//             switch ($this->s__pantalla) {
-//               
+//             if ($this->s__pantalla=='pant_adj') {
+//                 if(!$this->s__guardo){
+//                     toba::notificacion()->agregar(utf8_decode('Los siguientes archivos superan el tamaño máximo:  Intentelo nuevamente '), "info");
+//                     $this->set_pantalla('pant_adj');
+//                 }
+//                 
 //             }
            
         }
@@ -457,12 +461,14 @@ class ci_alta_solicitud extends toba_ci
         {
             $this->s__pantalla='pant_pinv';
         }
-        
+        function conf__pant_adj(toba_ei_pantalla $pantalla)
+        {
+            $this->s__pantalla='pant_adj';
+        } 
        //--------formulario para adjuntos
         //cuil,documento,comprobantes,cert antecedentes siempre son obligatorios
         function conf__form_adj(toba_ei_formulario $form)
 	{
-            $this->s__guardo=true;
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
                 if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando hay cargado al codirector
@@ -528,12 +534,16 @@ class ci_alta_solicitud extends toba_ci
                     $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                 }
             }
+            
             return $datos;
+            
 	}
         
         function evt__form_adj__guardar($datos)
         {
+            $this->s__guardo=true;
             $band=true;
+            //$this->s__no_supera=true;
             $no_supera_tamano=true;
             $mensaje='';
             $datos2=array();
@@ -546,9 +556,10 @@ class ci_alta_solicitud extends toba_ci
                     $datos2['fecha']=$insc['fecha_presentacion'];
                 }   
             }
+            
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
-                if(isset($datos['cert_ant']['size'])){
-                    if($datos['cert_ant']['size']>3145728 ){$no_supera_tamano=false;
+                if(isset($datos['cert_ant']['size'])){//120000
+                    if($datos['cert_ant']['size']>3145728){$no_supera_tamano=false;
                     $mensaje.=' cert_ant ';
                     }                               
                 }
@@ -626,21 +637,21 @@ class ci_alta_solicitud extends toba_ci
                         }
                         if(isset($datos['rend_acad'])){
                             $nombre_ra="rend_acad".$cuil_becario.".pdf";
-                           // $destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ra;
-                            $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ra;
+                            //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ra;
+                           $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ra;
                             move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['rend_acad']=strval($nombre_ra);
                         }
                         if(isset($datos['cv_post'])){
                             $nombre_cvp="cv_post".$cuil_becario.".pdf";
-                           // $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
+                            //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
                             $destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
                             move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cv_post']=strval($nombre_cvp);
                         }
                         if(isset($datos['cv_dir'])){
                             $nombre_cvd="cv_dir".$cuil_becario.".pdf";
-                            //$destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
+                           // $destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
                             $destino_cvd="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
                             move_uploaded_file($datos['cv_dir']['tmp_name'], $destino_cvd);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cv_dir']=strval($nombre_cvd);
@@ -661,8 +672,8 @@ class ci_alta_solicitud extends toba_ci
                         }
                         if(isset($datos['docum'])){
                             $nombre_docum="docum".$cuil_becario.".pdf";
-                           // $destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_docum;
-                            $destino_docum="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_docum;
+                            $destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_docum;
+                           // $destino_docum="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_docum;
                             move_uploaded_file($datos['docum']['tmp_name'], $destino_docum);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['docum']=strval($nombre_docum);
                         }
@@ -675,8 +686,8 @@ class ci_alta_solicitud extends toba_ci
                         }
                         if(isset($datos['desarrollo_pt'])){
                             $nombre_des_pt="des_pt".$cuil_becario.".pdf";
-                           // $destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
-                            $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                            $destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                           // $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
                             move_uploaded_file($datos['desarrollo_pt']['tmp_name'], $destino_des_pt);//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['desarrollo_pt']=strval($nombre_des_pt);
                         }
@@ -690,8 +701,7 @@ class ci_alta_solicitud extends toba_ci
                         $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
                         $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
               }else{
-                  //echo('Ha ocurrido un error, por favor inténtelo de nuevo.');
-                  //throw new toba_error(utf8_decode('Los siguientes archivos superan el tamaño máximo: ').$mensaje);
+                 // $this->s__no_supera=false;
                   toba::notificacion()->agregar(utf8_decode('Los siguientes archivos superan el tamaño máximo: '.$mensaje.". Intentelo nuevamente "), "info");
                   $this->s__guardo=false;//para que no salga mensaje de que guardo correctamente
               }
