@@ -103,7 +103,7 @@ class dt_director_beca extends toba_datos_tabla
         function get_datos_director($id_dir){//lo llama para director y codirector
             $salida=array();
             if(isset($id_dir)){
-               $sql="select upper(trim(d.apellido)||', '||trim(d.nombre)) as nombre,legajo,cuil1||'-'||cuil||'-'||cuil2 as cuil,correo,cat_estat,case when dedic=1 then 'Simple' else case when dedic=2 then 'Parcial' else case when dedic=3 then 'Exclusiva' else 'Ah-Honorem' end end  end as dedicacion,case when carac='I' then 'Interino' else case when carac='R' then 'Regular' else case when carac='S' then 'Suplente' else 'Otro' end end end as carac,c.descripcion as cat_conicet, i.descripcion as cat_inv, lugar_trabajo, institucion, titulo,
+               $sql="select upper(trim(d.apellido)||', '||trim(d.nombre)) as nombre,legajo,cuil1||'-'||cuil||'-'||cuil2 as cuil,correo,cat_estat,case when dedic=1 then 'Exclusiva' else case when dedic=2 then 'Parcial' else case when dedic=3 then 'Simple' else 'Ah-Honorem' end end  end as dedicacion,case when carac='I' then 'Interino' else case when carac='R' then 'Regular' else case when carac='S' then 'Suplente' else 'Otro' end end end as carac,c.descripcion as cat_conicet, i.descripcion as cat_inv, lugar_trabajo, institucion, titulo,
                     calle||' '||numero||' CP: '||cod_postal||' '||p.descripcion_pcia||' '||a.nombre as domi,hs_dedic_inves, dom.telefono
                      from director_beca d
                      left outer join categoria_conicet c on (d.cat_conicet=c.id_categ)

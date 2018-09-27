@@ -50,6 +50,8 @@ class consultas_designa
               from pinvestigacion p
               where extract (year from p.fec_desde) in (2015,2016,2017,2018,2019)
               and p.estado<>'X'
+              and not exists (select * from subproyecto s
+                              where s.id_proyecto=p.id_pinv)
               order by descripcion";
 	$res= toba::db('designa')->consultar($sql);
 	return $res;

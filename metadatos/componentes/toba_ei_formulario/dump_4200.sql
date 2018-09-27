@@ -117,7 +117,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'3418', --evento_id
 	'4200', --objeto
 	'imprimir1', --identificador
-	'Imprimir Formulario', --etiqueta
+	'Inscripción Becario', --etiqueta
 	'1', --maneja_datos
 	NULL, --sobre_fila
 	NULL, --confirmacion
@@ -150,7 +150,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'3419', --evento_id
 	'4200', --objeto
 	'imprimir2', --identificador
-	'Imprimir Ficha', --etiqueta
+	'Ficha Inscripción', --etiqueta
 	'1', --maneja_datos
 	NULL, --sobre_fila
 	NULL, --confirmacion
