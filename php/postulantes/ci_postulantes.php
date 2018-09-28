@@ -48,11 +48,16 @@ class ci_postulantes extends toba_ci
 	}
         
         function evt__cuadro__seleccion($datos){
-            $this->dep('datos')->tabla('inscripcion_beca')->cargar($datos);
-            $datos2['id_becario']=$datos['id_becario'];
-            $datos2['fecha']=$datos['fecha_presentacion'];
-            $this->dep('datos')->tabla('inscripcion_adjuntos')->cargar($datos2);
-            $this->set_pantalla('pant_editar');
+            $estado=$this->dep('datos')->tabla('inscripcion_beca')->get_estado($datos);
+            if($estado<>'I'){
+                $this->dep('datos')->tabla('inscripcion_beca')->cargar($datos);
+                $datos2['id_becario']=$datos['id_becario'];
+                $datos2['fecha']=$datos['fecha_presentacion'];
+                $this->dep('datos')->tabla('inscripcion_adjuntos')->cargar($datos2);
+                $this->set_pantalla('pant_editar');
+            }else{
+                toba::notificacion()->agregar(utf8_decode('No puede editar una inscripción que no ha sido enviada por el becario.'), 'info');   
+            } 
         }
         
         function evt__cuadro__asignarp($datos){
@@ -74,7 +79,7 @@ class ci_postulantes extends toba_ci
 	{
             $form->evento('imprimir1')->vinculo()->agregar_parametro('evento_trigger', 'imprimir1');
             $form->evento('imprimir2')->vinculo()->agregar_parametro('evento_trigger', 'imprimir2'); 
-                if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
+            if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                     $datos=$this->dep('datos')->tabla('inscripcion_beca')->get();
                     if($datos['categ_beca']==3){//estudiantes desactivo 
                          $form->desactivar_efs(array('imagen_vista_previa_titu','imagen_vista_previa_cvc')); 
@@ -139,22 +144,19 @@ class ci_postulantes extends toba_ci
             $band=true;
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
             $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
-            //$conv=$this->dep('datos')->tabla('convocatoria')->get();
             if($inscripcion['estado']=='I'){//cuando la inscripcion esta en I nadie puede cambiar nada
                 toba::notificacion()->agregar('No puede modificar una inscripción que no ha sido enviada por el becario.', 'error');   
             }else{
                 //esto es para todos porque nadie puede pasar a E
                 if($inscripcion['estado']<>'E' && $datos['estado']=='E' ){//la inscripcion no esta en estado E y se la quiere pasar
                     toba::notificacion()->agregar('La inscripcion no puede ser pasada a E por la UA. Es el becario es quien debe hacerlo.', 'error');   
-                    //$mensaje.='La inscripcion no puede ser pasada a E por la UA. Es el becario es quien debe hacerlo. <br>';
-                    //$datos2['estado']=$inscripcion['estado'];//conservo el estado
                 }else{//puedo cambiar estado
                     
                     $perfil = toba::usuario()->get_perfil_datos();
                     if ($perfil == null) {//es usuario de SCyT
                     //usuario de SCyT puede modificar siempre salvo por no pasar a E que ya se chequeo antes
-                        $datos2['estado']=$datos['estado'];
-                        $datos2['observaciones']=$datos['observaciones'];
+                       // $datos2['estado']=$datos['estado'];
+                        //$datos2['observaciones']=$datos['observaciones'];
                         if(isset($datos['puntaje'])){//si han cargado puntaje en el formulario
                             if($inscripcion['estado']=='A'){//solo si esta aceptado puede cambiar puntaje
                                 $datos2['puntaje']=$datos['puntaje'];
@@ -172,9 +174,12 @@ class ci_postulantes extends toba_ci
                     if($band){
                         $datos2['estado']=$datos['estado'];
                         $datos2['observaciones']=$datos['observaciones'];
+                        if($datos['estado']=='I'){//si reabre la inscripcion se pierde la fecha de envio
+                            $datos2['fecha_envio']=null;$mensaje='. Inscripcion reabierta, se ha perdido la fecha de envio.';
+                        }
                         $this->dep('datos')->tabla('inscripcion_beca')->set($datos2);
                         $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();
-                        toba::notificacion()->agregar('Los datos se han guardado correctamente', 'info');   
+                        toba::notificacion()->agregar('Los datos se han guardado correctamente'.$mensaje, 'info');   
                     }else{
                       toba::notificacion()->agregar($mensaje, 'info');   
                     }
@@ -198,7 +203,17 @@ class ci_postulantes extends toba_ci
 //este metodo lo copie tal cual de alta solicitud
 
         function vista_pdf(toba_vista_pdf $salida){
-         $bandera = toba::memoria()->get_parametro('evento_trigger');
+            //sale con leyenda separada  No generado por becario 
+          $bandera = toba::memoria()->get_parametro('evento_trigger');
+          //print_r($bandera);exit;
+          $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+          $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
+          $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
+          $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
+          $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
+          $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
+          $datos_adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get_datos_adjuntos($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);          
+          $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
           $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
@@ -209,6 +224,13 @@ class ci_postulantes extends toba_ci
           $datos_adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get_datos_adjuntos($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);          
           $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($inscripcion['id_proyecto']);
           $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
+          $datos_carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get_datos_carrera($inscripcion['id_carrera']); 
+          
+          if(isset($inscripcion['uni_acad'])){
+                $uacad=$this->dep('datos')->tabla('inscripcion_beca')->get_unidad($inscripcion['uni_acad']);
+            }else{
+                $uacad='';
+           }
           if($bandera=='imprimir1'){//imprimir el formulario
             $salida->set_nombre_archivo("Inscripcion_Becario.pdf");
             //recuperamos el objteo ezPDF para agregar la cabecera y el pie de página 
@@ -218,8 +240,8 @@ class ci_postulantes extends toba_ci
             $pdf->ezSetMargins(100, 50, 45, 45);
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
-            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi)                  '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
-            $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
+            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por postulante     '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $pdf->ezStartPageNumbers(500, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             
             //Configuración de Título.
             $salida->titulo(utf8_d_seguro(''));    
@@ -240,7 +262,13 @@ class ci_postulantes extends toba_ci
            
             //INICIALIZACION VARIABLE CAT
             $centrado = array('justification'=>'center');
-            $datos_carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get_datos_carrera($inscripcion['id_carrera']); 
+//            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+//            $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
+//            //print_r($inscripcion);
+//            $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
+//            $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
+//            $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
+            
             $datos_estudio=$this->dep('datos')->tabla('becario_estudio')->get_datos_estudio($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_beca=$this->dep('datos')->tabla('becario_beca')->get_datos_beca($inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
             $datos_empleo_actual=$this->dep('datos')->tabla('becario_empleo')->get_empleos(true,$inscripcion['id_becario'],$inscripcion['fecha_presentacion']); 
@@ -254,11 +282,6 @@ class ci_postulantes extends toba_ci
             //$carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get();//no se usa
             //por si llega hasta el final sin guardar y presiona el botón imprimir ver!! pero como va a ser obligatorio entonces esta
          
-            if(isset($inscripcion['uni_acad'])){
-                $uacad=$this->dep('datos')->tabla('inscripcion_beca')->get_unidad($inscripcion['uni_acad']);
-            }else{
-                $uacad='';
-            }
            
             //-------------------------------1
             $pdf->ezText(' <b>1. SOLICITUD </b>', 12,$centrado);
@@ -604,15 +627,11 @@ class ci_postulantes extends toba_ci
             
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
-            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi)                 '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
-            $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
+            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por postulante     '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $pdf->ezStartPageNumbers(500, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             //Configuración de Título.
             $salida->titulo(utf8_decode(''));   
-            //$pdf->setLineStyle(1);
-            //$pdf->setLineStyle(5);
-            //$pdf->Line(1, 45, 210-20, 45);//ultimo le da la inclinacion
-            //$pdf->Line(10, 45, 550, 45);//primero: eje x desde donde comienza/tercero es el largo de la linea/cuarto:ultimo le da la inclinacion
-            //segundo le da orientacion sobre x
+            
             $pdf->ezText(utf8_decode(' <b>Ficha de Inscripción </b>'), 10);
             $texto=' La presente ficha deberá ser debidamente firmada y entregada en la Secretaría de Investigación de la Unidad Académica';
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
@@ -625,16 +644,36 @@ class ci_postulantes extends toba_ci
             $pdf->ezText("\n", 7);
             $tabla_cod=array();
             $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Categoría de Beca:</b>'),'col2' => utf8_d_seguro($cat)),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
-            $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Código de proyecto:</b>'),'col2' => $datos_proy['codigo']),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+            $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Unidad Académica:</b>'),'col2' => $uacad),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+            $cols_p = array('col1'=>"<b>Datos del Proyecto al que se incorpora:</b>",'col2'=>'');
+            $tabla_p=array();
+            $tabla_p[0]=array( 'col1'=>utf8_decode('Código:'),'col2' => $datos_proy['codigo']);
+            $tabla_p[1]=array( 'col1'=>utf8_decode('Título:'),'col2' => $datos_proy['denominacion']);
+            $tabla_p[2]=array( 'col1'=>'Director:','col2' => $datos_proy['apnom_director']);
+            $pdf->ezTable($tabla_p,$cols_p,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            //---
             $cols_dp = array('col1'=>"<b>Datos Personales</b>",'col2'=>'');
             $tabla_dp=array();
             $tabla_dp[0]=array( 'col1'=>'Postulante:','col2' => utf8_decode($datos_bec['nombre']));
             $tabla_dp[1]=array( 'col1'=>'CUIL:','col2' => $datos_bec['cuil']);
-            $tabla_dp[3]=array( 'col1'=>'e-mail:','col2' => $datos_bec['correo']);
-            $tabla_dp[4]=array( 'col1'=>'Fecha de nacimiento:','col2' => $fec_nac);
+            $tabla_dp[2]=array( 'col1'=>'e-mail:','col2' => $datos_bec['correo']);
+            $tabla_dp[3]=array( 'col1'=>'Fecha de nacimiento:','col2' => $fec_nac);
             $tabla_dp[5]=array( 'col1'=>'Domicilio:','col2' => $datos_bec['domi']);
-            $tabla_dp[6]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_bec['telefono']);
+            $tabla_dp[5]=array( 'col1'=>utf8_decode('Teléfono:'),'col2' => $datos_bec['telefono']);
             $pdf->ezTable($tabla_dp,$cols_dp,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            //--
+            $cols_c = array('col1'=>"<b>Datos de la Carrera</b>",'col2'=>'');
+            $tabla_c=array();
+            if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduado
+                    $tabla_c[0]=array( 'col1'=>utf8_decode('Institución:'),'col2' => trim($datos_carrera['institucion']));
+            }else{
+                    $tabla_c[0]=array( 'col1'=>utf8_decode('Unidad Académica:'),'col2' => $datos_carrera['uni_acad']);
+            }
+            $tabla_c[1]=array( 'col1'=>'Carrera:','col2' => trim($datos_carrera['carrera']));
+            $tabla_c[2]=array( 'col1'=>'Promedio sin aplazos:','col2' => $datos_carrera['promedio']);
+            $tabla_c[3]=array( 'col1'=>'Promedio con aplazos:','col2' => $datos_carrera['promedio_ca']);
+            $pdf->ezTable($tabla_c,$cols_c,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            //--
             $tabla_dir=array(); 
             $tabla_dir[0]=array( 'col1'=>'Apellido y Nombre:','col2' => utf8_decode($datos_dir['nombre']));
             $tabla_dir[1]=array( 'col1'=>'CUIL:','col2' => $datos_dir['cuil']);
@@ -714,7 +753,7 @@ class ci_postulantes extends toba_ci
             $tabla_firma3[1]=array('col1'=>'','col2'=>'','col3'=>'');
             $tabla_firma3[2]=array('col1'=>'','col2'=>'','col3'=>'');
             $tabla_firma3[3]=array('col1'=>'','col2'=>'','col3'=>'');
-            $tabla_firma3[4]=array('col1'=>'Lugar de fecha','col2'=>'Lugar y fecha','col3'=>'Lugar y fecha');
+            $tabla_firma3[4]=array('col1'=>'Lugar y fecha','col2'=>'Lugar y fecha','col3'=>'Lugar y fecha');
             $pdf->ezTable($tabla_firma3,array('col1'=>'','col2'=>'','col3'=>''),'',array('showHeadings'=>0,'shaded'=>0,'width'=>550,'cols'=>array('col1'=>array('justification'=>'center','width'=>150),'col2'=>array('justification'=>'center','width'=>200),'col3'=>array('justification'=>'center','width'=>200))));
             //lugar de la beca
             $tabla_lugar=array();

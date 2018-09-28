@@ -1,5 +1,6 @@
 <?php
 require_once 'consultas_designa.php';
+require_once 'dt_convocatoria.php';
 class dt_inscripcion_beca extends toba_datos_tabla
 {
     function get_estado($datos){
@@ -12,13 +13,20 @@ class dt_inscripcion_beca extends toba_datos_tabla
     }
     function get_postulantes($filtro=null){
         $where=' WHERE 1=1';
-       
-        if(isset($filtro['anio'])){
+        if(isset($filtro['anio'])){//esta siempre es obligatoria
             $valor=$filtro['anio']['valor']-1;
             $where.=' and anio='.$valor;
         }
         if(isset ($filtro['uni_acad'])){
-            $where.=" and uni_acad='".$filtro['uni_acad']['valor']."'";
+            switch ($filtro['uni_acad']['condicion']) {
+                case 'es_igual_a':$where.=" and uni_acad='".$filtro['uni_acad']['valor']."'";
+                    break;
+                case 'es_distinto_de':$where.=" and uni_acad<>'".$filtro['uni_acad']['valor']."'";
+                    break;
+                default: $where.=" and uni_acad='".$filtro['uni_acad']['valor']."'";
+                    break;
+            }
+            
         }
         if(isset ($filtro['estado'])){
             $where.=" and estado='".$filtro['estado']['valor']."'";
@@ -26,26 +34,8 @@ class dt_inscripcion_beca extends toba_datos_tabla
         if(isset ($filtro['categ_beca'])){
             $where.=" and categ_beca=".$filtro['categ_beca']['valor'];
         }
-
-//        $sql="select * from 
-//               (select i.uni_acad,i.estado,i.categ_beca,i.fecha_presentacion,i.id_becario,i.puntaje,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.fec_nacim,c.descripcion as categoria, 
-//                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,t.descripcion as cat_oo,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic as cat_co,cico.descripcion as cei_co,di.titulo as tituloc,tco.descripcion as catco_oo
-//                from inscripcion_beca i
-//                INNER JOIN becario b ON (i.id_becario=b.id_becario)
-//                LEFT OUTER JOIN categoria_beca c ON (c.id_categ=i.categ_beca)
-//                LEFT OUTER JOIN proyecto_inv p ON (p.id_pinv=i.id_proyecto)
-//                LEFT OUTER JOIN director_beca di ON (di.id=i.id_director)
-//                LEFT OUTER JOIN categoria_invest ci ON (ci.cod_cati=di.cat_invest)
-//                LEFT OUTER JOIN categoria_conicet t ON (t.id_categ=di.cat_conicet)
-//                LEFT OUTER JOIN director_beca co ON (co.id=i.id_codirector)
-//                LEFT OUTER JOIN categoria_conicet tco ON (tco.id_categ=co.cat_conicet)
-//                LEFT OUTER JOIN categoria_invest cico ON (cico.cod_cati=co.cat_invest)
-//                )sub
-//                $where ";
-        
-                
-          $perfil = toba::usuario()->get_perfil_datos();
-          if ($perfil != null) {//usuario de la UA
+        $perfil = toba::usuario()->get_perfil_datos();
+        if ($perfil != null) {//usuario de la UA
               //inscripcion correspond a la UA
               $sql1=" select i.* from inscripcion_beca i"
                       . " inner join unidad_acad u on (i.uni_acad=u.sigla) ";
@@ -56,10 +46,14 @@ class dt_inscripcion_beca extends toba_datos_tabla
                       . " inner join unidad_acad n on (u.uni_acad=n.sigla)";
               $con1 = toba::perfil_de_datos()->filtrar($sql1);
               $con2 = toba::perfil_de_datos()->filtrar($sql2);
-              $con=" ( select * from (".$con1.")sub "
-                      . " UNION "
+              $con="  (select * from (".$con1.")sub )";
+              //verifico si la fecha actual es >= fecha a partir de la cual puede ver los 
+              $bandera = dt_convocatoria::puede_ver_asignados($filtro['anio']['valor']);//anio es obligatorio por tanto siempre tiene valor        
+              if($bandera){
+                  $con="(".$con." UNION "
                       . " select * from (".$con2.")sub2"
                       . ")";
+              }
           }else{//usuario de SCyT
               $con=' inscripcion_beca ';
           }
@@ -78,13 +72,20 @@ class dt_inscripcion_beca extends toba_datos_tabla
                 LEFT OUTER JOIN categoria_conicet tco ON (tco.id_categ=co.cat_conicet)
                 LEFT OUTER JOIN categoria_invest cico ON (cico.cod_cati=co.cat_invest)
                 )sub
-                $where ";
+                $where "
+                  . " order by uni_acad,agente";
           
         return toba::db('becarios')->consultar($sql);
     }
     function get_unidades(){
         $uni_acad = consultas_designa::get_unidades();
         return $uni_acad;
+    }
+    function get_unidades_perfil(){
+        $sql="select * from unidad_acad";
+        $sql2=toba::perfil_de_datos()->filtrar($sql);
+        $res= toba::db('becarios')->consultar($sql2);
+        return $res;
     }
     function get_departamentos($uni_acad){
         $dep =consultas_designa::get_departamentos($uni_acad);

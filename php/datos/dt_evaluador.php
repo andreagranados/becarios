@@ -24,6 +24,14 @@ class dt_evaluador extends toba_datos_tabla
                 . " group by u.id,u.uni_acad,u.nombre_evaluador) sub";
         return toba::db('becarios')->consultar($sql);
     }
+    function get_evaluados_x($id){
+        $sql=" select b.apellido||', '||b.nombre as nombre, i.uni_acad "
+                . " from evaluador e"
+                . " inner join inscripcion_beca i on (e.id_becario=i.id_becario and e.fecha=i.fecha_presentacion)"
+                . " inner join becario b on (b.id_becario=i.id_becario)"
+                . " where id_ua=$id";
+        return toba::db('becarios')->consultar($sql);
+    }
   
 }
 ?>

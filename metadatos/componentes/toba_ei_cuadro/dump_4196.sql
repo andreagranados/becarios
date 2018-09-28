@@ -231,7 +231,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4350', --objeto_cuadro_col
 	'agente', --clave
 	'4', --orden
-	'Agente', --titulo
+	'Postulante', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho
