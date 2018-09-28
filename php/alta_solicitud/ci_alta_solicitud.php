@@ -723,8 +723,16 @@ class ci_alta_solicitud extends toba_ci
                     $this->evento('imprimir')->vinculo()->agregar_parametro('evento_trigger', 'imprimir1');
                     $this->evento('imprimir_ficha')->vinculo()->agregar_parametro('evento_trigger', 'imprimir2'); 
                 }else{
-                    $this->evento('imprimir')->ocultar();
-                    $this->evento('imprimir_ficha')->ocultar();
+                     if($insc['estado']=='I'){
+                        $this->evento('imprimir')->ocultar();
+                        $this->evento('imprimir_ficha')->ocultar();
+                     }else{//oculta todo para el resto de los estados
+                        $this->evento('enviar')->ocultar();
+                        $this->evento('previu')->ocultar();
+                        $this->evento('imprimir')->ocultar();
+                        $this->evento('imprimir_ficha')->ocultar();
+                         
+                     }
                 }
              }
             
@@ -1183,6 +1191,11 @@ class ci_alta_solicitud extends toba_ci
             $tabla_p[1]=array( 'col1'=>utf8_decode('Título:'),'col2' => $datos_proy['denominacion']);
             $tabla_p[2]=array( 'col1'=>'Director:','col2' => $datos_proy['apnom_director']);
             $pdf->ezTable($tabla_p,$cols_p,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            //---
+             if(isset($inscripcion['titulo_plan_trabajo'])){
+                 $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Plan de Trabajo:</b>'),'col2' => trim($inscripcion['titulo_plan_trabajo'])),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+             }
+            
             //---
             $cols_dp = array('col1'=>"<b>Datos Personales</b>",'col2'=>'');
             $tabla_dp=array();

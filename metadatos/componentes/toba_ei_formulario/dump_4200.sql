@@ -1363,7 +1363,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'imagen_vista_previa_if', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'16', --orden
+	'17', --orden
 	'Informe Final', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion
@@ -1443,7 +1443,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'imagen_vista_previa_dp', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
-	'17', --orden
+	'16', --orden
 	'Plan Trabajo', --etiqueta
 	NULL, --etiqueta_estilo
 	NULL, --descripcion

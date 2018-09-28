@@ -651,6 +651,10 @@ class ci_postulantes extends toba_ci
             $tabla_p[1]=array( 'col1'=>utf8_decode('Título:'),'col2' => $datos_proy['denominacion']);
             $tabla_p[2]=array( 'col1'=>'Director:','col2' => $datos_proy['apnom_director']);
             $pdf->ezTable($tabla_p,$cols_p,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
+            //--
+            if(isset($inscripcion['titulo_plan_trabajo'])){
+                 $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Título Plan de Trabajo:</b>'),'col2' => trim($inscripcion['titulo_plan_trabajo'])),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+             }
             //---
             $cols_dp = array('col1'=>"<b>Datos Personales</b>",'col2'=>'');
             $tabla_dp=array();
