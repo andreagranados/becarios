@@ -261,7 +261,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4351', --objeto_cuadro_col
 	'fec_nacim', --clave
-	'6', --orden
+	'7', --orden
 	'Fecha Nacimiento', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -292,7 +292,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4352', --objeto_cuadro_col
 	'categoria', --clave
-	'7', --orden
+	'8', --orden
 	'Categoría', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -323,7 +323,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4354', --objeto_cuadro_col
 	'codigo', --clave
-	'8', --orden
+	'9', --orden
 	'Código', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -354,7 +354,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4355', --objeto_cuadro_col
 	'fec_desde', --clave
-	'9', --orden
+	'10', --orden
 	'Fecha Inicio', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -385,7 +385,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4356', --objeto_cuadro_col
 	'fec_hasta', --clave
-	'10', --orden
+	'11', --orden
 	'Fecha Fin', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -416,7 +416,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4357', --objeto_cuadro_col
 	'tema', --clave
-	'11', --orden
+	'12', --orden
 	'Título del Plan de Trab', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -447,7 +447,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4358', --objeto_cuadro_col
 	'director', --clave
-	'12', --orden
+	'13', --orden
 	'Director', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -478,7 +478,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4359', --objeto_cuadro_col
 	'cat_dir', --clave
-	'13', --orden
+	'14', --orden
 	'Categoria y Dedic Dir', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -509,7 +509,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4360', --objeto_cuadro_col
 	'cei_dir', --clave
-	'14', --orden
+	'15', --orden
 	'CEI Dir', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -540,7 +540,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4361', --objeto_cuadro_col
 	'codirector', --clave
-	'17', --orden
+	'18', --orden
 	'Codirector', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -571,7 +571,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4362', --objeto_cuadro_col
 	'cat_co', --clave
-	'18', --orden
+	'19', --orden
 	'Categ y Dedic Codir', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -602,7 +602,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4363', --objeto_cuadro_col
 	'cei_co', --clave
-	'19', --orden
+	'20', --orden
 	'CEI Codir', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -664,7 +664,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4370', --objeto_cuadro_col
 	'titulo', --clave
-	'16', --orden
+	'17', --orden
 	'Max Titul', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -695,7 +695,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4371', --objeto_cuadro_col
 	'tituloc', --clave
-	'20', --orden
+	'21', --orden
 	'Max Titul', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -726,7 +726,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4372', --objeto_cuadro_col
 	'cat_oo', --clave
-	'15', --orden
+	'16', --orden
 	'Cat Otro Organismo', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -757,7 +757,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4373', --objeto_cuadro_col
 	'catco_oo', --clave
-	'21', --orden
+	'22', --orden
 	'Cat Otro Organismo', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -788,7 +788,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'4196', --objeto_cuadro
 	'4377', --objeto_cuadro_col
 	'puntaje', --clave
-	'22', --orden
+	'23', --orden
 	'Puntaje Definitivo', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -825,6 +825,37 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'7', --estilo
 	NULL, --ancho
 	'8', --formateo
+	NULL, --vinculo_indice
+	NULL, --no_ordenar
+	NULL, --mostrar_xls
+	NULL, --mostrar_pdf
+	NULL, --pdf_propiedades
+	NULL, --desabilitado
+	NULL, --total
+	NULL, --total_cc
+	NULL, --usar_vinculo
+	NULL, --vinculo_carpeta
+	NULL, --vinculo_item
+	NULL, --vinculo_popup
+	NULL, --vinculo_popup_param
+	NULL, --vinculo_target
+	NULL, --vinculo_celda
+	NULL, --vinculo_servicio
+	'0', --permitir_html
+	NULL, --grupo
+	NULL  --evento_asociado
+);
+INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
+	'becarios', --objeto_cuadro_proyecto
+	'4196', --objeto_cuadro
+	'4397', --objeto_cuadro_col
+	'correo', --clave
+	'6', --orden
+	'Correo', --titulo
+	'ei-cuadro-col-tit', --estilo_titulo
+	'4', --estilo
+	NULL, --ancho
+	'1', --formateo
 	NULL, --vinculo_indice
 	NULL, --no_ordenar
 	NULL, --mostrar_xls
