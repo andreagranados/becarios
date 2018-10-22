@@ -176,6 +176,8 @@ class ci_postulantes extends toba_ci
                         $datos2['observaciones']=$datos['observaciones'];
                         if($datos['estado']=='I'){//si reabre la inscripcion se pierde la fecha de envio
                             $datos2['fecha_envio']=null;$mensaje='. Inscripcion reabierta, se ha perdido la fecha de envio.';
+                            $usuario=$this->dep('datos')->tabla('inscripcion_beca')->get_usuario($inscripcion['id_becario']);
+                            $this->dep('datos')->tabla('inscripcion_beca')->desbloquear($usuario);
                         }
                         $this->dep('datos')->tabla('inscripcion_beca')->set($datos2);
                         $this->dep('datos')->tabla('inscripcion_beca')->sincronizar();

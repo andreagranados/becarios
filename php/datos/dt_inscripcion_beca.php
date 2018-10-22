@@ -1,8 +1,19 @@
 <?php
 require_once 'consultas_designa.php';
+require_once 'consultas_toba.php';
 require_once 'dt_convocatoria.php';
 class dt_inscripcion_beca extends toba_datos_tabla
 {
+    function get_usuario($id_becario){
+        $sql="select cast (cuil1 as text)||cast(cuil as text)||cast(cuil2 as text) as usuario from becario where id_becario=".$id_becario;
+        $res= toba::db('becarios')->consultar($sql);
+        return $res[0]['usuario'];
+    }
+    function desbloquear($usuario){
+         
+        consultas_toba::desbloquear($usuario);
+    }
+   
     function get_estado($datos){
         //print_r($datos);
         $sql="select estado from inscripcion_beca"
