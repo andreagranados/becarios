@@ -215,15 +215,6 @@ class ci_postulantes extends toba_ci
           $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
           $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
           $datos_adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get_datos_adjuntos($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);          
-          $bandera = toba::memoria()->get_parametro('evento_trigger');
-          //print_r($bandera);exit;
-          $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-          $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
-          $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
-          $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
-          $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
-          $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
-          $datos_adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get_datos_adjuntos($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);          
           $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($inscripcion['id_proyecto']);
           $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
           $datos_carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get_datos_carrera($inscripcion['id_carrera']); 
@@ -479,7 +470,7 @@ class ci_postulantes extends toba_ci
                     $tabla_trab[$i]=array( 'col1'=>trim($des['titulo']),'col2' => trim($des['presentado_en']),'col3' => $fecha);
                     $i++;
                 }   
-               $pdf->ezTable($tabla_trab,array('col1'=>utf8_d_seguro('<b>TÍTULO DEL TRABAJO</b>'),'col2'=>'<b>PRESENTADO O PUBLICADO EN</b>','col3'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500));
+               $pdf->ezTable($tabla_trab,array('col1'=>utf8_d_seguro('<b>TÍTULO DEL TRABAJO</b>'),'col2'=>'<b>PRESENTADO O PUBLICADO EN</b>','col3'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1,'cols' =>array('col1' => array('width'=>330),'col2' => array('width'=>100),'col3' => array('width'=>70))  ));
                $pdf->ezText("\n", 10);
             }
             if(count($datos_idioma)>0){
