@@ -412,7 +412,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'4', --orden
 	'4', --etiqueta
 	'DATOS DEL PROYECTO DE INVESTIGACIÓN AL QUE SE INCORPORA (APROBADO O EN EVALUACIÓN)<br>
-Seleccione un proyecto y espere a que se autocompleten el resto de los campos', --descripcion
+Seleccione un proyecto y espere a que se autocompleten todos los campos', --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen

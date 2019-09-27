@@ -332,7 +332,7 @@ class ci_alta_solicitud extends toba_ci
                 toba::notificacion()->agregar(utf8_decode('La inscripción ya ha sido enviada'), "info");
             }else{
                 $datos['estado']='E';
-                $datos['fecha_envio']=date('Y-m-d');;
+                $datos['fecha_envio']=date('Y-m-d');
                 if($insc['categ_beca']==1 or $insc['categ_beca']==2){
                     $proy=$this->dep('datos')->tabla('proyecto_inv')->get();
                     $datos['uni_acad']=$proy['uni_acad'];
@@ -995,7 +995,7 @@ class ci_alta_solicitud extends toba_ci
                   }
             }
             if(count($datos_trab)>0){
-               $pdf->ezText(utf8_d_seguro(' <b>2.7 TRABAJOS REALIZADOS: MONOGRAFÍAS, TRABAJOS DE SEMINARIOS, TESIS, CONGRESOS, PUBLICACIONES </b>'), 10); 
+               $pdf->ezText(utf8_d_seguro(' <b>2.7 TRABAJOS/CURSOS REALIZADOS: MONOGRAFÍAS, TRABAJOS DE SEMINARIOS, TESIS, CONGRESOS, PUBLICACIONES, CURSOS </b>'), 10); 
                $pdf->ezText("\n", 10);
                $i=0;
                $tabla_trab=array();              
@@ -1368,7 +1368,7 @@ class ci_alta_solicitud extends toba_ci
                 $this->dependencia('ci_antecedentes')->dependencia('form_emp')->vista_impresion($salida);
                 $this->dependencia('ci_antecedentes')->dependencia('form_pi')->vista_impresion($salida);
                 $this->dependencia('ci_antecedentes')->dependencia('form_pe')->vista_impresion($salida);
-                $salida->mensaje('2.7 TRABAJOS REALIZADOS');
+                $salida->mensaje('2.7 TRABAJOS/CURSOS REALIZADOS');
                 
                 $this->dependencia('ci_antecedentes')->dependencia('form_trab')->vista_impresion($salida);
                 $salida->mensaje('2.8 CONOCIMIENTO DE IDIOMAS');
