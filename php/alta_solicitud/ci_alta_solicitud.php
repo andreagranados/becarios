@@ -471,6 +471,7 @@ class ci_alta_solicitud extends toba_ci
         function conf__form_adj(toba_ei_formulario $form)
 	{
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+            $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
                 if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando hay cargado al codirector
                     $form->ef('cv_codir')->set_obligatorio(true);
@@ -480,57 +481,57 @@ class ci_alta_solicitud extends toba_ci
             if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 if(isset($adj['cert_ant'])){
-                    $nomb_ca='/becarios/1.0/becarios_2019/'.$adj['cert_ant'];//en windows
+                    $nomb_ca='/becarios/1.0/becarios_'.$anio.'/'.$adj['cert_ant'];//en windows
                     $datos['cert_ant']=$adj['cert_ant'];
                     $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                 }
                 if(isset($adj['const_titu'])){
-                    $nomb_ti='/becarios/1.0/becarios_2019/'.$adj['const_titu'];
+                    $nomb_ti='/becarios/1.0/becarios_'.$anio.'/'.$adj['const_titu'];
                     $datos['const_titu']=$adj['const_titu'];
                     $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_ti}' >const titu</a>";
                 }
                 if(isset($adj['rend_acad'])){
-                    $nomb_ra='/becarios/1.0/becarios_2019/'.$adj['rend_acad'];
+                    $nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
                     $datos['rend_acad']=$adj['rend_acad'];
                     $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                 }
                 if(isset($adj['cv_post'])){
-                    $nomb_cvp='/becarios/1.0/becarios_2019/'.$adj['cv_post'];
+                    $nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
                     $datos['cv_post']=$adj['cv_post'];
                     $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postul</a>";
                 }
                 if(isset($adj['cv_dir'])){
-                    $nomb_cvdir='/becarios/1.0/becarios_2019/'.$adj['cv_dir'];
+                    $nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
                     $datos['cv_dir']=$adj['cv_dir'];
                     $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
                 }
                 if(isset($adj['cv_codir'])){
-                    $nomb_cdir='/becarios/1.0/becarios_2019/'.$adj['cv_codir'];
+                    $nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
                     $datos['cv_codir']=$adj['cv_codir'];
                     $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
                 }
                 if(isset($adj['cuil'])){ 
-                    $nomb_cuil='/becarios/1.0/becarios_2019/'.$adj['cuil'];
+                    $nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
                     $datos['cuil']=$adj['cuil'];
                     $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
                 }
                 if(isset($adj['docum'])){
-                    $nomb_doc='/becarios/1.0/becarios_2019/'.$adj['docum'];
+                    $nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
                     $datos['docum']=$adj['docum'];
                     $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
                 }
                 if(isset($adj['comprob'])){
-                    $nomb_comp='/becarios/1.0/becarios_2019/'.$adj['comprob'];
+                    $nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
                     $datos['comprob']=$adj['comprob'];
                     $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                 }
                 if(isset($adj['desarrollo_pt'])){
-                    $nomb_des_pt='/becarios/1.0/becarios_2019/'.$adj['desarrollo_pt'];
+                    $nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
                     $datos['desarrollo_pt']=$adj['desarrollo_pt'];
                     $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
                 }
                 if(isset($adj['informe_final'])){
-                    $nomb_informe_final='/becarios/1.0/becarios_2019/'.$adj['informe_final'];
+                    $nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
                     $datos['informe_final']=$adj['informe_final'];
                     $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                 }
@@ -549,6 +550,7 @@ class ci_alta_solicitud extends toba_ci
             $datos2=array();
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                 $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
+                $anio=date("Y",strtotime($insc['fecha_presentacion']))+1;//toma la fecha de la presentacion de la beca
                 if($insc['estado']<>'I'){//solo en estado I puede modificar
                     $band=false;
                 }else{
@@ -556,8 +558,9 @@ class ci_alta_solicitud extends toba_ci
                     $datos2['fecha']=$insc['fecha_presentacion'];
                     $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 }   
+            }else{
+                $anio=date("Y")+1;
             }
-            
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
                 if(isset($datos['cert_ant']['size'])){//120000
                     if($datos['cert_ant']['size']>3145728){$no_supera_tamano=false;
@@ -622,81 +625,81 @@ class ci_alta_solicitud extends toba_ci
                        // print_r($datos['cert_ant']['tmp_name']);
                         if (isset($datos['cert_ant'])) {
                             $nombre_ca="cert_ant".$cuil_becario.".pdf";
-                            //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ca;
-                            $destino_ca="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ca;
+                            //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ca;
+                            $destino_ca="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ca;
                             if(move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cert_ant']=strval($nombre_ca);}
                         }
                         //no obligatorio
                         if(isset($datos['const_titu'])){
                             $nombre_ti="const_titu".$cuil_becario.".pdf";
-                            //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ti;
-                            $destino_ti="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ti;
+                            //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ti;
+                            $destino_ti="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ti;
                             if(move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['const_titu']=strval($nombre_ti);}
                         }
                         
                         if(isset($datos['rend_acad'])){
                             $nombre_ra="rend_acad".$cuil_becario.".pdf";
-                            //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ra;
-                            $destino_ra="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ra;
+                            //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ra;
+                            $destino_ra="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ra;
                             if(move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['rend_acad']=strval($nombre_ra);}
                         }
                         
                         if(isset($datos['cv_post'])){
                             $nombre_cvp="cv_post".$cuil_becario.".pdf";
-                           // $destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
-                            $destino_cvp="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvp;
+                            //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvp;
+                            $destino_cvp="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvp;
                             if(move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cv_post']=strval($nombre_cvp);}
                         }
                         if(isset($datos['cv_dir'])){
                             $nombre_cvd="cv_dir".$cuil_becario.".pdf";
-                           // $destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
-                            $destino_cvd="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvd;
+                           // $destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvd;
+                            $destino_cvd="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvd;
                             if(move_uploaded_file($datos['cv_dir']['tmp_name'], $destino_cvd)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cv_dir']=strval($nombre_cvd);}
                         }
                         if(isset($datos['cv_codir'])){
                             $nombre_cvc="cv_codir".$cuil_becario.".pdf";
-                           // $destino_cvc="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cvc;
-                            $destino_cvc="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cvc;
+                            //$destino_cvc="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvc;
+                            $destino_cvc="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvc;
                             if(move_uploaded_file($datos['cv_codir']['tmp_name'], $destino_cvc)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cv_codir']=strval($nombre_cvc);}
                         }
                         if(isset($datos['cuil'])){
                             $nombre_cuil="cuil".$cuil_becario.".pdf";
-                            //$destino_cuil="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_cuil;
-                            $destino_cuil="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_cuil;
+                            //$destino_cuil="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cuil;
+                            $destino_cuil="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cuil;
                             if(move_uploaded_file($datos['cuil']['tmp_name'], $destino_cuil)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['cuil']=strval($nombre_cuil);}
                         }
                         if(isset($datos['docum'])){
                             $nombre_docum="docum".$cuil_becario.".pdf";
-                            //$destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_docum;
-                            $destino_docum="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_docum;
+                            //$destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_docum;
+                            $destino_docum="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_docum;
                             if(move_uploaded_file($datos['docum']['tmp_name'], $destino_docum)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['docum']=strval($nombre_docum);}
                         }
                         if(isset($datos['comprob'])){
                             $nombre_comprob="comprob".$cuil_becario.".pdf";
-                            //$destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
-                            $destino_comprob="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_comprob;
+                            //$destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_comprob;
+                            $destino_comprob="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_comprob;
                             if(move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                             $datos2['comprob']=strval($nombre_comprob);}
                         }
                         if(isset($datos['desarrollo_pt'])){
                             $nombre_des_pt="des_pt".$cuil_becario.".pdf";
-                           // $destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
-                            $destino_des_pt="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_des_pt;
+                            //$destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_des_pt;
+                            $destino_des_pt="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_des_pt;
                             if(move_uploaded_file($datos['desarrollo_pt']['tmp_name'], $destino_des_pt)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                                 $datos2['desarrollo_pt']=strval($nombre_des_pt);}
                         }
                         if(isset($datos['informe_final'])){
                             $nombre_ifinal="ifinal".$cuil_becario.".pdf";
-                           // $destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
-                            $destino_ifinal="/home/cristian/toba_2.7.1/proyectos/becarios/www/becarios_2019/".$nombre_ifinal;
+                            //$destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ifinal;
+                            $destino_ifinal="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ifinal;
                             if(move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
                                 $datos2['informe_final']=strval($nombre_ifinal);}//si lo puede mover con exito actualizar campo
                         }
