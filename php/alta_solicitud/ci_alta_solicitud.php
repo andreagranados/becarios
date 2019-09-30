@@ -745,6 +745,7 @@ class ci_alta_solicitud extends toba_ci
           $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
           $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
@@ -820,7 +821,7 @@ class ci_alta_solicitud extends toba_ci
             //-----------------------datos que antes iban en la CARATULA
             $pdf->ezText(utf8_d_seguro(' <b>BECAS DE INVESTIGACIÓN DE LA UNIVERSIDAD NACIONAL DEL COMAHUE</b>'), 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(' <b>CONVOCATORIA 2019</b>', 12,$centrado);
+            $pdf->ezText(' <b>CONVOCATORIA '.$anio.'</b>', 12,$centrado);
             $pdf->ezText("\n", 10);
             $pdf->ezText('<b>POSTULANTE: </b>'.utf8_d_seguro($datos_bec['nombre']), 12,$centrado);
             $pdf->ezText("\n", 10);
@@ -1332,7 +1333,7 @@ class ci_alta_solicitud extends toba_ci
                    //$pdf->addJpegFromFile($imagen, 30, 750, 70, 60);
                    $imagen = toba::proyecto()->get_path().'/www/img/logo_becarios.jpg';
                    $pdf->addJpegFromFile($imagen, 30, 750, 108, 69);
-                   $pdf->addText(30,750,13,utf8_decode('<b>                                   CONVOCATORIA BECAS INVESTIGACIÓN - 2019</b>'));
+                   $pdf->addText(30,750,13,utf8_decode('<b>                                   CONVOCATORIA BECAS INVESTIGACIÓN - '.$anio.'</b>'));
                    $pdf->closeObject(); 
                 }     
             }//if bandera=imprimir2
