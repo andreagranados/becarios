@@ -99,39 +99,39 @@ class ci_postulantes extends toba_ci
                             $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_titu}' >titulo</a>";
                         }
                         if(isset($adj['rend_acad'])){
-                            $nomb_ra='/becarios/1.0/becarios'.$anio.'/'.$adj['rend_acad'];
+                            $nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
                             $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                         }
                         if(isset($adj['cv_post'])){
-                            $nomb_cvp='/becarios/1.0/becarios'.$anio.'/'.$adj['cv_post'];
+                            $nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
                             $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postulante</a>";
                         }
                         if(isset($adj['cv_dir'])){
-                            $nomb_cvdir='/becarios/1.0/becarios'.$anio.'/'.$adj['cv_dir'];
+                            $nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
                             $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
                         }
                         if(isset($adj['cv_codir'])){
-                            $nomb_cdir='/becarios/1.0/becarios'.$anio.'/'.$adj['cv_codir'];
+                            $nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
                             $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
                         }
                         if(isset($adj['cuil'])){
-                            $nomb_cuil='/becarios/1.0/becarios'.$anio.'/'.$adj['cuil'];
+                            $nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
                             $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
                         }
                         if(isset($adj['docum'])){
-                            $nomb_doc='/becarios/1.0/becarios'.$anio.'/'.$adj['docum'];
+                            $nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
                             $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
                         }
                         if(isset($adj['comprob'])){
-                            $nomb_comp='/becarios/1.0/becarios'.$anio.'/'.$adj['comprob'];
+                            $nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
                             $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                         }
                         if(isset($adj['desarrollo_pt'])){
-                            $nomb_des_pt='/becarios/1.0/becarios'.$anio.'/'.$adj['desarrollo_pt'];
+                            $nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
                             $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
                         }
                         if(isset($adj['informe_final'])){
-                            $nomb_informe_final='/becarios/1.0/becarios'.$anio.'/'.$adj['informe_final'];
+                            $nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
                             $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                         }
                     }
