@@ -422,8 +422,18 @@ class ci_alta_solicitud extends toba_ci
                 $this->dep('datos')->tabla('domicilio_lt')->cargar($datosdomilt);
                 $datos_proy=array('id_pinv'=>$insc[0]['id_proyecto']);
                 $this->dep('datos')->tabla('proyecto_inv')->cargar($datos_proy);
-            }//el becario no tiene inscripcion guardada
-           
+            }else{//el becario no tiene inscripcion guardada
+                $becar=$this->dep('datos')->tabla('becario')->get_becario($usuario);
+                if(count($becar)>0){//existe el becario?
+                    //precarga el becario y su domicilio
+                    $datosb=array('id_becario'=>$becar[0]['id_becario']);
+                    $this->dep('datos')->tabla('becario')->cargar($datosb);
+                    $becario=$this->dep('datos')->tabla('becario')->get();
+                    //domicilio del becario
+                    $datosdom=array('nro_domicilio'=>$becario['nro_domicilio']);
+                    $this->dep('datos')->tabla('domicilio')->cargar($datosdom);
+                }
+            }
             //print_r($this->get_id_pantalla());
             switch ($this->get_id_pantalla()) {
 			//--- Una vez instalado los archivos nos es posible volver atr�s

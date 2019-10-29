@@ -28,5 +28,15 @@ class dt_becario extends toba_datos_tabla
             return '';
         }
     }
+    function get_becario($cuil){//busca si el becario existe
+        $sql=" select b.* from becario b "
+                . " where "
+                . " b.cuil1 = cast(substring('".$cuil."',1,2) as numeric)"
+                . " and b.cuil = cast(substring('".$cuil."',3,length('".$cuil."')-3) as numeric)"
+                . " and b.cuil2 = cast(substring('".$cuil."',length('".$cuil."'),1) as numeric)";
+               
+        $res= toba::db('becarios')->consultar($sql);
+        return $res;
+    }
 }
 ?>        
