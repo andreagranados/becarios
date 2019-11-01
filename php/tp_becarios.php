@@ -99,9 +99,8 @@
 	{
 		echo "</div>";		
 		echo "<div class='login-pie'>";
-                
-                echo "<div> <a href='https://docs.google.com/forms/d/e/1FAIpQLSfnLWF_9tYPsuqAXvtyaFk-e4v--sG6m1u8uLn-vwe2RicdZQ/viewform?usp=sf_link'>Solicitud Usuario</a>" ."</div>";
-                echo "<br>";
+                //echo "<div> <a href='https://docs.google.com/forms/d/e/1FAIpQLSfnLWF_9tYPsuqAXvtyaFk-e4v--sG6m1u8uLn-vwe2RicdZQ/viewform?usp=sf_link'>Solicitud Usuario</a>" ."</div>";
+                //echo "<br>";
                 $anio=date('Y');
 		echo "<div style='font-size:10px;'>Desarrollado por <strong>".toba_recurso::imagen_proyecto('logo_sti_sin.png',true,'30','30')."</strong><br>Equipo de Desarrollo TOBA-UNCOMA<br>Universidad Nacional del Comahue</div>
 			<div >2018 - $anio</div>";
