@@ -199,6 +199,7 @@ class ci_postulantes extends toba_ci
         }
         function evt__volver(){
             $this->dep('datos')->tabla('inscripcion_beca')->resetear();
+            $this->dep('datos')->tabla('inscripcion_adjuntos')->resetear();
             $this->dep('datos')->tabla('becario')->resetear();    
             $this->dep('datos')->tabla('evaluador')->resetear();    
             $this->set_pantalla('pant_inicial');
