@@ -12,12 +12,14 @@ class consultas_designa
                 . $where;
         return toba::db('designa')->consultar($sql);
     }
-    function get_docentes(){//docentes con cargo vigente en periodo 2018
+    function get_docentes(){//docentes con cargo vigente en periodo actual
   	$sql="select e.id_docente, e.apellido||', '||e.nombre as descripcion 
               from docente e
               where legajo<>0 and exists (select * from designacion d 
-                            where d.id_docente=e.id_docente 
-                            and d.desde <= '2019-01-31' and (d.hasta >= '2018-02-01' or d.hasta is null))
+                                          left outer join mocovi_periodo_presupuestario m on (d.desde <= m.fecha_fin and (d.hasta >= m.fecha_inicio or d.hasta is null))
+                            		  where m.actual and not (d.hasta is not null and d.hasta<=d.desde)
+                                          and d.id_docente=e.id_docente 
+                                           )
                          order by apellido,nombre   ";
 	
 	$res= toba::db('designa')->consultar($sql);
@@ -139,12 +141,12 @@ class consultas_designa
     }
     function get_designaciones($id_doc){
        // print_r($id_doc);
-  	$sql="select id_designacion, cat_estat||dedic||'-'||carac as descripcion
+	$sql="select id_designacion, cat_estat||dedic||'-'||carac as descripcion
               from designacion d
-              where d.id_docente=$id_doc
-                  and d.desde <= '2019-01-31' and (d.hasta >= '2018-02-01' or d.hasta is null)
-             ";
-	
+              left outer join mocovi_periodo_presupuestario m on (d.desde <= m.fecha_fin and (d.hasta >= m.fecha_inicio or d.hasta is null))
+              where m.actual
+                  and d.id_docente=$id_doc
+                  and not (d.hasta is not null and d.hasta<=d.desde)";//no esta anulada la designacion
 	$res= toba::db('designa')->consultar($sql);
 	return $res;
     }
