@@ -70,7 +70,7 @@ class dt_inscripcion_beca extends toba_datos_tabla
           }
           //print_r($con);exit;
           $sql="select * from 
-               (select i.uni_acad,i.fecha_envio,i.estado,i.categ_beca,i.fecha_presentacion,i.id_becario,i.puntaje,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.correo,b.fec_nacim,c.descripcion as categoria, 
+               (select i.uni_acad,i.fecha_envio,i.estado,i.categ_beca,i.fecha_presentacion,i.id_becario,i.puntaje,i.titulo_plan_trabajo as tema,extract (year from i.fecha_presentacion) as anio,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.correo,b.fec_nacim,c.descripcion as categoria, c_ib.carrera,case when c_ib.uni_acad is null then c_ib.institucion else c_ib.uni_acad end as ua_institucion,
                 p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,coalesce(t.descripcion)||'('||coalesce(di.institucion)||')' as cat_oo,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic||'-'||co.carac as cat_co,cico.descripcion as cei_co,co.titulo as tituloc,coalesce(tco.descripcion)||'('||coalesce(co.institucion)||')' as catco_oo
                 from ".$con." i
                 INNER JOIN becario b ON (i.id_becario=b.id_becario)
@@ -82,6 +82,7 @@ class dt_inscripcion_beca extends toba_datos_tabla
                 LEFT OUTER JOIN director_beca co ON (co.id=i.id_codirector)
                 LEFT OUTER JOIN categoria_conicet tco ON (tco.id_categ=co.cat_conicet)
                 LEFT OUTER JOIN categoria_invest cico ON (cico.cod_cati=co.cat_invest)
+                LEFT OUTER JOIN carrera_inscripcion_beca c_ib ON (c_ib.id=i.id_carrera)
                 )sub
                 $where "
                   . " order by uni_acad,agente";
