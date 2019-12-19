@@ -76,8 +76,8 @@ class ci_antecedentes extends toba_ci
                 $domi=$this->controlador()->dep('datos')->tabla('domicilio')->get();
                 $datosb['nro_domicilio']=$domi['nro_domicilio'];
                 //datos del becario
-                $datosb['apellido']=$datos['apellido'];
-                $datosb['nombre']=$datos['nombre'];
+                $datosb['apellido']=mb_strtoupper($datos['apellido'],'LATIN1');
+                $datosb['nombre']=mb_strtoupper($datos['nombre'],'LATIN1');
                 $datosb['cuil1']=substr($datos['cuil'], 0, 2);
                 $datosb['cuil']=substr($datos['cuil'], 2, 8);
                 $datosb['cuil2']=substr($datos['cuil'], 10, 1);
