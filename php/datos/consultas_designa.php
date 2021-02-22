@@ -51,7 +51,7 @@ class consultas_designa
         $sql="select p.id_pinv,coalesce(codigo,'')||' '||SUBSTRING(p.denominacion,1,60)||'....' as descripcion
               from pinvestigacion p "
               //." where extract (year from p.fec_desde) in (2015,2016,2017,2018,2019)
-              ." where extract (year from p.fec_hasta) >= 2020
+              ." where extract (year from p.fec_hasta) >= 2021
               and p.estado<>'X'
               and not exists (select * from subproyecto s
                               where s.id_proyecto=p.id_pinv)
