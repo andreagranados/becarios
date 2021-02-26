@@ -481,7 +481,8 @@ class ci_alta_solicitud extends toba_ci
         function conf__form_adj(toba_ei_formulario $form)
 	{
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-            $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
+            //$anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
+            $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
                 if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando hay cargado al codirector
                     $form->ef('cv_codir')->set_obligatorio(true);
@@ -560,7 +561,8 @@ class ci_alta_solicitud extends toba_ci
             $datos2=array();
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                 $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
-                $anio=date("Y",strtotime($insc['fecha_presentacion']))+1;//toma la fecha de la presentacion de la beca
+                //$anio=date("Y",strtotime($insc['fecha_presentacion']))+1;//toma la fecha de la presentacion de la beca
+                $anio=date("Y",strtotime($insc['fecha_presentacion']));//toma la fecha de la presentacion de la beca
                 if($insc['estado']<>'I'){//solo en estado I puede modificar
                     $band=false;
                 }else{
@@ -569,7 +571,8 @@ class ci_alta_solicitud extends toba_ci
                     $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 }   
             }else{
-                $anio=date("Y")+1;
+               //$anio=date("Y")+1;
+                $anio=date("Y");
             }
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
                 if(isset($datos['cert_ant']['size'])){//120000
@@ -755,7 +758,8 @@ class ci_alta_solicitud extends toba_ci
           $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
+          //$anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
+          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
           $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
