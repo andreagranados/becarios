@@ -25,8 +25,11 @@ class dt_inscripcion_beca extends toba_datos_tabla
     function get_postulantes($filtro=null){
         $where=' WHERE 1=1';
         if(isset($filtro['anio'])){//esta siempre es obligatoria
-           // $valor=$filtro['anio']['valor']-1;
-            $valor=$filtro['anio']['valor'];
+            if($filtro['anio']['valor']==2021){
+               $valor=$filtro['anio']['valor']; 
+            }else{
+               $valor=$filtro['anio']['valor']-1;
+            }
             $where.=' and anio='.$valor;
         }
         if(isset ($filtro['uni_acad'])){
