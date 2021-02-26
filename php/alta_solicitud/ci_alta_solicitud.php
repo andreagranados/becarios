@@ -723,7 +723,7 @@ class ci_alta_solicitud extends toba_ci
                   $this->s__guardo=false;//para que no salga mensaje de que guardo correctamente
               }
             }//no modifica nada
- 
+            clearstatcache();
         }
         //recien cuando ha sifo enviado muestra los botones para imprimir
         function conf__pant_final(toba_ei_pantalla $pantalla){

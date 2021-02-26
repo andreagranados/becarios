@@ -81,7 +81,8 @@ class ci_postulantes extends toba_ci
             $form->evento('imprimir2')->vinculo()->agregar_parametro('evento_trigger', 'imprimir2'); 
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                     $datos=$this->dep('datos')->tabla('inscripcion_beca')->get();
-                    $anio=date("Y",strtotime($datos['fecha_presentacion']))+1;
+                    //$anio=date("Y",strtotime($datos['fecha_presentacion']))+1;
+                    $anio=date("Y",strtotime($datos['fecha_presentacion']));
                     if($datos['categ_beca']==3){//estudiantes desactivo 
                          $form->desactivar_efs(array('imagen_vista_previa_titu','imagen_vista_previa_cvc')); 
                     }
@@ -168,7 +169,8 @@ class ci_postulantes extends toba_ci
                         }
                     }else{//usuario de la UA solo puede modificar durante el periodo indicado en la convocatoria
                     //solo estado y observaciones
-                        $band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio+1);
+                        //$band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio+1);
+                        $band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio);
                         if(!$band){
                             $mensaje=utf8_decode('No puede modificar porque ha pasado el período para hacer cambios');}
                     }
@@ -211,6 +213,8 @@ class ci_postulantes extends toba_ci
           $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+          //$anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
+          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
           $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));
@@ -236,7 +240,7 @@ class ci_postulantes extends toba_ci
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
             $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por postulante     '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
-            $pdf->ezStartPageNumbers(500, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
+            $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             
             //Configuración de Título.
             $salida->titulo(utf8_d_seguro(''));    
@@ -285,7 +289,7 @@ class ci_postulantes extends toba_ci
             //-----------------------datos que antes iban en la CARATULA
             $pdf->ezText(utf8_d_seguro(' <b>BECAS DE INVESTIGACIÓN DE LA UNIVERSIDAD NACIONAL DEL COMAHUE</b>'), 12,$centrado);
             $pdf->ezText("\n", 10);
-            $pdf->ezText(' <b>CONVOCATORIA 2019</b>', 12,$centrado);
+            $pdf->ezText(' <b>CONVOCATORIA '.$anio.'</b>', 12,$centrado);
             $pdf->ezText("\n", 10);
             $pdf->ezText('<b>POSTULANTE: </b>'.utf8_d_seguro($datos_bec['nombre']), 12,$centrado);
             $pdf->ezText("\n", 10);
