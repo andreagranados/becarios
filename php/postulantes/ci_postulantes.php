@@ -239,7 +239,7 @@ class ci_postulantes extends toba_ci
             $pdf->ezSetMargins(100, 50, 45, 45);
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
-            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi)                  '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por el postulante   '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
             $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             
             //Configuración de Título.
@@ -626,7 +626,7 @@ class ci_postulantes extends toba_ci
             
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
-            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi)                 '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por el postulante   '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
             $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             //Configuración de Título.
             $salida->titulo(utf8_decode(''));   
