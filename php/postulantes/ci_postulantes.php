@@ -206,10 +206,9 @@ class ci_postulantes extends toba_ci
             $this->dep('datos')->tabla('evaluador')->resetear();    
             $this->set_pantalla('pant_inicial');
         }
-//este metodo lo copie tal cual de alta solicitud
+//este metodo lo copie tal cual de alta solicitud //sale con leyenda separada  No generado por becario 
 
         function vista_pdf(toba_vista_pdf $salida){
-            //sale con leyenda separada  No generado por becario 
           $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
@@ -221,6 +220,7 @@ class ci_postulantes extends toba_ci
           $datos_dir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_director']); 
           $datos_codir=$this->dep('datos')->tabla('director_beca')->get_datos_director($inscripcion['id_codirector']); 
           $datos_adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get_datos_adjuntos($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);          
+          //print_r($bandera);exit;
           $datos_proy=$this->dep('datos')->tabla('proyecto_inv')->get_datos_proyecto($inscripcion['id_proyecto']);
           $datos_insc=$this->dep('datos')->tabla('inscripcion_beca')->get_datos_inscripcion($inscripcion['id_becario'],$inscripcion['fecha_presentacion']);
           $datos_carrera=$this->dep('datos')->tabla('carrera_inscripcion_beca')->get_datos_carrera($inscripcion['id_carrera']); 
@@ -239,7 +239,7 @@ class ci_postulantes extends toba_ci
             $pdf->ezSetMargins(100, 50, 45, 45);
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
-            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por postulante     '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi)                  '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
             $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             
             //Configuración de Título.
@@ -467,7 +467,7 @@ class ci_postulantes extends toba_ci
                   }
             }
             if(count($datos_trab)>0){
-               $pdf->ezText(utf8_d_seguro(' <b>2.7 TRABAJOS REALIZADOS: MONOGRAFÍAS, TRABAJOS DE SEMINARIOS, TESIS, CONGRESOS, PUBLICACIONES </b>'), 10); 
+               $pdf->ezText(utf8_d_seguro(' <b>2.7 TRABAJOS/CURSOS REALIZADOS: MONOGRAFÍAS, TRABAJOS DE SEMINARIOS, TESIS, CONGRESOS, PUBLICACIONES, CURSOS </b>'), 10); 
                $pdf->ezText("\n", 10);
                $i=0;
                $tabla_trab=array();              
@@ -476,7 +476,7 @@ class ci_postulantes extends toba_ci
                     $tabla_trab[$i]=array( 'col1'=>trim($des['titulo']),'col2' => trim($des['presentado_en']),'col3' => $fecha);
                     $i++;
                 }   
-               $pdf->ezTable($tabla_trab,array('col1'=>utf8_d_seguro('<b>TÍTULO DEL TRABAJO</b>'),'col2'=>'<b>PRESENTADO O PUBLICADO EN</b>','col3'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1,'cols' =>array('col1' => array('width'=>330),'col2' => array('width'=>100),'col3' => array('width'=>70))  ));
+               $pdf->ezTable($tabla_trab,array('col1'=>utf8_d_seguro('<b>TÍTULO DEL TRABAJO</b>'),'col2'=>'<b>PRESENTADO O PUBLICADO EN</b>','col3'=>'<b>FECHA</b>'),'',array('shaded'=>0,'showLines'=>1,'width'=>500,'cols' =>array('col1' => array('width'=>330),'col2' => array('width'=>100),'col3' => array('width'=>70))    ));
                $pdf->ezText("\n", 10);
             }
             if(count($datos_idioma)>0){
@@ -626,11 +626,15 @@ class ci_postulantes extends toba_ci
             
             //Configuramos el pie de página. El mismo, tendra el número de página centrado en la página y la fecha ubicada a la derecha. 
             //Primero definimos la plantilla para el número de página.
-            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi) - No generado por postulante     '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
-            $pdf->ezStartPageNumbers(500, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
+            $formato = utf8_decode('Convocatoria Becas de Investigación (Mocovi)                 '.date('d/m/Y h:i:s a').'     Página {PAGENUM} de {TOTALPAGENUM} ');
+            $pdf->ezStartPageNumbers(400, 20, 8, 'left', $formato, 1); //utf8_d_seguro($formato)
             //Configuración de Título.
             $salida->titulo(utf8_decode(''));   
-            
+            //$pdf->setLineStyle(1);
+            //$pdf->setLineStyle(5);
+            //$pdf->Line(1, 45, 210-20, 45);//ultimo le da la inclinacion
+            //$pdf->Line(10, 45, 550, 45);//primero: eje x desde donde comienza/tercero es el largo de la linea/cuarto:ultimo le da la inclinacion
+            //segundo le da orientacion sobre x
             $pdf->ezText(utf8_decode(' <b>Ficha de Inscripción </b>'), 10);
             $texto=' La presente ficha deberá ser debidamente firmada y entregada en la Secretaría de Investigación de la Unidad Académica';
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
@@ -650,10 +654,11 @@ class ci_postulantes extends toba_ci
             $tabla_p[1]=array( 'col1'=>utf8_decode('Título:'),'col2' => $datos_proy['denominacion']);
             $tabla_p[2]=array( 'col1'=>'Director:','col2' => $datos_proy['apnom_director']);
             $pdf->ezTable($tabla_p,$cols_p,'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));
-            //--
-            if(isset($inscripcion['titulo_plan_trabajo'])){
-                 $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Título Plan de Trabajo:</b>'),'col2' => trim($inscripcion['titulo_plan_trabajo'])),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
+            //---
+             if(isset($inscripcion['titulo_plan_trabajo'])){
+                 $pdf->ezTable($tabla_cod,array('col1'=>utf8_decode('<b>Plan de Trabajo:</b>'),'col2' => trim($inscripcion['titulo_plan_trabajo'])),'',array('shaded'=>0,'showLines'=>1,'width'=>550,'cols'=>array('col1'=>array('justification'=>'right','width'=>200),'col2'=>array('width'=>350)) ));      
              }
+            
             //---
             $cols_dp = array('col1'=>"<b>Datos Personales</b>",'col2'=>'');
             $tabla_dp=array();
@@ -796,14 +801,13 @@ class ci_postulantes extends toba_ci
                    //$pdf->addJpegFromFile($imagen, 30, 750, 70, 60);
                    $imagen = toba::proyecto()->get_path().'/www/img/logo_becarios.jpg';
                    $pdf->addJpegFromFile($imagen, 30, 750, 108, 69);
-                   $pdf->addText(30,750,13,utf8_decode('<b>                                   CONVOCATORIA BECAS INVESTIGACIÓN - 2019</b>'));
+                   $pdf->addText(30,750,13,utf8_decode('<b>                                   CONVOCATORIA BECAS INVESTIGACIÓN - '.$anio.'</b>'));
                    $pdf->closeObject(); 
                 }     
             }//if bandera=imprimir2
                        
             }//else
-        }//fin vista_pdf
-	
+        }//fin vista_pdf	
 	//-----------------------------------------------------------------------------------
 	//---- cuadro -----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
