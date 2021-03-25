@@ -1,5 +1,4 @@
 <?php
-require_once 'ci_alta_solicitud.php';
 class ci_postulantes extends toba_ci
 {
     protected $s__datos_filtro;
