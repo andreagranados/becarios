@@ -89,14 +89,17 @@ class ci_postulantes extends toba_ci
                     $agente=$this->dep('datos')->tabla('becario')->get_datos_personales($datos['id_becario']);
                     $datos['agente']=$agente['nombre'];
                     if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
+                        $user=getenv('DB_USER_SL');
+                        $password=getenv('DB_PASS_SL');
                         $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                         if(isset($adj['cert_ant'])){
-                            //$nomb_ca='http://mocovi.uncoma.edu.ar/becarios_2019/'.$adj['cert_ant'];
-                            $nomb_ca='/becarios/1.0/becarios_'.$anio.'/'.$adj['cert_ant'];
+                            $nomb_ca='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cert_ant'];
+                            //$nomb_ca='/becarios/1.0/becarios_'.$anio.'/'.$adj['cert_ant'];
                             $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                         }
                         if(isset($adj['const_titu'])){
-                            $nomb_titu='/becarios/1.0/becarios_'.$anio.'/'.$adj['const_titu'];
+                            $nomb_titu='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['const_titu'];
+                            //$nomb_titu='/becarios/1.0/becarios_'.$anio.'/'.$adj['const_titu'];
                             $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_titu}' >titulo</a>";
                         }
                         if(isset($adj['rend_acad'])){
