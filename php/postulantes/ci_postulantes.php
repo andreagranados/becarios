@@ -81,8 +81,7 @@ class ci_postulantes extends toba_ci
             $form->evento('imprimir2')->vinculo()->agregar_parametro('evento_trigger', 'imprimir2'); 
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                     $datos=$this->dep('datos')->tabla('inscripcion_beca')->get();
-                    //$anio=date("Y",strtotime($datos['fecha_presentacion']))+1;
-                    $anio=date("Y",strtotime($datos['fecha_presentacion']));
+                    $anio=date("Y",strtotime($datos['fecha_presentacion']))+1;
                     if($datos['categ_beca']==3){//estudiantes desactivo 
                          $form->desactivar_efs(array('imagen_vista_previa_titu','imagen_vista_previa_cvc')); 
                     }
@@ -103,39 +102,48 @@ class ci_postulantes extends toba_ci
                             $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_titu}' >titulo</a>";
                         }
                         if(isset($adj['rend_acad'])){
-                            $nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
+                            $nomb_ra='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['rend_acad'];
+                            //$nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
                             $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                         }
                         if(isset($adj['cv_post'])){
-                            $nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
+                            $nomb_cvp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cv_post'];
+                            //$nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
                             $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postulante</a>";
                         }
                         if(isset($adj['cv_dir'])){
-                            $nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
+                            $nomb_cvdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cv_dir'];
+                            //$nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
                             $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
                         }
                         if(isset($adj['cv_codir'])){
-                            $nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
+                            $nomb_cdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cv_codir'];
+                            //$nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
                             $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
                         }
                         if(isset($adj['cuil'])){
-                            $nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
+                            $nomb_cuil='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cuil'];
+                            //$nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
                             $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
                         }
                         if(isset($adj['docum'])){
-                            $nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
+                            $nomb_doc='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['docum'];
+                            //$nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
                             $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
                         }
                         if(isset($adj['comprob'])){
-                            $nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
+                            $nomb_comp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['comprob'];
+                            //$nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
                             $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                         }
                         if(isset($adj['desarrollo_pt'])){
-                            $nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
+                            $nomb_des_pt='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
+                            //$nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
                             $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
                         }
                         if(isset($adj['informe_final'])){
-                            $nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
+                            $nomb_informe_final='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['informe_final'];
+                            //$nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
                             $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                         }
                     }
@@ -172,8 +180,7 @@ class ci_postulantes extends toba_ci
                         }
                     }else{//usuario de la UA solo puede modificar durante el periodo indicado en la convocatoria
                     //solo estado y observaciones
-                        //$band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio+1);
-                        $band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio);
+                        $band=$this->dep('datos')->tabla('convocatoria')->puedo_modificar($anio+1);
                         if(!$band){
                             $mensaje=utf8_decode('No puede modificar porque ha pasado el período para hacer cambios');}
                     }
@@ -215,8 +222,7 @@ class ci_postulantes extends toba_ci
           $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-          //$anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
-          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
+          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
           $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));

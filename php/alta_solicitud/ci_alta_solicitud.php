@@ -481,8 +481,7 @@ class ci_alta_solicitud extends toba_ci
         function conf__form_adj(toba_ei_formulario $form)
 	{
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-            //$anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
-            $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
+            $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
             if($inscripcion['categ_beca']==1 or $inscripcion['categ_beca']==2){//graduados
                 if(isset($inscripcion['id_codirector'])){//solo es obligatorio cuando hay cargado al codirector
                     $form->ef('cv_codir')->set_obligatorio(true);
@@ -490,59 +489,72 @@ class ci_alta_solicitud extends toba_ci
             }
             $datos['categ']=$inscripcion['categ_beca'];
             if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
+                $user=getenv('DB_USER_SL');
+                $password=getenv('DB_PASS_SL');
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 if(isset($adj['cert_ant'])){
-                    $nomb_ca='/becarios/1.0/becarios_'.$anio.'/'.$adj['cert_ant'];//en windows
+                    $nomb_ca='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cert_ant'];
+                    //$nomb_ca='/becarios/1.0/becarios_'.$anio.'/'.$adj['cert_ant'];//en windows
                     $datos['cert_ant']=$adj['cert_ant'];
                     $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                 }
                 if(isset($adj['const_titu'])){
-                    $nomb_ti='/becarios/1.0/becarios_'.$anio.'/'.$adj['const_titu'];
+                    $nomb_ti='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['const_titu'];
+                    //$nomb_ti='/becarios/1.0/becarios_'.$anio.'/'.$adj['const_titu'];
                     $datos['const_titu']=$adj['const_titu'];
                     $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_ti}' >const titu</a>";
                 }
                 if(isset($adj['rend_acad'])){
-                    $nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
+                    $nomb_ra='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['rend_acad'];
+                    //$nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
                     $datos['rend_acad']=$adj['rend_acad'];
                     $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                 }
                 if(isset($adj['cv_post'])){
-                    $nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
+                    $nomb_cvp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cv_post'];
+                    //$nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
                     $datos['cv_post']=$adj['cv_post'];
                     $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postul</a>";
                 }
                 if(isset($adj['cv_dir'])){
-                    $nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
+                    $nomb_cvdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cv_dir'];
+                    //$nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
                     $datos['cv_dir']=$adj['cv_dir'];
                     $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
                 }
                 if(isset($adj['cv_codir'])){
-                    $nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
+                    $nomb_cdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cv_codir'];
+                    //$nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
                     $datos['cv_codir']=$adj['cv_codir'];
                     $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
                 }
                 if(isset($adj['cuil'])){ 
-                    $nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
+                    $nomb_cuil='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['cuil'];
+                    //$nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
                     $datos['cuil']=$adj['cuil'];
                     $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
                 }
                 if(isset($adj['docum'])){
-                    $nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
+                    $nomb_doc='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['docum'];
+                    //$nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
                     $datos['docum']=$adj['docum'];
                     $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
                 }
                 if(isset($adj['comprob'])){
-                    $nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
+                    $nomb_comp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['comprob'];
+                    //$nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
                     $datos['comprob']=$adj['comprob'];
                     $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                 }
                 if(isset($adj['desarrollo_pt'])){
-                    $nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
+                    $nomb_des_pt='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
+                    //$nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
                     $datos['desarrollo_pt']=$adj['desarrollo_pt'];
                     $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
                 }
                 if(isset($adj['informe_final'])){
-                    $nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
+                    $nomb_informe_final='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/becarios_'.$anio.'/'.$adj['informe_final'];
+                    //$nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
                     $datos['informe_final']=$adj['informe_final'];
                     $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                 }
@@ -561,8 +573,7 @@ class ci_alta_solicitud extends toba_ci
             $datos2=array();
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                 $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
-                //$anio=date("Y",strtotime($insc['fecha_presentacion']))+1;//toma la fecha de la presentacion de la beca
-                $anio=date("Y",strtotime($insc['fecha_presentacion']));//toma la fecha de la presentacion de la beca
+                $anio=date("Y",strtotime($insc['fecha_presentacion']))+1;//toma la fecha de la presentacion de la beca
                 if($insc['estado']<>'I'){//solo en estado I puede modificar
                     $band=false;
                 }else{
@@ -571,8 +582,7 @@ class ci_alta_solicitud extends toba_ci
                     $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 }   
             }else{
-               //$anio=date("Y")+1;
-                $anio=date("Y");
+               $anio=date("Y")+1;
             }
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
                 if(isset($datos['cert_ant']['size'])){//120000
@@ -758,8 +768,7 @@ class ci_alta_solicitud extends toba_ci
           $bandera = toba::memoria()->get_parametro('evento_trigger');
           //print_r($bandera);exit;
           $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-          //$anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
-          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']));
+          $anio=date("Y",strtotime($inscripcion['fecha_presentacion']))+1;
           $cat=$this->dep('datos')->tabla('categoria_beca')->get_descripcion_categoria($inscripcion['categ_beca']);
           $datos_bec=$this->dep('datos')->tabla('becario')->get_datos_personales($inscripcion['id_becario']);
           $fec_nac=date("d/m/Y",strtotime($datos_bec['fec_nacim']));

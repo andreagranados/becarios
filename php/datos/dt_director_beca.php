@@ -84,29 +84,16 @@ class dt_director_beca extends toba_datos_tabla
             if(isset($filtro)){
                 $condicion=" c.id_conv=".$filtro['id_conv']." and ";
             }
-//            $sql="select legajo,trim(apellido)||', '||trim(nombre) as docente,sum(cant) as cant from (select 1,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant 
-//                   from director_beca d
-//                    inner join inscripcion_beca i on (i.id_director=d.id)
-//                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
-//                    
-//                    group by d.legajo,d.apellido,d.nombre
-//                    union
-//                    select 2,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant from director_beca d
-//                    inner join inscripcion_beca i on (i.id_codirector=d.id)
-//                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
-//                                           
-//                    group by d.legajo,d.apellido,d.nombre)sub
-//                    group by legajo,apellido,nombre";
-             $sql="select legajo,trim(apellido)||', '||trim(nombre) as docente,sum(cant) as cant from (select 1,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant 
+            $sql="select legajo,trim(apellido)||', '||trim(nombre) as docente,sum(cant) as cant from (select 1,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant 
                    from director_beca d
                     inner join inscripcion_beca i on (i.id_director=d.id)
-                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)))
+                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
                     
                     group by d.legajo,d.apellido,d.nombre
                     union
                     select 2,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant from director_beca d
                     inner join inscripcion_beca i on (i.id_codirector=d.id)
-                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)))
+                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
                                            
                     group by d.legajo,d.apellido,d.nombre)sub
                     group by legajo,apellido,nombre";

@@ -4,7 +4,6 @@ class dt_categoria_beca extends toba_datos_tabla
 	function get_descripciones()
 	{
             $sql = "SELECT id_categ, descripcion FROM categoria_beca "
-                    . " where id_categ=2"
                     . " ORDER BY descripcion";
             return toba::db('becarios')->consultar($sql);
 	}
