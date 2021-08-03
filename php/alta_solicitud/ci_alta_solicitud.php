@@ -564,7 +564,178 @@ class ci_alta_solicitud extends toba_ci
             
 	}
         
-        function evt__form_adj__guardar($datos)
+//        function evt__form_adj__guardar($datos)
+//        {
+//            $this->s__guardo=true;
+//            $band=true;
+//            $no_supera_tamano=true;
+//            $mensaje='';
+//            $datos2=array();
+//            if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
+//                $insc=$this->dep('datos')->tabla('inscripcion_beca')->get();
+//                $anio=date("Y",strtotime($insc['fecha_presentacion']))+1;//toma la fecha de la presentacion de la beca
+//                if($insc['estado']<>'I'){//solo en estado I puede modificar
+//                    $band=false;
+//                }else{
+//                    $datos2['id_becario']=$insc['id_becario'];
+//                    $datos2['fecha']=$insc['fecha_presentacion'];
+//                    $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
+//                }   
+//            }else{
+//               $anio=date("Y")+1;
+//            }
+//            if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
+//                if(isset($datos['cert_ant']['size'])){//120000
+//                    if($datos['cert_ant']['size']>3145728){$no_supera_tamano=false;
+//                    $mensaje.=' cert_ant ';
+//                    }                               
+//                }
+//                if(isset($datos['rend_acad']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['rend_acad']['size']>3145728){$no_supera_tamano=false;
+//                    $mensaje.=' rend_acad ';
+//                    }
+//                }
+//                if(isset($datos['cv_post']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['cv_post']['size']>3145728 ){$no_supera_tamano=false;
+//                    $mensaje.=' cv_post ';
+//                    }
+//                }
+//                if(isset($datos['cv_dir']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['cv_dir']['size']>3145728 ){$no_supera_tamano=false;
+//                    $mensaje.=' cv_dir ';
+//                    }
+//                }
+//                if(isset($datos['cuil']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['cuil']['size']>3145728){$no_supera_tamano=false;
+//                    $mensaje.=' cuil ';
+//                    }
+//                }
+//                if(isset($datos['docum']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['docum']['size']>3145728 ){$no_supera_tamano=false;
+//                    $mensaje.=' docum ';
+//                    }
+//                }
+//                if(isset($datos['comprob']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['comprob']['size']>3145728 ){$no_supera_tamano=false;
+//                    $mensaje.=' comprob ';
+//                    }
+//                }
+//                if(isset($datos['desarrollo_pt']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['desarrollo_pt']['size']>3145728){$no_supera_tamano=false;
+//                    $mensaje.=' desarrollo_pt ';
+//                    }
+//                }
+//                if(isset($datos['informe_final']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                    if($datos['informe_final']['size']>3145728 ){$no_supera_tamano=false;
+//                    $mensaje.=' informe_final ';
+//                    }
+//                }//solo para graduados chequea cv codir y const titu
+//                if($insc['categ_beca']!=3){//graduados
+//                    if(isset($datos['cv_codir']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                        if($datos['cv_codir']['size']>3145728 ){$no_supera_tamano=false;
+//                            $mensaje.=' cv_codir ';
+//                        }
+//                    }
+//                    if(isset($datos['const_titu']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
+//                        if($datos['const_titu']['size']>3145728 ){$no_supera_tamano=false;
+//                            $mensaje.=' const_titu ';
+//                        }
+//                    }
+//                }
+//                if($no_supera_tamano){//si los archivos no superan el tamano
+//                        $bec=$this->dep('datos')->tabla('becario')->get();
+//                        $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
+//                       // print_r($datos['cert_ant']['tmp_name']);
+//                        if (isset($datos['cert_ant'])) {
+//                            $nombre_ca="cert_ant".$cuil_becario.".pdf";
+//                            //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ca;
+//                            $destino_ca="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ca;
+//                            if(move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['cert_ant']=strval($nombre_ca);}
+//                        }
+//                        //no obligatorio
+//                        if(isset($datos['const_titu'])){
+//                            $nombre_ti="const_titu".$cuil_becario.".pdf";
+//                            //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ti;
+//                            $destino_ti="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ti;
+//                            if(move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['const_titu']=strval($nombre_ti);}
+//                        }
+//                        
+//                        if(isset($datos['rend_acad'])){
+//                            $nombre_ra="rend_acad".$cuil_becario.".pdf";
+//                            //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ra;
+//                            $destino_ra="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ra;
+//                            if(move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['rend_acad']=strval($nombre_ra);}
+//                        }
+//                        
+//                        if(isset($datos['cv_post'])){
+//                            $nombre_cvp="cv_post".$cuil_becario.".pdf";
+//                            //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvp;
+//                            $destino_cvp="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvp;
+//                            if(move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['cv_post']=strval($nombre_cvp);}
+//                        }
+//                        if(isset($datos['cv_dir'])){
+//                            $nombre_cvd="cv_dir".$cuil_becario.".pdf";
+//                           // $destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvd;
+//                            $destino_cvd="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvd;
+//                            if(move_uploaded_file($datos['cv_dir']['tmp_name'], $destino_cvd)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['cv_dir']=strval($nombre_cvd);}
+//                        }
+//                        if(isset($datos['cv_codir'])){
+//                            $nombre_cvc="cv_codir".$cuil_becario.".pdf";
+//                            //$destino_cvc="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvc;
+//                            $destino_cvc="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvc;
+//                            if(move_uploaded_file($datos['cv_codir']['tmp_name'], $destino_cvc)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['cv_codir']=strval($nombre_cvc);}
+//                        }
+//                        if(isset($datos['cuil'])){
+//                            $nombre_cuil="cuil".$cuil_becario.".pdf";
+//                            //$destino_cuil="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cuil;
+//                            $destino_cuil="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cuil;
+//                            if(move_uploaded_file($datos['cuil']['tmp_name'], $destino_cuil)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['cuil']=strval($nombre_cuil);}
+//                        }
+//                        if(isset($datos['docum'])){
+//                            $nombre_docum="docum".$cuil_becario.".pdf";
+//                            //$destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_docum;
+//                            $destino_docum="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_docum;
+//                            if(move_uploaded_file($datos['docum']['tmp_name'], $destino_docum)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['docum']=strval($nombre_docum);}
+//                        }
+//                        if(isset($datos['comprob'])){
+//                            $nombre_comprob="comprob".$cuil_becario.".pdf";
+//                            //$destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_comprob;
+//                            $destino_comprob="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_comprob;
+//                            if(move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                            $datos2['comprob']=strval($nombre_comprob);}
+//                        }
+//                        if(isset($datos['desarrollo_pt'])){
+//                            $nombre_des_pt="des_pt".$cuil_becario.".pdf";
+//                            //$destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_des_pt;
+//                            $destino_des_pt="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_des_pt;
+//                            if(move_uploaded_file($datos['desarrollo_pt']['tmp_name'], $destino_des_pt)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                                $datos2['desarrollo_pt']=strval($nombre_des_pt);}
+//                        }
+//                        if(isset($datos['informe_final'])){
+//                            $nombre_ifinal="ifinal".$cuil_becario.".pdf";
+//                            //$destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ifinal;
+//                            $destino_ifinal="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ifinal;
+//                            if(move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
+//                                $datos2['informe_final']=strval($nombre_ifinal);}//si lo puede mover con exito actualizar campo
+//                        }
+//                        $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
+//                        $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
+//              }else{
+//                  toba::notificacion()->agregar(utf8_decode('Los siguientes archivos superan el tamaño máximo: '.$mensaje.". Intentelo nuevamente "), "info");
+//                  $this->s__guardo=false;//para que no salga mensaje de que guardo correctamente
+//              }
+//            }//no modifica nada
+//            clearstatcache();
+//        }
+     function evt__form_adj__guardar($datos)
         {
             $this->s__guardo=true;
             $band=true;
@@ -585,153 +756,148 @@ class ci_alta_solicitud extends toba_ci
                $anio=date("Y")+1;
             }
             if($band){//band es true cuando tiene que cargar la primera vez o cuando puede modificar
-                if(isset($datos['cert_ant']['size'])){//120000
-                    if($datos['cert_ant']['size']>3145728){$no_supera_tamano=false;
-                    $mensaje.=' cert_ant ';
-                    }                               
-                }
-                if(isset($datos['rend_acad']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['rend_acad']['size']>3145728){$no_supera_tamano=false;
-                    $mensaje.=' rend_acad ';
+                // Definimos las variables
+                $user=getenv('DB_USER');
+                $host=getenv('DB_HOST');
+                $port=getenv('DB_PORT');
+                $password=getenv('DB_PASS');
+                $ruta="/becarios/becarios_".$anio;
+                //realizamos la conexion
+                $conn_id=ftp_connect($host,$port);
+                if($conn_id){
+                       $bec=$this->dep('datos')->tabla('becario')->get();
+                       $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
+                       //print_r($cuil_becario);exit;
+                         # Realizamos el login con nuestro usuario y contrasena
+                        if(ftp_login($conn_id,$user,$password)){
+                            ftp_pasv($conn_id, true);//activa modo pasivo. la conexion es iniciada por el cliente
+                            # Cambiamos al directorio especificado
+                            if(ftp_chdir($conn_id,$ruta)){
+                                if(isset($datos['cert_ant'])) {
+                                    $remote_file = $datos['cert_ant']['tmp_name'];
+				    $nombre_ca="cert_ant".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['cert_ant']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['const_titu'])) {
+                                    $remote_file = $datos['const_titu']['tmp_name'];
+				    $nombre_ca="const_titu".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['const_titu']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['rend_acad'])) {
+                                    $remote_file = $datos['rend_acad']['tmp_name'];
+                                    $nombre_ca="rend_acad".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['rend_acad']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['cv_post'])) {
+                                    $remote_file = $datos['cv_post']['tmp_name'];
+                                    $nombre_ca="cv_post".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['cv_post']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['cv_dir'])) {
+                                    $remote_file = $datos['cv_dir']['tmp_name'];
+                                    $nombre_ca="cv_dir".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['cv_dir']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['cv_codir'])) {
+                                    $remote_file = $datos['cv_codir']['tmp_name'];
+                                    $nombre_ca="cv_codir".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['cv_codir']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['cuil'])) {
+                                    $remote_file = $datos['cuil']['tmp_name'];
+                                    $nombre_ca="cuil".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['cuil']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['docum'])) {
+                                    $remote_file = $datos['docum']['tmp_name'];
+                                    $nombre_ca="docum".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['docum']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['comprob'])) {
+                                    $remote_file = $datos['comprob']['tmp_name'];
+                                    $nombre_ca="comprob".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['comprob']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['desarrollo_pt'])) {
+                                    $remote_file = $datos['desarrollo_pt']['tmp_name'];
+                                    $nombre_ca="desarrollo_pt".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['desarrollo_pt']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+                                if(isset($datos['informe_final'])) {
+                                    $remote_file = $datos['informe_final']['tmp_name'];
+                                    $nombre_ca="informe_final".$cuil_becario.".pdf";//nombre con el que se guarda el archivo
+                                    # Subimos el fichero
+                                    if(ftp_put($conn_id,$nombre_ca,$remote_file, FTP_BINARY)){
+                                            $datos2['informe_final']=strval($nombre_ca);   
+                                            echo "Fichero subido correctamente";
+                                    }else
+                                            echo "No ha sido posible subir el fichero";  
+                                }
+								
+                            }else{
+                                echo "No existe el directorio especificado";
+                            }
+                        } else{
+                            echo "El usuario o la contraseÃ±a son incorrectos";
+                        }
+
+                    }else{
+                        echo "No ha sido posible conectar con el servidor";
                     }
-                }
-                if(isset($datos['cv_post']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['cv_post']['size']>3145728 ){$no_supera_tamano=false;
-                    $mensaje.=' cv_post ';
-                    }
-                }
-                if(isset($datos['cv_dir']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['cv_dir']['size']>3145728 ){$no_supera_tamano=false;
-                    $mensaje.=' cv_dir ';
-                    }
-                }
-                if(isset($datos['cuil']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['cuil']['size']>3145728){$no_supera_tamano=false;
-                    $mensaje.=' cuil ';
-                    }
-                }
-                if(isset($datos['docum']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['docum']['size']>3145728 ){$no_supera_tamano=false;
-                    $mensaje.=' docum ';
-                    }
-                }
-                if(isset($datos['comprob']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['comprob']['size']>3145728 ){$no_supera_tamano=false;
-                    $mensaje.=' comprob ';
-                    }
-                }
-                if(isset($datos['desarrollo_pt']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['desarrollo_pt']['size']>3145728){$no_supera_tamano=false;
-                    $mensaje.=' desarrollo_pt ';
-                    }
-                }
-                if(isset($datos['informe_final']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                    if($datos['informe_final']['size']>3145728 ){$no_supera_tamano=false;
-                    $mensaje.=' informe_final ';
-                    }
-                }//solo para graduados chequea cv codir y const titu
-                if($insc['categ_beca']!=3){//graduados
-                    if(isset($datos['cv_codir']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                        if($datos['cv_codir']['size']>3145728 ){$no_supera_tamano=false;
-                            $mensaje.=' cv_codir ';
-                        }
-                    }
-                    if(isset($datos['const_titu']['size'])){//10mb=10485760,5mb=5242880,3mb=3145728
-                        if($datos['const_titu']['size']>3145728 ){$no_supera_tamano=false;
-                            $mensaje.=' const_titu ';
-                        }
-                    }
-                }
-                if($no_supera_tamano){//si los archivos no superan el tamano
-                        $bec=$this->dep('datos')->tabla('becario')->get();
-                        $cuil_becario=$bec['cuil1'].$bec['cuil'].$bec['cuil2'];
-                       // print_r($datos['cert_ant']['tmp_name']);
-                        if (isset($datos['cert_ant'])) {
-                            $nombre_ca="cert_ant".$cuil_becario.".pdf";
-                            //$destino_ca="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ca;
-                            $destino_ca="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ca;
-                            if(move_uploaded_file($datos['cert_ant']['tmp_name'], $destino_ca)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['cert_ant']=strval($nombre_ca);}
-                        }
-                        //no obligatorio
-                        if(isset($datos['const_titu'])){
-                            $nombre_ti="const_titu".$cuil_becario.".pdf";
-                            //$destino_ti="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ti;
-                            $destino_ti="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ti;
-                            if(move_uploaded_file($datos['const_titu']['tmp_name'], $destino_ti)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['const_titu']=strval($nombre_ti);}
-                        }
-                        
-                        if(isset($datos['rend_acad'])){
-                            $nombre_ra="rend_acad".$cuil_becario.".pdf";
-                            //$destino_ra="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ra;
-                            $destino_ra="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ra;
-                            if(move_uploaded_file($datos['rend_acad']['tmp_name'], $destino_ra)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['rend_acad']=strval($nombre_ra);}
-                        }
-                        
-                        if(isset($datos['cv_post'])){
-                            $nombre_cvp="cv_post".$cuil_becario.".pdf";
-                            //$destino_cvp="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvp;
-                            $destino_cvp="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvp;
-                            if(move_uploaded_file($datos['cv_post']['tmp_name'], $destino_cvp)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['cv_post']=strval($nombre_cvp);}
-                        }
-                        if(isset($datos['cv_dir'])){
-                            $nombre_cvd="cv_dir".$cuil_becario.".pdf";
-                           // $destino_cvd="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvd;
-                            $destino_cvd="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvd;
-                            if(move_uploaded_file($datos['cv_dir']['tmp_name'], $destino_cvd)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['cv_dir']=strval($nombre_cvd);}
-                        }
-                        if(isset($datos['cv_codir'])){
-                            $nombre_cvc="cv_codir".$cuil_becario.".pdf";
-                            //$destino_cvc="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvc;
-                            $destino_cvc="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cvc;
-                            if(move_uploaded_file($datos['cv_codir']['tmp_name'], $destino_cvc)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['cv_codir']=strval($nombre_cvc);}
-                        }
-                        if(isset($datos['cuil'])){
-                            $nombre_cuil="cuil".$cuil_becario.".pdf";
-                            //$destino_cuil="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_cuil;
-                            $destino_cuil="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_cuil;
-                            if(move_uploaded_file($datos['cuil']['tmp_name'], $destino_cuil)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['cuil']=strval($nombre_cuil);}
-                        }
-                        if(isset($datos['docum'])){
-                            $nombre_docum="docum".$cuil_becario.".pdf";
-                            //$destino_docum="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_docum;
-                            $destino_docum="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_docum;
-                            if(move_uploaded_file($datos['docum']['tmp_name'], $destino_docum)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['docum']=strval($nombre_docum);}
-                        }
-                        if(isset($datos['comprob'])){
-                            $nombre_comprob="comprob".$cuil_becario.".pdf";
-                            //$destino_comprob="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_comprob;
-                            $destino_comprob="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_comprob;
-                            if(move_uploaded_file($datos['comprob']['tmp_name'], $destino_comprob)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                            $datos2['comprob']=strval($nombre_comprob);}
-                        }
-                        if(isset($datos['desarrollo_pt'])){
-                            $nombre_des_pt="des_pt".$cuil_becario.".pdf";
-                            //$destino_des_pt="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_des_pt;
-                            $destino_des_pt="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_des_pt;
-                            if(move_uploaded_file($datos['desarrollo_pt']['tmp_name'], $destino_des_pt)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                                $datos2['desarrollo_pt']=strval($nombre_des_pt);}
-                        }
-                        if(isset($datos['informe_final'])){
-                            $nombre_ifinal="ifinal".$cuil_becario.".pdf";
-                            //$destino_ifinal="C:/proyectos/toba_2.6.3/proyectos/becarios/www/becarios_".$anio."/".$nombre_ifinal;
-                            $destino_ifinal="/home/andrea/toba_2.7.13/proyectos/becarios/www/becarios_".$anio."/".$nombre_ifinal;
-                            if(move_uploaded_file($datos['informe_final']['tmp_name'], $destino_ifinal)){//mueve un archivo a una nueva direccion, retorna true cuando lo hace y falso en caso de que no
-                                $datos2['informe_final']=strval($nombre_ifinal);}//si lo puede mover con exito actualizar campo
-                        }
-                        $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
-                        $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
-              }else{
-                  toba::notificacion()->agregar(utf8_decode('Los siguientes archivos superan el tamaño máximo: '.$mensaje.". Intentelo nuevamente "), "info");
-                  $this->s__guardo=false;//para que no salga mensaje de que guardo correctamente
-              }
+                
+                 $this->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
+                 $this->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
+             
             }//no modifica nada
             clearstatcache();
         }

@@ -9,7 +9,7 @@ INSERT INTO apex_fuente_datos (proyecto, fuente_datos, descripcion, descripcion_
 	'becarios', --descripcion_corta
 	'postgres7', --fuente_datos_motor
 	NULL, --host
-	NULL, --punto_montaje
+	'25', --punto_montaje
 	NULL, --subclase_archivo
 	NULL, --subclase_nombre
 	NULL, --orden
@@ -31,7 +31,7 @@ INSERT INTO apex_fuente_datos (proyecto, fuente_datos, descripcion, descripcion_
 	NULL, --descripcion_corta
 	NULL, --fuente_datos_motor
 	NULL, --host
-	NULL, --punto_montaje
+	'25', --punto_montaje
 	NULL, --subclase_archivo
 	NULL, --subclase_nombre
 	NULL, --orden
@@ -53,7 +53,7 @@ INSERT INTO apex_fuente_datos (proyecto, fuente_datos, descripcion, descripcion_
 	NULL, --descripcion_corta
 	NULL, --fuente_datos_motor
 	NULL, --host
-	NULL, --punto_montaje
+	'25', --punto_montaje
 	NULL, --subclase_archivo
 	NULL, --subclase_nombre
 	NULL, --orden
