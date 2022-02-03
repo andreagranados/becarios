@@ -68,7 +68,6 @@ class ci_postulantes extends becarios_abm_ci
                 $this->dep('datos')->tabla('inscripcion_beca')->cargar($datos);
                 //cargo los evaluadores del becario seleccionado y luego uso el get_filas
                 $datos2['id_becario']=$datos['id_becario'];
-                //$datos2['fecha']=$datos['fecha_presentacion'];
                 $datos2['id_conv']=$datos['id_conv'];
                 $this->dep('datos')->tabla('evaluador')->cargar($datos2);
                 $this->set_pantalla('pant_asigna');
@@ -85,7 +84,6 @@ class ci_postulantes extends becarios_abm_ci
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                     $datos=$this->dep('datos')->tabla('inscripcion_beca')->get();
                     $anio=$this->dep('datos')->tabla('convocatoria')->get_anio($datos['id_conv']);
-                    //$anio=date("Y",strtotime($datos['fecha_presentacion']))+1;
                     if($datos['categ_beca']==3){//estudiantes desactivo 
                          $form->desactivar_efs(array('imagen_vista_previa_titu','imagen_vista_previa_cvc')); 
                     }
@@ -851,7 +849,7 @@ class ci_postulantes extends becarios_abm_ci
             $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
             foreach ($datos as $clave => $elem) {
                 $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
             }
             $this->dep('datos')->tabla('evaluador')->procesar_filas($datos);
             $this->dep('datos')->tabla('evaluador')->sincronizar();
