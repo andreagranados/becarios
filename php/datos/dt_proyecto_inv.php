@@ -8,8 +8,8 @@ class dt_proyecto_inv extends toba_datos_tabla
             $sql = "SELECT id_pinv, codigo FROM proyecto_inv ORDER BY codigo";
             return toba::db('becarios')->consultar($sql);
 	}
-        function get_proyectos(){
-            $pro = consultas_designa::get_proyectos();
+        function get_proyectos($anio){
+            $pro = consultas_designa::get_proyectos($anio);
             return $pro;
         }
         function get_codigo_proyecto($id){

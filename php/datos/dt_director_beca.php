@@ -80,21 +80,20 @@ class dt_director_beca extends toba_datos_tabla
             return $dato;
         }
         function get_cant_postulantes($filtro){
-           
             if(isset($filtro)){
-                $condicion=" c.id_conv=".$filtro['id_conv']." and ";
+                $where=" where id_conv=".$filtro['id_conv'];
             }
             $sql="select legajo,trim(apellido)||', '||trim(nombre) as docente,sum(cant) as cant from (select 1,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant 
-                   from director_beca d
+                    from director_beca d
                     inner join inscripcion_beca i on (i.id_director=d.id)
-                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
-                    
+                    $where
                     group by d.legajo,d.apellido,d.nombre
+                    
                     union
+                    
                     select 2,d.legajo,d.apellido,d.nombre,count(distinct i.id_becario)as cant from director_beca d
                     inner join inscripcion_beca i on (i.id_codirector=d.id)
-                    inner join convocatoria c on (".$condicion." c.anio=(extract(year from i.fecha_presentacion)+1))
-                                           
+                    $where                 
                     group by d.legajo,d.apellido,d.nombre)sub
                     group by legajo,apellido,nombre";
             

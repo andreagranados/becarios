@@ -191,8 +191,8 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	'4199', --objeto_ei_filtro
 	'becarios', --objeto_ei_filtro_proyecto
 	'opciones', --tipo
-	'anio', --nombre
-	'anio', --expresion
+	'id_conv', --nombre
+	'id_conv', --expresion
 	'Convocatoria', --etiqueta
 	NULL, --descripcion
 	'1', --obligatorio
@@ -209,8 +209,8 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	NULL, --carga_sql
 	'becarios', --carga_fuente
 	NULL, --carga_lista
-	'anio', --carga_col_clave
-	'anio', --carga_col_desc
+	'id_conv', --carga_col_clave
+	'descripcion', --carga_col_desc
 	'1', --carga_permite_no_seteado
 	'--Seleccione--', --carga_no_seteado
 	'0', --carga_no_seteado_ocultar

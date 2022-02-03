@@ -1,6 +1,6 @@
 <?php
 /**
- * Esta clase fue y será generada automáticamente. NO EDITAR A MANO.
+ * Esta clase fue y serï¿½ generada automï¿½ticamente. NO EDITAR A MANO.
  * @ignore
  */
 class becarios_autoload 
@@ -21,6 +21,7 @@ class becarios_autoload
 		'becarios_comando' => 'extension_toba/becarios_comando.php',
 		'becarios_modelo' => 'extension_toba/becarios_modelo.php',
 		'becarios_ci' => 'extension_toba/componentes/becarios_ci.php',
+                'becarios_abm_ci' => 'extension_toba/componentes/becarios_abm_ci.php',
 		'becarios_cn' => 'extension_toba/componentes/becarios_cn.php',
 		'becarios_datos_relacion' => 'extension_toba/componentes/becarios_datos_relacion.php',
 		'becarios_datos_tabla' => 'extension_toba/componentes/becarios_datos_tabla.php',

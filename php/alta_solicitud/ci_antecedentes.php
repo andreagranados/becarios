@@ -58,6 +58,11 @@ class ci_antecedentes extends toba_ci
                     $primera=false;
                 }
             }else{//sino esta cargada la inscripcion significa que es la primera entonces pongo la fecha actual
+                 $id=$this->controlador()->dep('datos')->tabla('convocatoria')->convocatoria_actual();
+                 if(isset($id)){
+                     $datos_inscripcion['id_conv']=$id;
+                 }
+                 
                  $datos_inscripcion['fecha_presentacion']=date("Y-m-d");   
                  $datos_inscripcion['estado']='I';
             }
@@ -185,7 +190,7 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('becario_estudio')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('becario_estudio')->sincronizar();
@@ -208,7 +213,8 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    //$datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('becario_beca')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('becario_beca')->sincronizar();
@@ -231,7 +237,8 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    //$datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('becario_distincion')->procesar_filas($datos);  
                 $this->controlador()->dep('datos')->tabla('becario_distincion')->sincronizar();
@@ -244,55 +251,26 @@ class ci_antecedentes extends toba_ci
 	function conf__form_emp(toba_ei_formulario_ml $form)
 	{
             $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos_becario($insc['id_becario'],$insc['fecha_presentacion']);
+            //$datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos_becario($insc['id_becario'],$insc['fecha_presentacion']);
+            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos_becario($insc['id_becario'],$insc['id_conv']);
             if(isset($datos)){
                  $form->set_datos($datos);
             }
 	}
         function evt__form_emp__guardar($datos)
         {
-           // print_r($datos);
             $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                   //$datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('becario_empleo')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('becario_empleo')->sincronizar();
           }
         }
-        //empleos anteriores
-//        function conf__form_empa(toba_ei_formulario_ml $form)
-//	{
-//            $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-//            $datos=$this->controlador()->dep('datos')->tabla('becario_empleo')->get_empleos(false,$insc['id_becario'],$insc['fecha_presentacion']);
-//            if(isset($datos)){
-//                $datos2['instituciona']=$datos['institucion'];
-//                $datos2['direcciona']=$datos['direccion'];
-//                $datos2['cargoa']=$datos['cargo'];
-//                $datos2['anio_ingresoa']=$datos['anio_ingreso'];
-//                $form->set_datos($datos);
-//            }
-//	}
-//        function evt__form_empa__guardar($datos)
-//        { 
-//            print_r($datos);
-//            $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
-//            if($inscripcion['estado']=='I'){
-//                foreach ($datos as $clave => $elem) {
-//                    $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-//                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
-//                    $datos[$clave]['actual']=false;
-////                    $datos[$clave]['institucion']=$datos['instituciona']; 
-////                    $datos[$clave]['direccion']=$datos['direcciona']; 
-////                    $datos[$clave]['cargo']=$datos['cargoa']; 
-////                    $datos[$clave]['anio_ingresoa']=$datos['anio_ingresoa']; 
-//                }
-//                $this->controlador()->dep('datos')->tabla('becario_empleo')->procesar_filas($datos);
-//                $this->controlador()->dep('datos')->tabla('becario_empleo')->sincronizar();
-//          }
-//        }
+        
          //-----------------------------------------------------------------------------------
 	//---- formulario proyectos de investigacion  ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -310,7 +288,7 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('participacion_inv')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('participacion_inv')->sincronizar();
@@ -333,7 +311,7 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('participacion_ext')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('participacion_ext')->sincronizar();
@@ -356,7 +334,8 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    //$datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                 }
                 $this->controlador()->dep('datos')->tabla('becario_trabajo')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('becario_trabajo')->sincronizar();
@@ -379,7 +358,8 @@ class ci_antecedentes extends toba_ci
             if($inscripcion['estado']=='I'){
                 foreach ($datos as $clave => $elem) {
                     $datos[$clave]['id_becario']=$inscripcion['id_becario']; 
-                    $datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    //$datos[$clave]['fecha']=$inscripcion['fecha_presentacion']; 
+                    $datos[$clave]['id_conv']=$inscripcion['id_conv']; 
                    }
                 $this->controlador()->dep('datos')->tabla('becario_idioma')->procesar_filas($datos);
                 $this->controlador()->dep('datos')->tabla('becario_idioma')->sincronizar();

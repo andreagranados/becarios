@@ -354,7 +354,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'pant_inicial', --identificador
 	'1', --orden
 	'1', --etiqueta
-	'Seleccione la categoría a la que se postula', --descripcion
+	NULL, --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen
@@ -470,7 +470,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'7', --orden
 	'7', --etiqueta
 	'DATOS ADJUNTOS<br>
-No permite cargar archivos .PDF que superen los 3MB. En caso de que alguno de los archivos exceda ese tamaño se sugiere comprimirlo usando alguna herramienta online, por ejemplo <a href=" http://www.ilovepdf.com/es/comprimir_pdf" target="nueva"> ww.ilovepdf.com/es/comprimir_pdf</a>', --descripcion
+No permite cargar archivos .PDF que superen los 3MB. En caso de que alguno de los archivos exceda ese tamaño se sugiere comprimirlo usando alguna herramienta online, por ejemplo <a href=" http://www.ilovepdf.com/es/comprimir_pdf" target="nueva"> www.ilovepdf.com/es/comprimir_pdf</a>', --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen

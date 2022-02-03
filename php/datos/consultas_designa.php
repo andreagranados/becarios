@@ -46,16 +46,20 @@ class consultas_designa
         }
 	return $salida;
     }
-    function get_proyectos(){
+    function get_proyectos($anio){//Se podrá seleccionar sólo un proyecto de investigación que se encuentre vigente durante el año al que corresponde la convocatoria
         //p.codigo||'-'||SUBSTRING (p.denominacion,0,50) as denominacion
+        $pdia=date('Y-m-d', strtotime($anio.'-01-01'));
+        $udia=date('Y-m-d', strtotime($anio.'-12-31'));
         $sql="select p.id_pinv,coalesce(codigo,'')||' '||SUBSTRING(p.denominacion,1,60)||'....' as descripcion
               from pinvestigacion p "
               //." where extract (year from p.fec_desde) in (2015,2016,2017,2018,2019)
-              ." where extract (year from p.fec_hasta) >= 2021
-              and p.estado<>'X'
+              //." where extract (year from p.fec_hasta) >= $anio
+                ." where p.fec_desde<='".$udia."' and p.fec_hasta>='".$pdia
+              ."' and p.estado<>'X'
               and not exists (select * from subproyecto s
                               where s.id_proyecto=p.id_pinv)
               order by descripcion";
+        
 	$res= toba::db('designa')->consultar($sql);
 	return $res;
     }
