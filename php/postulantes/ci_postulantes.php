@@ -9,12 +9,11 @@ class ci_postulantes extends becarios_abm_ci
         
         function get_ua_evaluadoras(){
             $res=array();
-            if (isset($this->s__datos_filtro['anio'])) {
-                $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
-                if(isset($inscripcion)){
-                    $res=$this->dep('datos')->tabla('ua_evaluadora')->get_ua_evaluadoras($this->s__datos_filtro['anio']['valor'],$inscripcion['uni_acad']);
-                }
+            $inscripcion=$this->dep('datos')->tabla('inscripcion_beca')->get();
+            if(isset($inscripcion)){
+                $res=$this->dep('datos')->tabla('ua_evaluadora')->get_ua_evaluadoras($inscripcion['id_conv'],$inscripcion['uni_acad']);
             }
+            
             return $res;    
         }
 	 //-----------------------------------------------------------------------------------

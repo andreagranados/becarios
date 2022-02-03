@@ -7,11 +7,11 @@ class dt_ua_evaluadora extends toba_datos_tabla
             return toba::db('becarios')->consultar($sql);
 	}
         //listado de las UA evaluadoras correspondientes al anio que ingresa como argumento y cuya UA sea distinta a la del becario
-        function get_ua_evaluadoras($anio,$ua)
+        function get_ua_evaluadoras($id_conv,$ua)
 	{
             $where='';
-            if(isset($anio)){
-                $where.=' and  anio='.$anio;
+            if(isset($id_conv)){
+                $where.=' and id_convocatoria='.$id_conv;
             }
             if(isset($ua)){
                 $where.=" and  uni_acad<>'".$ua."'";
