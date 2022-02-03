@@ -11,6 +11,8 @@ class form_adj_extension extends toba_ei_formulario
 					case '3':
                                                 this.ef('const_titu').ocultar();
                                                 this.ef('cv_codir').ocultar();
+                                                this.ef('eliminar_const_titu').ocultar();
+                                                this.ef('eliminar_cv_codir').ocultar();
 						break;
                                              
 				}
