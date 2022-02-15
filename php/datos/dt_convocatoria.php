@@ -47,10 +47,23 @@ class dt_convocatoria extends toba_datos_tabla
             }
             return $band;
         }
-        function puede_ver_asignados($anio){
+//        function puede_ver_asignados($anio){
+//            $band=false;
+//            $sql="select fec_ver_asignadas from convocatoria "
+//                    . " where anio=$anio";
+//            $res = toba::db('becarios')->consultar($sql);
+//            if(isset($res)){
+//                $fecha_actual=date('Y-m-d');
+//                if($fecha_actual>=$res[0]['fec_ver_asignadas']){
+//                    $band=true;
+//                }
+//            }
+//            return $band;
+//        }
+        function puede_ver_asignados($id_conv){
             $band=false;
             $sql="select fec_ver_asignadas from convocatoria "
-                    . " where anio=$anio";
+                    . " where id_conv=$id_conv";
             $res = toba::db('becarios')->consultar($sql);
             if(isset($res)){
                 $fecha_actual=date('Y-m-d');

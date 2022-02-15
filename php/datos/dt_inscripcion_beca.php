@@ -58,7 +58,7 @@ class dt_inscripcion_beca extends toba_datos_tabla
               $con2 = toba::perfil_de_datos()->filtrar($sql2);
               $con="  (select * from (".$con1.")sub )";
               //verifico si la fecha actual es >= fecha a partir de la cual puede ver los 
-              $bandera = dt_convocatoria::puede_ver_asignados($filtro['anio']['valor']);//anio es obligatorio por tanto siempre tiene valor        
+              $bandera = dt_convocatoria::puede_ver_asignados($filtro['id_conv']['valor']);//anio es obligatorio por tanto siempre tiene valor        
               if($bandera){
                   $con="(".$con." UNION "
                       . " select * from (".$con2.")sub2"
