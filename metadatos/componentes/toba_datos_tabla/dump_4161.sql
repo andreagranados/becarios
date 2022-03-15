@@ -86,21 +86,21 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2000', --col_id
+	'2472', --col_id
 	'fecha_presentacion', --columna
 	'F', --tipo
-	'1', --pk
+	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	'1', --no_nulo_db
+	'0', --no_nulo_db
 	'0', --externa
 	'inscripcion_beca'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2001', --col_id
+	'2473', --col_id
 	'categ_beca', --columna
 	'E', --tipo
 	'0', --pk
@@ -114,7 +114,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2002', --col_id
+	'2474', --col_id
 	'estado', --columna
 	'C', --tipo
 	'0', --pk
@@ -128,7 +128,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2003', --col_id
+	'2475', --col_id
 	'uni_acad', --columna
 	'C', --tipo
 	'0', --pk
@@ -142,7 +142,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2004', --col_id
+	'2476', --col_id
 	'id_director', --columna
 	'E', --tipo
 	'0', --pk
@@ -156,7 +156,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2005', --col_id
+	'2477', --col_id
 	'id_codirector', --columna
 	'E', --tipo
 	'0', --pk
@@ -170,7 +170,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2006', --col_id
+	'2478', --col_id
 	'id_proyecto', --columna
 	'E', --tipo
 	'0', --pk
@@ -184,7 +184,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2007', --col_id
+	'2479', --col_id
 	'id_carrera', --columna
 	'E', --tipo
 	'0', --pk
@@ -198,7 +198,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2008', --col_id
+	'2480', --col_id
 	'beca_en_curso', --columna
 	'L', --tipo
 	'0', --pk
@@ -212,7 +212,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2009', --col_id
+	'2481', --col_id
 	'institucion_beca_en_curso', --columna
 	'C', --tipo
 	'0', --pk
@@ -226,12 +226,12 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2010', --col_id
+	'2482', --col_id
 	'ua_trabajo_beca', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia
-	'4', --largo
+	'5', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa
@@ -240,7 +240,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2012', --col_id
+	'2483', --col_id
 	'desc_trabajo_beca', --columna
 	'C', --tipo
 	'0', --pk
@@ -254,7 +254,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2013', --col_id
+	'2484', --col_id
 	'nro_domicilio_trabajo_beca', --columna
 	'E', --tipo
 	'0', --pk
@@ -268,12 +268,12 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2014', --col_id
+	'2485', --col_id
 	'titulo_plan_trabajo', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia
-	'180', --largo
+	'250', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa
@@ -282,7 +282,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2110', --col_id
+	'2486', --col_id
 	'dpto_trabajo_beca', --columna
 	'C', --tipo
 	'0', --pk
@@ -296,7 +296,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2124', --col_id
+	'2487', --col_id
 	'observaciones', --columna
 	'C', --tipo
 	'0', --pk
@@ -310,7 +310,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2126', --col_id
+	'2488', --col_id
 	'desarrollo_plan_trab', --columna
 	'C', --tipo
 	'0', --pk
@@ -324,12 +324,12 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2127', --col_id
+	'2489', --col_id
 	'fundamentos_solicitud', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia
-	NULL, --largo
+	'1000', --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa
@@ -338,7 +338,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2168', --col_id
+	'2490', --col_id
 	'puntaje', --columna
 	'N', --tipo
 	'0', --pk
@@ -352,7 +352,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2174', --col_id
+	'2491', --col_id
 	'fecha_envio', --columna
 	'F', --tipo
 	'0', --pk
@@ -366,14 +366,14 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'becarios', --objeto_proyecto
 	'4161', --objeto
-	'2457', --col_id
+	'2492', --col_id
 	'id_conv', --columna
 	'E', --tipo
-	'0', --pk
+	'1', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
-	'0', --no_nulo_db
+	'1', --no_nulo_db
 	'0', --externa
 	'inscripcion_beca'  --tabla
 );

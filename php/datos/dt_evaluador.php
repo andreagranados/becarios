@@ -1,11 +1,7 @@
 <?php
 class dt_evaluador extends toba_datos_tabla
 {
-//    function get_evaluadores($fecha,$id_becario){
-//        $sql="select * from evaluador "
-//                . " where id_becario=$id_becario and fecha='".$fecha."'";
-//        return toba::db('becarios')->consultar($sql);
-//    }
+
     //listado de los evaluadores de una convocatoria y la cantidad de becarios asignados
     //y cantidad de inscripciones de la ua
     function get_distribucion($filtro){

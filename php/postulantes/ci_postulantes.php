@@ -13,7 +13,6 @@ class ci_postulantes extends becarios_abm_ci
             if(isset($inscripcion)){
                 $res=$this->dep('datos')->tabla('ua_evaluadora')->get_ua_evaluadoras($inscripcion['id_conv'],$inscripcion['uni_acad']);
             }
-            
             return $res;    
         }
 	 //-----------------------------------------------------------------------------------
@@ -47,6 +46,7 @@ class ci_postulantes extends becarios_abm_ci
                 $cuadro->set_datos($this->dep('datos')->tabla('inscripcion_beca')->get_postulantes($this->s__datos_filtro));
             }
 	}
+     
         
         function evt__cuadro__seleccion($datos){
             $estado=$this->dep('datos')->tabla('inscripcion_beca')->get_estado($datos);
@@ -825,10 +825,10 @@ class ci_postulantes extends becarios_abm_ci
 	//---- cuadro -----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 //imprime el numero de cada fila 
-	function conf_evt__cuadro__seleccion(toba_evento_usuario $evento, $fila)
-	{
-           // print_r($fila);
-	}
+//	function conf_evt__cuadro__seleccion(toba_evento_usuario $evento, $fila)
+//	{
+//           // print_r($fila);
+//	}
 	
 
 	//-----------------------------------------------------------------------------------

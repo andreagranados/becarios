@@ -7,6 +7,6 @@ INSERT INTO apex_restriccion_funcional_cols (proyecto, restriccion_funcional, it
 	'30', --restriccion_funcional
 	'3797', --item
 	'4196', --objeto_cuadro
-	'4377', --objeto_cuadro_col
+	'4820', --objeto_cuadro_col
 	'1'  --no_visible
 );

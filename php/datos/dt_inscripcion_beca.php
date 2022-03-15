@@ -2,6 +2,7 @@
 require_once 'consultas_designa.php';
 require_once 'consultas_toba.php';
 require_once 'dt_convocatoria.php';
+
 class dt_inscripcion_beca extends toba_datos_tabla
 {
     function get_usuario($id_becario){
@@ -22,7 +23,8 @@ class dt_inscripcion_beca extends toba_datos_tabla
         $res= toba::db('becarios')->consultar($sql);
         return $res[0]['estado'];
     }
-    function get_postulantes($filtro=null){
+    
+    function get_postulantes($filtro){
         $where=' WHERE 1=1';
         if(isset($filtro['id_conv'])){//esta siempre es obligatoria
             $where.=' and id_conv='.$filtro['id_conv']['valor'];
@@ -67,8 +69,8 @@ class dt_inscripcion_beca extends toba_datos_tabla
           }else{//usuario de SCyT
               $con=' inscripcion_beca ';
           }
-          //print_r($con);exit;
-          $sql="select * from 
+          
+        $sql="select * from 
                (select i.uni_acad,i.id_conv,i.fecha_envio,i.estado,i.categ_beca,i.fecha_presentacion,i.id_becario,i.puntaje,i.titulo_plan_trabajo as tema,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.correo,b.fec_nacim,c.descripcion as categoria, c_ib.carrera,case when c_ib.uni_acad is null then c_ib.institucion else c_ib.uni_acad end as ua_institucion,
                 p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,coalesce(t.descripcion)||'('||coalesce(di.institucion)||')' as cat_oo,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic||'-'||co.carac as cat_co,cico.descripcion as cei_co,co.titulo as tituloc,coalesce(tco.descripcion)||'('||coalesce(co.institucion)||')' as catco_oo
                 from ".$con." i
@@ -85,8 +87,9 @@ class dt_inscripcion_beca extends toba_datos_tabla
                 )sub
                 $where "
                   . " order by uni_acad,agente";
-          
+             
         return toba::db('becarios')->consultar($sql);
+        
     }
     function get_unidades(){
         $uni_acad = consultas_designa::get_unidades();

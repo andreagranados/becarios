@@ -75,7 +75,7 @@ class dt_convocatoria extends toba_datos_tabla
         }
         function convocatoria_actual(){//retorna el id de la convocatoria si existe conv actual, sino retorna nulo
             $fec_actual=date('Y-m-d');
-            $sql="select * from convocatoria where inicio<='".$fec_actual."' and  fin>='".$fec_actual."'";
+            $sql="select * from convocatoria where inicio<='".$fec_actual."' and  fec_fin_ua>='".$fec_actual."'";
             $resul=toba::db('becarios')->consultar($sql);
             if(count($resul)>0){
                 return $resul[0]['id_conv'];
