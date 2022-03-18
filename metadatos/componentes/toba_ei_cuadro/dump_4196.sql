@@ -83,7 +83,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'becarios', --proyecto
 	'3706', --evento_id
 	'4196', --objeto
-	'asignap', --identificador
+	'asignarp', --identificador
 	NULL, --etiqueta
 	'1', --maneja_datos
 	'1', --sobre_fila
