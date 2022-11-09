@@ -514,75 +514,84 @@ class ci_alta_solicitud extends becarios_abm_ci
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 $carpeta='becarios_'.$anio.'_'.$inscripcion['id_conv'];
                 if(isset($adj['cert_ant'])){
-                    $nomb_ca='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cert_ant'];
+                    $nomb_ca=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['cert_ant']);
+                    //$nomb_ca='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cert_ant'];
                     //$nomb_ca='/becarios/1.0/becarios_'.$anio.'/'.$adj['cert_ant'];//en windows
                     $datos['cert_ant']=$adj['cert_ant'];
                     $datos['imagen_vista_previa_ca'] = "<a target='_blank' href='{$nomb_ca}' >cert ant</a>";
                 }
                 if(isset($adj['const_titu'])){
-                    $nomb_ti='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['const_titu'];
+                    $nomb_ti=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['const_titu']);
+                    //$nomb_ti='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['const_titu'];
                     //$nomb_ti='/becarios/1.0/becarios_'.$anio.'/'.$adj['const_titu'];
                     $datos['const_titu']=$adj['const_titu'];
                     $datos['imagen_vista_previa_titu'] = "<a target='_blank' href='{$nomb_ti}' >const titu</a>";
                 }
                 if(isset($adj['rend_acad'])){
-                    $nomb_ra='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['rend_acad'];
+                    $nomb_ra=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['rend_acad']);
+                    //$nomb_ra='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['rend_acad'];
                     //$nomb_ra='/becarios/1.0/becarios_'.$anio.'/'.$adj['rend_acad'];
                     $datos['rend_acad']=$adj['rend_acad'];
                     $datos['imagen_vista_previa_ra'] = "<a target='_blank' href='{$nomb_ra}' >rend acad</a>";
                 }
                 if(isset($adj['cv_post'])){
-                    $nomb_cvp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cv_post'];
+                    $nomb_cvp=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['cv_post']);
+                    //$nomb_cvp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cv_post'];
                     //$nomb_cvp='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_post'];
                     $datos['cv_post']=$adj['cv_post'];
                     $datos['imagen_vista_previa_cvp'] = "<a target='_blank' href='{$nomb_cvp}' >cv postul</a>";
                 }
                 if(isset($adj['cv_dir'])){
-                    $nomb_cvdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cv_dir'];
+                    $nomb_cvdir=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['cv_dir']);
+                    //$nomb_cvdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cv_dir'];
                     //$nomb_cvdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_dir'];
                     $datos['cv_dir']=$adj['cv_dir'];
                     $datos['imagen_vista_previa_cvd'] = "<a target='_blank' href='{$nomb_cvdir}' >cv director</a>";
                 }
                 if(isset($adj['cv_codir'])){
-                    $nomb_cdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cv_codir'];
+                    $nomb_cdir=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['cv_codir']);
+                    //$nomb_cdir='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cv_codir'];
                     //$nomb_cdir='/becarios/1.0/becarios_'.$anio.'/'.$adj['cv_codir'];
                     $datos['cv_codir']=$adj['cv_codir'];
                     $datos['imagen_vista_previa_cvc'] = "<a target='_blank' href='{$nomb_cdir}' >cv codirector</a>";
                 }
                 if(isset($adj['cuil'])){ 
-                    $nomb_cuil='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cuil'];
+                    $nomb_cuil=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['cuil']);
+                    //$nomb_cuil='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['cuil'];
                     //$nomb_cuil='/becarios/1.0/becarios_'.$anio.'/'.$adj['cuil'];
                     $datos['cuil']=$adj['cuil'];
                     $datos['imagen_vista_previa_cuil'] = "<a target='_blank' href='{$nomb_cuil}' >cuil</a>";
                 }
                 if(isset($adj['docum'])){
-                    $nomb_doc='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['docum'];
+                    $nomb_doc=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['docum']);
+                    //$nomb_doc='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['docum'];
                     //$nomb_doc='/becarios/1.0/becarios_'.$anio.'/'.$adj['docum'];
                     $datos['docum']=$adj['docum'];
                     $datos['imagen_vista_previa_docum'] = "<a target='_blank' href='{$nomb_doc}' >documento</a>";
                 }
                 if(isset($adj['comprob'])){
-                    $nomb_comp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['comprob'];
+                    $nomb_comp=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['comprob']);
+                    //$nomb_comp='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['comprob'];
                     //$nomb_comp='/becarios/1.0/becarios_'.$anio.'/'.$adj['comprob'];
                     $datos['comprob']=$adj['comprob'];
                     $datos['imagen_vista_previa_comp'] = "<a target='_blank' href='{$nomb_comp}' >comprobante</a>";
                 }
                 if(isset($adj['desarrollo_pt'])){
-                    $nomb_des_pt='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['desarrollo_pt'];
+                    $nomb_des_pt=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['desarrollo_pt']);
+                    //$nomb_des_pt='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['desarrollo_pt'];
                     //$nomb_des_pt='/becarios/1.0/becarios_'.$anio.'/'.$adj['desarrollo_pt'];
                     $datos['desarrollo_pt']=$adj['desarrollo_pt'];
                     $datos['imagen_vista_previa_dp'] = "<a target='_blank' href='{$nomb_des_pt}' >desarrollo plan trabajo</a>";
                 }
                 if(isset($adj['informe_final'])){
-                    $nomb_informe_final='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['informe_final'];
+                    $nomb_informe_final=$this->dep('datos')->tabla('inscripcion_adjuntos')->link_al_archivo($inscripcion['id_conv'],$adj['informe_final']);
+                    //$nomb_informe_final='http://'.$user.':'.$password.'@copia.uncoma.edu.ar/becarios/'.$carpeta.'/'.$adj['informe_final'];
                     //$nomb_informe_final='/becarios/1.0/becarios_'.$anio.'/'.$adj['informe_final'];
                     $datos['informe_final']=$adj['informe_final'];
                     $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                 }
             }
-            
             return $datos;
-            
 	}
         
 //        function evt__form_adj__guardar($datos)
