@@ -116,4 +116,11 @@ INSERT INTO apex_usuario_perfil_datos (proyecto, usuario_perfil_datos, nombre, d
 	'Asentamiento Universitario Zapala', --descripcion
 	NULL  --listar
 );
+INSERT INTO apex_usuario_perfil_datos (proyecto, usuario_perfil_datos, nombre, descripcion, listar) VALUES (
+	'becarios', --proyecto
+	'126', --usuario_perfil_datos
+	'ASMA', --nombre
+	'Asentamiento Universitario San Martin de los Andes', --descripcion
+	NULL  --listar
+);
 --- FIN Grupo de desarrollo 0

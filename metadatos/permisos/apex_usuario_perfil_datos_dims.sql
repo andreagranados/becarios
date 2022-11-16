@@ -116,4 +116,11 @@ INSERT INTO apex_usuario_perfil_datos_dims (proyecto, usuario_perfil_datos, dime
 	'197', --elemento
 	'AUZA '  --clave
 );
+INSERT INTO apex_usuario_perfil_datos_dims (proyecto, usuario_perfil_datos, dimension, elemento, clave) VALUES (
+	'becarios', --proyecto
+	'126', --usuario_perfil_datos
+	'20', --dimension
+	'198', --elemento
+	'ASMA '  --clave
+);
 --- FIN Grupo de desarrollo 0
