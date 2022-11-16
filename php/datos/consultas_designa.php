@@ -55,7 +55,7 @@ class consultas_designa
               //." where extract (year from p.fec_desde) in (2015,2016,2017,2018,2019)
               //." where extract (year from p.fec_hasta) >= $anio
                 ." where p.fec_desde<='".$udia."' and p.fec_hasta>='".$pdia
-              ."' and p.estado<>'X'
+              ."' and p.estado<>'X' and p.estado<>'R' and estado<>'B'
               and not exists (select * from subproyecto s
                               where s.id_proyecto=p.id_pinv)
               order by descripcion";

@@ -109,4 +109,11 @@ INSERT INTO apex_usuario_perfil_datos_dims (proyecto, usuario_perfil_datos, dime
 	'119', --elemento
 	'ESCM '  --clave
 );
+INSERT INTO apex_usuario_perfil_datos_dims (proyecto, usuario_perfil_datos, dimension, elemento, clave) VALUES (
+	'becarios', --proyecto
+	'125', --usuario_perfil_datos
+	'20', --dimension
+	'197', --elemento
+	'AUZA '  --clave
+);
 --- FIN Grupo de desarrollo 0

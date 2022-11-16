@@ -14,7 +14,7 @@
             echo "<div style='font-size:15px;font-family:Verdana,Helvetica;color:#660033;font-weight:bold;'>";
             echo "Convocatoria Becas de Investigaci&oacute;n";
             echo "</div>";
-            echo "<div>versi&oacute;n ".toba::proyecto()->get_version();
+            //echo "<div>versi&oacute;n ".toba::proyecto()->get_version();
             //echo " <a href='Disposicion005-15SH.pdf'>Disposici?n</a>" ."</div>";
             //echo " <a href='resol_0442_2017.pdf'>Resoluci&oacute;n</a>" ."</div>";
             echo "</div>";
@@ -99,10 +99,10 @@
 	{
 		echo "</div>";		
 		echo "<div class='login-pie'>";
-                echo "<div> <a href='https://docs.google.com/forms/d/e/1FAIpQLSemQajJqz5qsAp0DJkOC2ytbrwnyTKm2reTMTD94Dax7m7x0A/viewform?usp=sf_link'>Solicitud Usuario</a>" ."</div>";
+                echo "<div> <a href='https://docs.google.com/forms/d/e/1FAIpQLScvwW-KQIVYdn8MTd6451lEm3Mea6fiSG7-DmaVMFnEqDl11A/viewform?usp=sf_link'>Solicitud Usuario</a>" ."</div>";
                 echo "<br>";
                 $anio=date('Y');
-		echo "<div style='font-size:10px;'>Desarrollado por <strong>".toba_recurso::imagen_proyecto('logo_sti_sin.png',true,'30','30')."</strong><br>Equipo de Desarrollo TOBA-UNCOMA<br>Universidad Nacional del Comahue</div>
+		echo "<div style='font-size:10px;'>Desarrollado por <strong>".toba_recurso::imagen_proyecto('DTI_LOGO.png',true,'60','30')."</strong><br>Equipo de Desarrollo TOBA-UNCOMA<br>Universidad Nacional del Comahue</div>
 			<div >2018 - $anio</div>";
 		echo "</div>";
 	}

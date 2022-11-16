@@ -50,18 +50,17 @@ class ci_postulantes extends becarios_abm_ci
         
         function evt__cuadro__seleccion($datos){
             $estado=$this->dep('datos')->tabla('inscripcion_beca')->get_estado($datos);
-            if($estado<>'I'){
+           // if($estado<>'I'){
                 $this->dep('datos')->tabla('inscripcion_beca')->cargar($datos);
                 $datos2['id_becario']=$datos['id_becario'];
                 //$datos2['fecha']=$datos['fecha_presentacion'];
                 $datos2['id_conv']=$datos['id_conv'];
                 $this->dep('datos')->tabla('inscripcion_adjuntos')->cargar($datos2);
                 $this->set_pantalla('pant_editar');
-            }else{
-                toba::notificacion()->agregar(utf8_decode('No puede editar una inscripción que no ha sido enviada por el becario.'), 'info');   
-            } 
+            //}else{
+               // toba::notificacion()->agregar(utf8_decode('No puede editar una inscripción que no ha sido enviada por el becario.'), 'info');   
+            //} 
         }
-        
         function evt__cuadro__asignarp($datos){
             $estado=$this->dep('datos')->tabla('inscripcion_beca')->get_estado($datos);
             if($estado=='A'){
@@ -83,6 +82,15 @@ class ci_postulantes extends becarios_abm_ci
             $form->evento('imprimir2')->vinculo()->agregar_parametro('evento_trigger', 'imprimir2'); 
             if ($this->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                     $datos=$this->dep('datos')->tabla('inscripcion_beca')->get();
+                    //nuevo
+                    $estado=$this->dep('datos')->tabla('inscripcion_beca')->get_estado($datos);
+                     if($estado=='I'){
+                        $form->eliminar_evento('modificacion');
+                        $form->eliminar_evento('cancelar');
+                        $form->eliminar_evento('imprimir1');
+                        $form->eliminar_evento('imprimir2');
+                    }   
+                    //
                     $anio=$this->dep('datos')->tabla('convocatoria')->get_anio($datos['id_conv']);
                     if($datos['categ_beca']==3){//estudiantes desactivo 
                          $form->desactivar_efs(array('imagen_vista_previa_titu','imagen_vista_previa_cvc')); 
@@ -161,7 +169,8 @@ class ci_postulantes extends becarios_abm_ci
                             $datos['imagen_vista_previa_if'] = "<a target='_blank' href='{$nomb_informe_final}' >informe final</a>";
                         }
                     }
-                    $form->set_datos($datos);    
+                    $form->set_datos($datos);   
+                    
                 }
         }
         function evt__formulario__modificacion($datos)

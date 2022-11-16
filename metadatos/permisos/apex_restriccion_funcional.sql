@@ -28,4 +28,10 @@ INSERT INTO apex_restriccion_funcional (proyecto, restriccion_funcional, descrip
 	'no_ve_puntaje', --descripcion
 	'0'  --permite_edicion
 );
+INSERT INTO apex_restriccion_funcional (proyecto, restriccion_funcional, descripcion, permite_edicion) VALUES (
+	'becarios', --proyecto
+	'64', --restriccion_funcional
+	'no_modif_evaluadores', --descripcion
+	'0'  --permite_edicion
+);
 --- FIN Grupo de desarrollo 0
