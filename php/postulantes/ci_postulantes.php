@@ -98,8 +98,8 @@ class ci_postulantes extends becarios_abm_ci
                     $agente=$this->dep('datos')->tabla('becario')->get_datos_personales($datos['id_becario']);
                     $datos['agente']=$agente['nombre'];
                     if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
-                        $user=getenv('DB_USER_SL');
-                        $password=getenv('DB_PASS_SL');
+                        //$user=getenv('DB_USER_SL');
+                        //$password=getenv('DB_PASS_SL');
                         $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                         $carpeta='becarios_'.$anio.'_'.$datos['id_conv'];
                         if(isset($adj['cert_ant'])){

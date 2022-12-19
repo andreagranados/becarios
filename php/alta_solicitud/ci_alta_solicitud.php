@@ -509,8 +509,8 @@ class ci_alta_solicitud extends becarios_abm_ci
             }
             $datos['categ']=$inscripcion['categ_beca'];
             if ($this->dep('datos')->tabla('inscripcion_adjuntos')->esta_cargada()) {
-                $user=getenv('DB_USER_SL');
-                $password=getenv('DB_PASS_SL');
+                //$user=getenv('DB_USER_SL');
+                //$password=getenv('DB_PASS_SL');
                 $adj=$this->dep('datos')->tabla('inscripcion_adjuntos')->get();
                 $carpeta='becarios_'.$anio.'_'.$inscripcion['id_conv'];
                 if(isset($adj['cert_ant'])){
