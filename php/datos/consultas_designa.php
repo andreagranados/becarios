@@ -3,7 +3,7 @@ class consultas_designa
 {
     function get_carreras($uni_acad){
         if(isset ($uni_acad)){
-            $where=" where uni_acad='".$uni_acad."'";
+            $where=" where activo and uni_acad='".$uni_acad."'";
         }else{
             $where="";
         }
@@ -132,7 +132,7 @@ class consultas_designa
 	return $res;
     }
     function get_departamentos($uni_acad){
-        $where=" where descripcion<>'SIN DEPARTAMENTO'";
+        $where=" where vigente and descripcion<>'SIN DEPARTAMENTO'";
         if(isset($uni_acad)){
           $where.=" and  idunidad_academica='".$uni_acad."'";  
         }
