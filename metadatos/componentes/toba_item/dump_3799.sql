@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3799]--  Instructivo 
+--[3799]--  Instructivo Postulante 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Instructivo', --nombre
+	'Instructivo Postulante', --nombre
 	NULL, --descripcion
 	'25', --punto_montaje
 	'descargas/ci_instructivo.php', --actividad_accion
