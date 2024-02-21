@@ -324,9 +324,12 @@ class ci_antecedentes extends toba_ci
 	function conf__form_trab(toba_ei_formulario_ml $form)
 	{
             $datos=$this->controlador()->dep('datos')->tabla('becario_trabajo')->get_filas();
-            if(isset($datos)){
-                 $form->set_datos($datos);
+            $rs=rs_ordenar_por_columna ($datos, 'titulo');
+          
+            if(isset($rs)){
+                 $form->set_datos($rs);
             }
+
 	}
         function evt__form_trab__guardar($datos)
         {
