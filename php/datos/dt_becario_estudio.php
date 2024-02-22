@@ -13,7 +13,7 @@ class dt_becario_estudio extends toba_datos_tabla
 //        }
         function get_datos_estudio($id_becario,$id_c){
             $sql="select * from becario_estudio"
-                    . " where id_becario=".$id_becario." and id_conv=".$id_c ;
+                    . " where id_becario=".$id_becario." and id_conv=".$id_c ." order by desde";
             return toba::db('becarios')->consultar($sql);
         }
 }

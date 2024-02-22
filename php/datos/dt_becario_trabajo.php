@@ -8,7 +8,7 @@ class dt_becario_trabajo extends toba_datos_tabla
 //        }
         function get_datos_trabajo($id_becario,$id_c){
              $sql="select * from becario_trabajo"
-                    . " where id_becario=".$id_becario." and id_conv=".$id_c;
+                    . " where id_becario=".$id_becario." and id_conv=".$id_c. " order by titulo";
                      
             return toba::db('becarios')->consultar($sql);
         }

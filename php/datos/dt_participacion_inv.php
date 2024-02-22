@@ -3,7 +3,7 @@ class dt_participacion_inv extends toba_datos_tabla
 {
      function get_datos_pi($id_becario,$id_c){
          $sql="select * from participacion_inv"
-                . " where id_becario=".$id_becario." and id_conv=".$id_c ;
+                . " where id_becario=".$id_becario." and id_conv=".$id_c." order by desde" ;
         return toba::db('becarios')->consultar($sql);
     }
 }

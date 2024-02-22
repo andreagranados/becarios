@@ -8,7 +8,7 @@ class dt_becario_distincion extends toba_datos_tabla
         }
         function get_datos_distincion($id_becario,$id_c){
              $sql="select * from becario_distincion"
-                    . " where id_becario=".$id_becario." and id_conv=".$id_c ;
+                    . " where id_becario=".$id_becario." and id_conv=".$id_c ." order by fecha_dis";
             return toba::db('becarios')->consultar($sql);
         }
 }

@@ -27,7 +27,8 @@ class dt_becario_empleo extends toba_datos_tabla
            $sql="select * from becario_empleo"
                    . " where id_becario=".$bec
                    . " and id_conv=".$id_c
-                   . $where; 
+                   . $where
+                   . " order by anio_ingreso"; 
            return toba::db('becarios')->consultar($sql);
         }
         function get_empleos_becario($bec,$id_c){

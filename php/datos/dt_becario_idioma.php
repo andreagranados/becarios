@@ -13,7 +13,7 @@ class dt_becario_idioma extends toba_datos_tabla
                      . " left outer join opciones e on (e.id=b.escribe)"
                      . " left outer join opciones c on (c.id=b.habla)"
                      . " left outer join opciones d on (d.id=b.entiende)"
-                    . " where id_becario=".$id_becario." and id_conv=".$id_c;
+                    . " where id_becario=".$id_becario." and id_conv=".$id_c. " order by idioma";
                      
             return toba::db('becarios')->consultar($sql);
         }
