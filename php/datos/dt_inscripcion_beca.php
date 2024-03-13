@@ -25,6 +25,7 @@ class dt_inscripcion_beca extends toba_datos_tabla
     }
     
     function get_postulantes($filtro){
+       
         $where=' WHERE 1=1';
         if(isset($filtro['id_conv'])){//esta siempre es obligatoria
             $where.=' and id_conv='.$filtro['id_conv']['valor'];
@@ -41,11 +42,39 @@ class dt_inscripcion_beca extends toba_datos_tabla
             
         }
         if(isset ($filtro['estado'])){
-            $where.=" and estado='".$filtro['estado']['valor']."'";
+            switch ($filtro['estado']['condicion']) {
+                case 'es_igual_a':$where.=" and estado='".$filtro['estado']['valor']."'";
+                    break;
+                case 'es_distinto_de':$where.=" and estado<>'".$filtro['estado']['valor']."'";
+                    break;
+            }
         }
+        
         if(isset ($filtro['categ_beca'])){
-            $where.=" and categ_beca=".$filtro['categ_beca']['valor'];
+            switch ($filtro['categ_beca']['condicion']) {
+                case 'es_igual_a':$where.=" and categ_beca=".$filtro['categ_beca']['valor'];
+                    break;
+                case 'es_distinto_de':$where.=" and categ_beca<>".$filtro['categ_beca']['valor'];
+                    break;
+            }
         }
+        if(isset ($filtro['tiene_av'])){
+            switch ($filtro['tiene_av']['valor']) {
+                case 1:$where.=" and informe_avance is not null ";
+                    break;
+                case 0:$where.=" and informe_avance is null ";
+                    break;
+            }
+        }
+        if(isset ($filtro['tiene_if'])){
+            switch ($filtro['tiene_if']['valor']) {
+                case 1:$where.=" and informe_fin is not null ";
+                    break;
+                case 0:$where.=" and informe_fin is null ";
+                    break;
+            }
+        }
+        
         $perfil = toba::usuario()->get_perfil_datos();
         if ($perfil != null) {//usuario de la UA
               //inscripcion correspond a la UA
@@ -69,12 +98,24 @@ class dt_inscripcion_beca extends toba_datos_tabla
           }else{//usuario de SCyT
               $con=' inscripcion_beca ';
           }
-          
+       
+        //////  ------------------------
+         //obtengo los perfiles funcionales del usuario
+        $perf_funcion = toba::usuario()->get_perfiles_funcionales();
+        //obtengo el id del usuario
+        $usuario = toba::usuario()->get_id();
+        //si es becario entonces aplico filtro por cuil
+        if(in_array("becario", $perf_funcion)){
+            $where.=" and usuario='".$usuario."'";
+        }
+        //////  ------------------------
         $sql="select * from 
-               (select i.uni_acad,i.id_conv,i.fecha_envio,i.estado,i.categ_beca,i.fecha_presentacion,i.id_becario,i.puntaje,i.titulo_plan_trabajo as tema,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.correo,b.fec_nacim,c.descripcion as categoria, c_ib.carrera,case when c_ib.uni_acad is null then c_ib.institucion else c_ib.uni_acad end as ua_institucion,
-                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,coalesce(t.descripcion)||'('||coalesce(di.institucion)||')' as cat_oo,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic||'-'||co.carac as cat_co,cico.descripcion as cei_co,co.titulo as tituloc,coalesce(tco.descripcion)||'('||coalesce(co.institucion)||')' as catco_oo
+               (select i.uni_acad,i.id_conv,i.fecha_envio,i.estado,i.categ_beca,i.fecha_presentacion,i.id_becario,i.puntaje,i.titulo_plan_trabajo as tema,b.cuil1||'-'||b.cuil||'-'||b.cuil2 as cuil,b.apellido||', '||b.nombre as agente, b.correo,b.fec_nacim,c.descripcion as categoria, c_ib.carrera,c_ib.promedio,c_ib.promedio_ca,case when c_ib.uni_acad is null then c_ib.institucion else c_ib.uni_acad end as ua_institucion,
+                p.codigo,p.fec_desde,p.fec_hasta,p.nro_ord_cs,di.apellido||', '||di.nombre as director,di.titulo,di.cat_estat||di.dedic||'-'||di.carac as cat_dir,ci.descripcion as cei_dir,coalesce(t.descripcion)||'('||coalesce(di.institucion)||')' as cat_oo,co.apellido||', '||co.nombre as codirector,co.cat_estat||co.dedic||'-'||co.carac as cat_co,cico.descripcion as cei_co,co.titulo as tituloc,coalesce(tco.descripcion)||'('||coalesce(co.institucion)||')' as catco_oo,bb.usuario,a.informe_avance,a.informe_fin
                 from ".$con." i
                 INNER JOIN becario b ON (i.id_becario=b.id_becario)
+                INNER JOIN (select id_becario,cast (cuil1 as text)||cast(cuil as text)||cast(cuil2 as text) as usuario
+			    from becario) bb ON (i.id_becario=bb.id_becario)
                 LEFT OUTER JOIN categoria_beca c ON (c.id_categ=i.categ_beca)
                 LEFT OUTER JOIN proyecto_inv p ON (p.id_pinv=i.id_proyecto)
                 LEFT OUTER JOIN director_beca di ON (di.id=i.id_director)
@@ -84,10 +125,11 @@ class dt_inscripcion_beca extends toba_datos_tabla
                 LEFT OUTER JOIN categoria_conicet tco ON (tco.id_categ=co.cat_conicet)
                 LEFT OUTER JOIN categoria_invest cico ON (cico.cod_cati=co.cat_invest)
                 LEFT OUTER JOIN carrera_inscripcion_beca c_ib ON (c_ib.id=i.id_carrera)
+                LEFT OUTER JOIN inscripcion_adjuntos a ON (i.id_becario=a.id_becario and i.id_conv=a.id_conv)
                 )sub
                 $where "
                   . " order by uni_acad,agente";
-             
+        //  print_r($sql);   
         return toba::db('becarios')->consultar($sql);
         
     }

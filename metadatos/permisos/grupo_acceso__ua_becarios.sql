@@ -102,3 +102,8 @@ INSERT INTO apex_grupo_acc_restriccion_funcional (proyecto, usuario_grupo_acc, r
 	'ua_becarios', --usuario_grupo_acc
 	'64'  --restriccion_funcional
 );
+INSERT INTO apex_grupo_acc_restriccion_funcional (proyecto, usuario_grupo_acc, restriccion_funcional) VALUES (
+	'becarios', --proyecto
+	'ua_becarios', --usuario_grupo_acc
+	'80'  --restriccion_funcional
+);

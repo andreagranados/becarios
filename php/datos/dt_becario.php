@@ -38,5 +38,16 @@ class dt_becario extends toba_datos_tabla
         $res= toba::db('becarios')->consultar($sql);
         return $res;
     }
+    function get_cuil($id_bec){
+        $sql="select cast(cuil1 as text)||cast(cuil as text)||cast(cuil2 as text) as cuil "
+                . "from becario where id_becario=$id_bec";
+        $res= toba::db('becarios')->consultar($sql);
+        
+        if(count($res)>0){
+            return $res[0]['cuil'];
+        }else{
+            return '';
+        } 
+    }
 }
 ?>        

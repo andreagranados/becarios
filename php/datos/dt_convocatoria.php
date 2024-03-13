@@ -17,21 +17,34 @@ class dt_convocatoria extends toba_datos_tabla
                     . "ORDER BY anio desc";
             return toba::db('becarios')->consultar($sql);
 	}
-        //recibe el año de la inscripcion a beca y en funcion a la convocatoria a la que corresponda se fija si puede o no modificar
-//        function puedo_modificar($anio){
-//            $band=false;
-//            $sql="select fec_inicio_ua,fec_fin_ua from convocatoria "
-//                    . "where anio=$anio";
-//            $res = toba::db('becarios')->consultar($sql);
-//            if(isset($res)){
-//                $fecha_actual=date('Y-m-d');
-//               // print_r($fecha_actual);
-//                if($fecha_actual>=$res[0]['fec_inicio_ua'] && $fecha_actual<=$res[0]['fec_fin_ua']){
-//                    $band=true;
-//                }
-//            }
-//            return $band;
-//        }
+        function puedo_modificar_inf_avan($id_conv){//puedo modificar Informes de Avance
+            $band=false;
+            $sql="select fec_inicio_ia,	fec_fin_ia from convocatoria "
+                    . "where id_conv=$id_conv";
+            $res = toba::db('becarios')->consultar($sql);
+            if(isset($res)){
+                $fecha_actual=date('Y-m-d');
+               // print_r($fecha_actual);
+                if($fecha_actual>=$res[0]['fec_inicio_ia'] && $fecha_actual<=$res[0]['fec_fin_ia']){
+                    $band=true;
+                }
+            }
+            return $band;
+        }
+        function puedo_modificar_inf_fin($id_conv){//puedo modificar Informes Finales
+            $band=false;
+            $sql="select fec_inicio_if,	fec_fin_if from convocatoria "
+                    . "where id_conv=$id_conv";
+            $res = toba::db('becarios')->consultar($sql);
+            if(isset($res)){
+                $fecha_actual=date('Y-m-d');
+               // print_r($fecha_actual);
+                if($fecha_actual>=$res[0]['fec_inicio_if'] && $fecha_actual<=$res[0]['fec_fin_if']){
+                    $band=true;
+                }
+            }
+            return $band;
+        }
         //recibe el id de la convocatoria corresp a la inscripcion a beca y  se fija si puede o no modificar
          function puedo_modificar($id_conv){
             $band=false;

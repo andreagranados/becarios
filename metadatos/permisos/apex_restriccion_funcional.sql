@@ -34,4 +34,22 @@ INSERT INTO apex_restriccion_funcional (proyecto, restriccion_funcional, descrip
 	'no_modif_evaluadores', --descripcion
 	'0'  --permite_edicion
 );
+INSERT INTO apex_restriccion_funcional (proyecto, restriccion_funcional, descripcion, permite_edicion) VALUES (
+	'becarios', --proyecto
+	'79', --restriccion_funcional
+	'postulantes_becarios', --descripcion
+	'0'  --permite_edicion
+);
+INSERT INTO apex_restriccion_funcional (proyecto, restriccion_funcional, descripcion, permite_edicion) VALUES (
+	'becarios', --proyecto
+	'80', --restriccion_funcional
+	'ua_becarios', --descripcion
+	'0'  --permite_edicion
+);
+INSERT INTO apex_restriccion_funcional (proyecto, restriccion_funcional, descripcion, permite_edicion) VALUES (
+	'becarios', --proyecto
+	'81', --restriccion_funcional
+	'central_becarios', --descripcion
+	'0'  --permite_edicion
+);
 --- FIN Grupo de desarrollo 0

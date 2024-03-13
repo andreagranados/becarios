@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[4195]--  Postulantes 
+--[4566]--  Postulantes - ci_formularios 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,18 +9,18 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'becarios', --proyecto
-	'4195', --objeto
+	'4566', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
 	'toba', --clase_proyecto
 	'toba_ci', --clase
 	'25', --punto_montaje
-	'ci_postulantes', --subclase
-	'postulantes/ci_postulantes.php', --subclase_archivo
+	'ci_formularios', --subclase
+	'postulantes/ci_formularios.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'Postulantes', --nombre
+	'Postulantes - ci_formularios', --nombre
 	NULL, --titulo
 	'0', --colapsable
 	NULL, --descripcion
@@ -36,48 +36,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2018-07-30 15:11:58', --creacion
+	'2024-03-08 10:13:34', --creacion
 	'arriba'  --posicion_botonera
-);
---- FIN Grupo de desarrollo 0
-
-------------------------------------------------------------
--- apex_objeto_eventos
-------------------------------------------------------------
-
---- INICIO Grupo de desarrollo 0
-INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
-	'becarios', --proyecto
-	'3406', --evento_id
-	'4195', --objeto
-	'volver', --identificador
-	'Volver', --etiqueta
-	'1', --maneja_datos
-	NULL, --sobre_fila
-	NULL, --confirmacion
-	NULL, --estilo
-	'apex', --imagen_recurso_origen
-	'atras.png', --imagen
-	'1', --en_botonera
-	NULL, --ayuda
-	'1', --orden
-	NULL, --ci_predep
-	'0', --implicito
-	'0', --defecto
-	NULL, --display_datos_cargados
-	NULL, --grupo
-	NULL, --accion
-	NULL, --accion_imphtml_debug
-	NULL, --accion_vinculo_carpeta
-	NULL, --accion_vinculo_item
-	NULL, --accion_vinculo_objeto
-	NULL, --accion_vinculo_popup
-	NULL, --accion_vinculo_popup_param
-	NULL, --accion_vinculo_target
-	NULL, --accion_vinculo_celda
-	NULL, --accion_vinculo_servicio
-	'0', --es_seleccion_multiple
-	'0'  --es_autovinculo
 );
 --- FIN Grupo de desarrollo 0
 
@@ -86,13 +46,13 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 ------------------------------------------------------------
 INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_etiq, ev_cancelar_etiq, ancho, alto, posicion_botonera, tipo_navegacion, botonera_barra_item, con_toc, incremental, debug_eventos, activacion_procesar, activacion_cancelar, ev_procesar, ev_cancelar, objetos, post_procesar, metodo_despachador, metodo_opciones) VALUES (
 	'becarios', --objeto_mt_me_proyecto
-	'4195', --objeto_mt_me
+	'4566', --objeto_mt_me
 	NULL, --ev_procesar_etiq
 	NULL, --ev_cancelar_etiq
 	NULL, --ancho
 	NULL, --alto
 	NULL, --posicion_botonera
-	NULL, --tipo_navegacion
+	'tab_h', --tipo_navegacion
 	'0', --botonera_barra_item
 	'0', --con_toc
 	NULL, --incremental
@@ -114,10 +74,10 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becarios', --proyecto
-	'3439', --dep_id
-	'4195', --objeto_consumidor
-	'4566', --objeto_proveedor
-	'ci_formularios', --identificador
+	'3443', --dep_id
+	'4566', --objeto_consumidor
+	'4571', --objeto_proveedor
+	'form_encabezado', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -126,10 +86,10 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becarios', --proyecto
-	'3045', --dep_id
-	'4195', --objeto_consumidor
-	'4196', --objeto_proveedor
-	'cuadro', --identificador
+	'3440', --dep_id
+	'4566', --objeto_consumidor
+	'4567', --objeto_proveedor
+	'form_informes', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -138,34 +98,10 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'becarios', --proyecto
-	'3047', --dep_id
-	'4195', --objeto_consumidor
-	'4197', --objeto_proveedor
-	'datos', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becarios', --proyecto
-	'3049', --dep_id
-	'4195', --objeto_consumidor
-	'4199', --objeto_proveedor
-	'filtros', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'becarios', --proyecto
-	'3065', --dep_id
-	'4195', --objeto_consumidor
-	'4213', --objeto_proveedor
-	'form_asignar', --identificador
+	'3441', --dep_id
+	'4566', --objeto_consumidor
+	'4568', --objeto_proveedor
+	'formulario', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -181,11 +117,11 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
 	'becarios', --objeto_ci_proyecto
-	'4195', --objeto_ci
-	'1718', --pantalla
+	'4566', --objeto_ci
+	'1829', --pantalla
 	'pant_inicial', --identificador
 	'1', --orden
-	'Pantalla Inicial', --etiqueta
+	'Datos Principales', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
@@ -200,30 +136,11 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 );
 INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
 	'becarios', --objeto_ci_proyecto
-	'4195', --objeto_ci
-	'1723', --pantalla
-	'pant_editar', --identificador
+	'4566', --objeto_ci
+	'1830', --pantalla
+	'pant_informes', --identificador
 	'2', --orden
-	'Pantalla Edicion', --etiqueta
-	NULL, --descripcion
-	NULL, --tip
-	'apex', --imagen_recurso_origen
-	NULL, --imagen
-	NULL, --objetos
-	NULL, --eventos
-	NULL, --subclase
-	NULL, --subclase_archivo
-	NULL, --template
-	NULL, --template_impresion
-	'25'  --punto_montaje
-);
-INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
-	'becarios', --objeto_ci_proyecto
-	'4195', --objeto_ci
-	'1725', --pantalla
-	'pant_asigna', --identificador
-	'3', --orden
-	'Pantalla Asignacion', --etiqueta
+	'Informes Becario', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
@@ -243,45 +160,22 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 ------------------------------------------------------------
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'becarios', --proyecto
-	'1718', --pantalla
-	'4195', --objeto_ci
+	'1829', --pantalla
+	'4566', --objeto_ci
+	'0', --orden
+	'3441'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'becarios', --proyecto
+	'1830', --pantalla
+	'4566', --objeto_ci
 	'1', --orden
-	'3045'  --dep_id
+	'3440'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'becarios', --proyecto
-	'1718', --pantalla
-	'4195', --objeto_ci
+	'1830', --pantalla
+	'4566', --objeto_ci
 	'0', --orden
-	'3049'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'becarios', --proyecto
-	'1723', --pantalla
-	'4195', --objeto_ci
-	'0', --orden
-	'3439'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'becarios', --proyecto
-	'1725', --pantalla
-	'4195', --objeto_ci
-	'0', --orden
-	'3065'  --dep_id
-);
-
-------------------------------------------------------------
--- apex_eventos_pantalla
-------------------------------------------------------------
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1723', --pantalla
-	'4195', --objeto_ci
-	'3406', --evento_id
-	'becarios'  --proyecto
-);
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1725', --pantalla
-	'4195', --objeto_ci
-	'3406', --evento_id
-	'becarios'  --proyecto
+	'3443'  --dep_id
 );
