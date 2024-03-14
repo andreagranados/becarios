@@ -10,16 +10,13 @@ class dt_director_beca extends toba_datos_tabla
         function get_docentes()
 	{
             $datos_docentes = consultas_designa::get_docentes();
-//            $sql=" SELECT dblink_connect('designa', 'dbname=designa user=postgres password=postgres' ) ";
-//            toba::db('becarios')->consultar($sql);
-//            $sql = "SELECT *
-//    FROM dblink('designa', 'select id_designacion, e.apellido as descripcion from designacion d, docente e
-//                            where d.id_docente=e.id_docente 
-//                            and d.id_designacion in (1,3)')
-//      AS t1(id_designacion integer, descripcion character varying);";
             return $datos_docentes;
 	}
-       
+        function get_categ_docente($id_doc)
+	{
+            $datos = consultas_designa::get_categ_docente($id_doc);
+            return $datos;
+	}
         //dado un docente trae las designaciones
         function get_designaciones($id_doc)
 	{

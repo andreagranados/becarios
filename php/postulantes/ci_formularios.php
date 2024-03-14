@@ -157,6 +157,11 @@ class ci_formularios extends ci_postulantes
                          
                     }
                     if($band){
+                        if(isset($datos['estado'])){//esta cambiando el estado
+                            if($datos['estado']<>'R'){
+                                $datos2['fecha_renuncia']=null;
+                            }
+                        }
                         $datos2['estado']=$datos['estado'];
                         $datos2['observaciones']=$datos['observaciones'];
                         if($datos['estado']=='I'){//si reabre la inscripcion se pierde la fecha de envio
@@ -398,7 +403,23 @@ class ci_formularios extends ci_postulantes
              if ($this->controlador()->dep('datos')->tabla('inscripcion_beca')->esta_cargada()) {
                 $insc=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
                 $agente=$this->controlador()->dep('datos')->tabla('becario')->get_nombre($insc['id_becario']);
-                $texto="Becario: ".$agente."\n";//."Fechas Carga Informes Avance: "
+                $a=array('id_conv'=>$insc['id_conv']);
+                $fi=$this->controlador()->dep('datos')->tabla('convocatoria')->get_descripciones_filtro($a);
+                //print_r($fi);exit;
+                
+                if(isset($fi[0]['fec_inicio_ia']) and isset($fi[0]['fec_fin_ia']) ){
+                    $fechas_ia=date("d/m/Y",strtotime($fi[0]['fec_inicio_ia'])).' - '.date("d/m/Y",strtotime($fi[0]['fec_fin_ia']));
+                }else{
+                    $fechas_ia="";
+                }
+                 if(isset($fi[0]['fec_inicio_if']) and isset($fi[0]['fec_fin_if']) ){
+                    $fechas_if=date("d/m/Y",strtotime($fi[0]['fec_inicio_if'])).' - '.date("d/m/Y",strtotime($fi[0]['fec_fin_if']));
+                }else{
+                    $fechas_if="";
+                }
+                //$fechas_ia=date("d/m/Y",strtotime($fi[0]['fec_inicio_ia'])).' - '.date("d/m/Y",strtotime($fi[0]['fec_fin_ia']));
+                //print_r($fechas_ia);exit;
+                $texto="Becario: ".$agente."<br>"."<br>".utf8_decode(" Presentación de Informes Avance: ").$fechas_ia."<br>".utf8_decode(" Presentación de Informes Finales: ").$fechas_if;//."Fechas Carga Informes Avance: "
                 $form->set_titulo($texto);
             }
 	}

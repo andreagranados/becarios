@@ -7,7 +7,7 @@ class dt_convocatoria extends toba_datos_tabla
             return toba::db('becarios')->consultar($sql);
 	}
         function get_descripciones_filtro($filtro)
-        {  
+        { 
             $where='';
             if(isset($filtro['id_conv'])){
                 $where=" where id_conv=".$filtro['id_conv'];
