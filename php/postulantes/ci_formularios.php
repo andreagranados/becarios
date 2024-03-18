@@ -112,7 +112,7 @@ class ci_formularios extends ci_postulantes
         }
         function evt__formulario__modificacion($datos)
         {//solo estado, puntaje y observaciones
-           // print_r($datos);exit;
+            //print_r($datos);exit;
             $mensaje='';
             $band=true;
             $inscripcion=$this->controlador()->dep('datos')->tabla('inscripcion_beca')->get();
@@ -131,12 +131,14 @@ class ci_formularios extends ci_postulantes
                        // $datos2['estado']=$datos['estado'];
                         //$datos2['observaciones']=$datos['observaciones'];
                         if(isset($datos['puntaje'])){//si han cargado puntaje en el formulario
-                            if($inscripcion['estado']=='A'){//solo si esta aceptado puede cambiar puntaje
-                                $datos2['puntaje']=$datos['puntaje'];
-                            }else{
-                                $band=false;
-                                toba::notificacion()->agregar(utf8_decode('La inscripción debe estar Admitida (A) para poder ingresarle el puntaje'), 'info');   
+                            if($inscripcion['puntaje']<>$datos['puntaje']){
+                                if($inscripcion['estado']=='A' and $datos['estado']=='A'){//solo si esta aceptado puede cambiar puntaje
+                                    $datos2['puntaje']=$datos['puntaje'];
+                                }else{
+                                    $mensaje.=utf8_decode(' La inscripción debe estar Admitida (A) para poder ingresarle/modificarle el puntaje');
+                                }
                             }
+                            
                         }
                         if(isset($datos['fecha_renuncia'])){//se ha cargado fecha de renuncia
                             $datos2['fecha_renuncia']=$datos['fecha_renuncia'];
