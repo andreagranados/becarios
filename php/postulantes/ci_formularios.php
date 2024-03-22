@@ -247,8 +247,9 @@ class ci_formularios extends ci_postulantes
                     //obtengo el perfil de datos del usuario logueado
                     $con="select sigla,descripcion from unidad_acad ";
                     $con = toba::perfil_de_datos()->filtrar($con);
-                    $resul=toba::db('designa')->consultar($con);
-                    if($insc['uni_acad']<>$resul[0]['sigla']){
+                    $resul=toba::db('becarios')->consultar($con);
+                   
+                    if($insc['uni_acad']!=trim($resul[0]['sigla'])){
                         $band=false;
                         $mensaje.="La postulacion no corresponde a su UA. No puede modificar informes.";
                     }else{//corresponde a la misma UUA de la postulacion
@@ -327,6 +328,8 @@ class ci_formularios extends ci_postulantes
                     $this->controlador()->dep('datos')->tabla('inscripcion_adjuntos')->set($datos2);
                     $this->controlador()->dep('datos')->tabla('inscripcion_adjuntos')->sincronizar();
                 }
+                toba::notificacion()->agregar(utf8_decode($mensaje), 'info');   
+            }else{
                 toba::notificacion()->agregar(utf8_decode($mensaje), 'info');   
             }
         }
