@@ -243,24 +243,33 @@ class ci_formularios extends ci_postulantes
                     $band=false;
                     $mensaje.="De estar en estado Designado para poder modificar. ";
                 }else{
-                    if(isset($datos['informe_avance'])){
-                        //si las fechas no estan seteadas devuelve falso
-                        $bandia=$this->controlador()->dep('datos')->tabla('convocatoria')->puedo_modificar_inf_avan($insc['id_conv']);
-                        if(!$bandia){
-                            $mensaje.="NO SUBIO IA. Verifique el periodo de fechas para subir Informes de Avance.";
+                    //verifico que la UA de la postulacion corresponda al usuario logueado
+                    //obtengo el perfil de datos del usuario logueado
+                    $con="select sigla,descripcion from unidad_acad ";
+                    $con = toba::perfil_de_datos()->filtrar($con);
+                    $resul=toba::db('designa')->consultar($con);
+                    if($insc['uni_acad']<>$resul[0]['sigla']){
+                        $band=false;
+                        $mensaje.="La postulacion no corresponde a su UA. No puede modificar informes.";
+                    }else{//corresponde a la misma UUA de la postulacion
+                        if(isset($datos['informe_avance'])){
+                            //si las fechas no estan seteadas devuelve falso
+                            $bandia=$this->controlador()->dep('datos')->tabla('convocatoria')->puedo_modificar_inf_avan($insc['id_conv']);
+                            if(!$bandia){
+                                $mensaje.="NO SUBIO IA. Verifique el periodo de fechas para subir Informes de Avance.";
+                              }
                         }
-                    }
-                    if(isset($datos['informe_fin'])){
-                        $bandif=$this->controlador()->dep('datos')->tabla('convocatoria')->puedo_modificar_inf_fin($insc['id_conv']);
-                         if(!$bandif){
-                            $mensaje.="NO SUBIO IF. Verifique el periodo de fechas para subir Informes Finales";
+                        if(isset($datos['informe_fin'])){
+                            $bandif=$this->controlador()->dep('datos')->tabla('convocatoria')->puedo_modificar_inf_fin($insc['id_conv']);
+                             if(!$bandif){
+                                $mensaje.="NO SUBIO IF. Verifique el periodo de fechas para subir Informes Finales";
+                            }
                         }
+                        $datos2['id_becario']=$insc['id_becario'];
+                        $datos2['id_conv']=$insc['id_conv'];
+                        $id=$insc['id_conv'];
+                        $anio=$this->controlador()->dep('datos')->tabla('convocatoria')->get_anio($id);
                     }
-                    
-                    $datos2['id_becario']=$insc['id_becario'];
-                    $datos2['id_conv']=$insc['id_conv'];
-                    $id=$insc['id_conv'];
-                    $anio=$this->controlador()->dep('datos')->tabla('convocatoria')->get_anio($id);
                 } 
             }else{
                 $band=false;
