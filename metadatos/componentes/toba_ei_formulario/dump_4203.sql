@@ -141,9 +141,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'7', --orden
-	'Rendimiento Académico', --etiqueta
+	'Rend Acad/Cert An', --etiqueta
 	NULL, --etiqueta_estilo
-	NULL, --descripcion
+	'Rendimiento Académico/Certificado Analítico', --descripcion
 	'0', --colapsado
 	'0', --desactivado
 	NULL, --estilo
@@ -1668,7 +1668,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'24', --orden
-	'Informe Final', --etiqueta
+	'Informe Final (de beca anterior)', --etiqueta
 	NULL, --etiqueta_estilo
 	'Informe Final  (si corresponde)', --descripcion
 	'0', --colapsado
